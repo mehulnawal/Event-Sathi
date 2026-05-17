@@ -951,341 +951,152 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Need Emergency Staff Section  */}
+        {/* =========================================
+   EMERGENCY SECTION
+========================================= */}
+
         <section
           id="emergency"
-          className="section"
-          style={{
-            position: 'relative',
-            overflow: 'hidden',
-            background: `radial-gradient(ellipse 60% 50% at 15% 50%, rgba(217,79,43,0.07) 0%, transparent 65%), radial-gradient(ellipse 40% 40% at 85% 20%, rgba(217,79,43,0.04) 0%, transparent 55%), var(--es-bg-card)`,
-          }}
+          className="section es-emergency-section"
         >
           <div className="container">
 
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '4px',
-                height: '100%',
-                background:
-                  'linear-gradient(to bottom, transparent, var(--es-coral), transparent)',
-                opacity: 0.6
-              }}
-            />
+            <div className="es-emergency-grid">
 
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                backgroundImage:
-                  'radial-gradient(circle, rgba(217,79,43,0.04) 1px, transparent 1px)',
-                backgroundSize: '30px 30px',
-                pointerEvents: 'none'
-              }}
-            />
-
-            <div style={{ position: 'relative' }}>
-
+              {/* LEFT CONTENT */}
               <div
-                className="es-emergency-grid"
+                className="reveal from-left"
+                style={{
+                  opacity: 1,
+                  transform: 'none',
+                  minWidth: 0
+                }}
               >
 
-                {/* Content */}
-                <div
-                  className="reveal from-left"
-                  style={{
-                    opacity: 1,
-                    transform: 'none'
-                  }}
-                >
-                  <div style={{ marginBottom: '24px' }}>
-                    <span
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '6px 16px',
-                        background: 'rgba(217,79,43,0.15)',
-                        border: '1px solid rgba(217,79,43,0.30)',
-                        borderRadius: '999px',
-                        fontSize: '12px',
-                        fontWeight: 700,
-                        color: '#F87171',
-                        letterSpacing: '0.05em',
-                        textTransform: 'uppercase'
-                      }}
+                <div style={{ marginBottom: '24px' }}>
+                  <span className="es-live-badge">
+
+                    <span className="es-live-dot-wrap">
+                      <span className="es-live-dot" />
+                      <span className="pulse-ring" />
+                    </span>
+
+                    Live Emergency Service
+                  </span>
+                </div>
+
+                <h2 className="es-emergency-title">
+                  Need Last-Minute
+                  <br />
+                  <span>Event Staff?</span>
+                </h2>
+
+                <p className="es-emergency-desc">
+                  Anchor cancelled last-minute. Crew didn't show up.
+                  Production needs backup. We deploy verified replacements in{' '}
+                  <strong>under 30 minutes.</strong>{' '}
+                  Anywhere in India.
+                </p>
+
+                {/* SERVICES */}
+                <div className="es-emergency-services">
+
+                  {EMERGENCY_SERVICES.map(({ icon, label }) => (
+                    <div
+                      key={label}
+                      className="es-service-card"
                     >
-                      <span
-                        style={{
-                          position: 'relative',
-                          width: '8px',
-                          height: '8px',
-                          flexShrink: 0
-                        }}
-                      >
-                        <span
-                          style={{
-                            position: 'absolute',
-                            inset: 0,
-                            borderRadius: '50%',
-                            background: 'var(--es-coral)',
-                            display: 'block'
-                          }}
-                        />
-                        <span className="pulse-ring" />
+
+                      <span className="es-service-icon">
+                        {icon}
                       </span>
 
-                      Live Emergency Service
-                    </span>
-                  </div>
+                      <span className="es-service-label">
+                        {label}
+                      </span>
 
-                  <h2
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: 'clamp(28px, 4vw, 52px)',
-                      fontWeight: 800,
-                      lineHeight: 1.1,
-                      color: 'var(--es-plum-dark)',
-                      marginBottom: '20px',
-                      letterSpacing: '-0.03em'
-                    }}
-                  >
-                    Need Last-Minute
-                    <br />
-                    <span style={{ color: 'var(--es-coral)' }}>
-                      Event Staff?
-                    </span>
-                  </h2>
-
-                  <p
-                    style={{
-                      fontSize: 'clamp(15px, 1.6vw, 17px)',
-                      color: 'var(--es-text-2)',
-                      lineHeight: 1.7,
-                      maxWidth: '440px',
-                      marginBottom: '36px'
-                    }}
-                  >
-                    Anchor cancelled last-minute. Crew didn't show up.
-                    Production needs backup. We deploy verified replacements in{' '}
-                    <strong style={{ color: 'var(--es-plum-dark)' }}>
-                      under 30 minutes.
-                    </strong>{' '}
-                    Anywhere in India.
-                  </p>
-
-                  <div
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-                      gap: '12px',
-                      marginBottom: '40px'
-                    }}
-                  >
-                    {EMERGENCY_SERVICES.map(({ icon, label }) => (
-                      <div
-                        key={label}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '12px',
-                          padding: '14px 18px',
-                          background: 'var(--es-bg)',
-                          border: '1.5px solid var(--es-border)',
-                          borderRadius: 'var(--r-md)'
-                        }}
-                      >
-                        <span
-                          style={{
-                            color: 'var(--es-coral)',
-                            flexShrink: 0
-                          }}
-                        >
-                          {icon}
-                        </span>
-
-                        <span
-                          style={{
-                            fontSize: '14px',
-                            fontWeight: 500,
-                            color: 'var(--es-text)',
-                            lineHeight: 1.3
-                          }}
-                        >
-                          {label}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <button
-                    className="btn btn-emergency btn-xl"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '12px',
-                      width: isMobile ? '100%' : 'auto'
-                    }}
-                  >
-                    <span
-                      style={{
-                        position: 'relative',
-                        width: '10px',
-                        height: '10px',
-                        flexShrink: 0
-                      }}
-                    >
-                      <span
-                        style={{
-                          position: 'absolute',
-                          inset: 0,
-                          borderRadius: '50%',
-                          background: '#fff'
-                        }}
-                      />
-                    </span>
-
-                    Request Emergency Staff Now
-                  </button>
-
-                  <p
-                    style={{
-                      marginTop: '14px',
-                      fontSize: '13px',
-                      color: 'var(--es-text-3)',
-                      letterSpacing: '0.01em'
-                    }}
-                  >
-                    Available 24 / 7 · Average response under 30 minutes
-                  </p>
-                </div>
-
-                {/* Image */}
-                <div
-                  className="es-emergency-img-col reveal"
-                  style={{
-                    position: 'relative',
-                    width: '100%',
-                    opacity: 1,
-                    transform: 'none'
-                  }}
-                >
-
-                  <div
-                    style={{
-                      borderRadius: 'var(--r-xl)',
-                      overflow: 'hidden',
-                      aspectRatio: isMobile ? '16/10' : '3/4',
-                      position: 'relative'
-                    }}
-                  >
-                    <img
-                      src={lastMinuteEventSectionImg}
-                      alt="Event crew at work"
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        display: 'block',
-                        filter: 'brightness(0.65) saturate(1.15)'
-                      }}
-                    />
-
-                    <div
-                      style={{
-                        position: 'absolute',
-                        inset: 0,
-                        background:
-                          'linear-gradient(to top, rgba(28,8,0,0.85) 0%, transparent 50%)'
-                      }}
-                    />
-                  </div>
-
-                  {!isMobile && (
-                    <>
-                      <div
-                        className="floating-badge-1"
-                        style={{
-                          position: 'absolute',
-                          bottom: '-20px',
-                          left: '-20px',
-                          background: 'var(--es-coral)',
-                          borderRadius: 'var(--r-lg)',
-                          padding: '20px 26px',
-                          boxShadow: 'var(--shadow-coral)',
-                          minWidth: '136px'
-                        }}
-                      >
-                        <div
-                          style={{
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '38px',
-                            color: '#FFFFFF',
-                            lineHeight: 1,
-                            marginBottom: '4px',
-                            letterSpacing: '-0.02em'
-                          }}
-                        >
-                          30m
-                        </div>
-
-                        <div
-                          style={{
-                            fontSize: '10px',
-                            color: 'rgba(255,255,255,0.72)',
-                            fontWeight: 700,
-                            letterSpacing: '0.06em',
-                            textTransform: 'uppercase'
-                          }}
-                        >
-                          Avg. Response
-                        </div>
-                      </div>
-
-                      <div
-                        className="floating-badge-2"
-                        style={{
-                          position: 'absolute',
-                          top: '20px',
-                          right: '-12px',
-                          background: 'rgba(255,255,255,0.96)',
-                          borderRadius: 'var(--r-md)',
-                          padding: '12px 16px',
-                          boxShadow: 'var(--shadow-lg)',
-                          fontSize: '13px',
-                          fontWeight: 700,
-                          color: 'var(--es-coral)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px'
-                        }}
-                      >
-                        <svg
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                        >
-                          <circle cx="12" cy="12" r="10" />
-                          <path d="M12 8v4l3 3" />
-                        </svg>
-
-                        Available 24/7
-                      </div>
-                    </>
-                  )}
+                    </div>
+                  ))}
 
                 </div>
+
+                {/* BUTTON */}
+                <button className="btn btn-emergency btn-xl es-emergency-btn">
+
+                  <span className="es-btn-dot" />
+
+                  Request Emergency Staff Now
+                </button>
+
+                <p className="es-emergency-note">
+                  Available 24 / 7 · Average response under 30 minutes
+                </p>
 
               </div>
+
+              {/* RIGHT IMAGE */}
+              <div
+                className="es-emergency-img-col reveal"
+                style={{
+                  opacity: 1,
+                  transform: 'none'
+                }}
+              >
+
+                <div className="es-emergency-image-wrap">
+
+                  <img
+                    src={lastMinuteEventSectionImg}
+                    alt="Event crew at work"
+                    className="es-emergency-image"
+                  />
+
+                  <div className="es-image-overlay" />
+
+                </div>
+
+                {/* FLOATING BADGES */}
+                {!isMobile && (
+                  <>
+
+                    <div className="floating-badge-1">
+
+                      <div className="floating-badge-time">
+                        30m
+                      </div>
+
+                      <div className="floating-badge-label">
+                        Avg. Response
+                      </div>
+
+                    </div>
+
+                    <div className="floating-badge-2">
+
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 8v4l3 3" />
+                      </svg>
+
+                      Available 24/7
+
+                    </div>
+
+                  </>
+                )}
+
+              </div>
+
             </div>
+
           </div>
         </section>
 
