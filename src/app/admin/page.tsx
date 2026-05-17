@@ -77,8 +77,6 @@ export default function AdminDashboard() {
                     <Link href="/" className="nav__logo">
                         Event<span>Saathi</span>
                     </Link>
-
-
                 </div>
             </header>
 

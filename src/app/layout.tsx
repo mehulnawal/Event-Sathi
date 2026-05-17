@@ -1,6 +1,9 @@
-import type { Metadata } from "next";
+'use client';
+
 import { Syne, DM_Sans } from "next/font/google";
+import { usePathname } from "next/navigation";
 import "@/app/globals.css";
+import PageLoader from "@/app/PageLoader";
 
 const syne = Syne({
   variable: "--font-syne",
@@ -16,23 +19,22 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Event Saathi — Build Your Event Team in Minutes",
-  description:
-    "India's premier event staffing marketplace. Find verified anchors, decorators, coordinators and production crews for any event, anywhere in India.",
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+
   return (
     <html
       lang="en"
       className={`${syne.variable} ${dmSans.variable} scroll-smooth`}
     >
       <body className="min-h-screen antialiased">
+        {/* Loader sirf tabhi aayega jab url exact "/" hoga (like http://localhost:3000/) */}
+        {pathname === "/" && <PageLoader />}
+
         {children}
       </body>
     </html>
