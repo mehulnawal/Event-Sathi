@@ -15,6 +15,17 @@ interface TeamForm {
   services: string[];
 }
 
+const menuLinks = [
+  { label: 'Home', href: '#', active: true },
+  { label: 'About Us', href: '#' },
+  { label: 'Project Showcase', href: '#' },
+  { label: 'Gallery', href: '#' },
+  { label: 'ESG', href: '#' },
+  { label: 'Career', href: '#' },
+  { label: 'Connect Now', href: '#' },
+];
+
+
 const EVENT_TYPES = [
   'Wedding', 'Corporate Event', 'Concert / Live Show',
   'College Festival', 'Product Launch', 'Birthday / Anniversary',
@@ -43,6 +54,12 @@ const SERVICES = [
   'Caterer', 'Lighting Crew', 'Security Staff',
   'Stage Coordinator', 'Make-up Artist', 'Emcee',
 ];
+
+const BRAND_COLORS = {
+  plumLight: '#140D2F',
+  gold: 'linear-gradient(135deg, #FFE082 0%, #C49B2B 60%, #8C6D13 100%)',
+};
+
 
 const FLOW_STEPS = [
   {
@@ -109,10 +126,10 @@ const FLOW_STEPS = [
 ];
 
 const HERO_STATS = [
-  { value: '2,400+', label: 'Verified Professionals' },
-  { value: '850+', label: 'Events Executed' },
-  { value: '30 min', label: 'Emergency Response' },
-  { value: '24', label: 'Cities Covered' },
+  { label: 'Verified Professionals', suffix: '+', target: 2400 },
+  { label: 'Events Executed', suffix: '+', target: 850 },
+  { label: 'Emergency Response', suffix: ' min', target: 30 },
+  { label: 'Cities Covered', suffix: '', target: 24 }
 ];
 
 const EMERGENCY_SERVICES = [
@@ -251,6 +268,7 @@ function StatCounter({ value, label }: { value: string; label: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
   const display = useCountUp(value, inView);
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -258,6 +276,7 @@ function StatCounter({ value, label }: { value: string; label: string }) {
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
+
   return (
     <div ref={ref}>
       <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'clamp(22px, 2.8vw, 34px)', color: 'var(--es-gold)', lineHeight: 1, marginBottom: '6px', fontWeight: 400 }}>
@@ -270,6 +289,8 @@ function StatCounter({ value, label }: { value: string; label: string }) {
   );
 }
 
+const CHANGING_WORDS = ['Photographers', 'Anchors', 'Sound Crews', 'Coordinators', 'On-Ground Teams'];
+
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -277,6 +298,79 @@ export default function HomePage() {
   const [teamForm, setTeamForm] = useState<TeamForm>({
     eventType: '', budget: '', city: '', guests: '', services: [],
   });
+
+  const [wordIndex, setWordIndex] = useState(0);
+  const [fadeState, setFadeState] = useState('fade-in');
+
+  const [counts, setCounts] = useState(HERO_STATS.map(() => 0));
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // 1. Snappy text rotation logic with hardware translation timers
+  useEffect(() => {
+    const wordInterval = setInterval(() => {
+      setFadeState('fade-out');
+
+      setTimeout(() => {
+        setWordIndex((prev) => (prev + 1) % CHANGING_WORDS.length);
+        setFadeState('fade-in');
+      }, 150); // Fast transition reset delay
+    }, 1600); // Quick visibility loop intervals
+
+    return () => clearInterval(wordInterval);
+  }, []);
+
+  // 2. Scroll-Triggered Intersection Observer + Smooth Counter Interpolation
+  // 2. Scroll-Triggered Intersection Observer + Smooth Counter Interpolation
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting && !hasAnimated) {
+          setHasAnimated(true);
+
+          const duration = 1500;
+          const frameRate = 1000 / 60; // 60fps execution
+          const totalFrames = Math.round(duration / frameRate);
+          let currentFrame = 0;
+
+          const counterInterval = setInterval(() => {
+            currentFrame++;
+            const progress = currentFrame / totalFrames;
+            const easeProgress = progress * (2 - progress); // Smooth deceleration curve
+
+            const nextCounts = HERO_STATS.map((stat) => {
+              const val = Math.floor(easeProgress * stat.target);
+              return val >= stat.target ? stat.target : val;
+            });
+
+            setCounts(nextCounts);
+
+            if (currentFrame >= totalFrames) {
+              setCounts(HERO_STATS.map(s => s.target)); // Lock down exact numbers at the end
+              clearInterval(counterInterval);
+            }
+          }, frameRate);
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, [hasAnimated]);
 
   useReveal();
 
@@ -316,7 +410,6 @@ export default function HomePage() {
 
   const isFormValid = teamForm.eventType && teamForm.budget && teamForm.city && teamForm.guests;
 
-  const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth <= 768);
     check();
@@ -675,207 +768,357 @@ export default function HomePage() {
           .es-footer-bottom { flex-direction: column; align-items: flex-start; }
         }
       `}</style>
+      <main>
 
-      {/* ══════════════════════════════════════
-          NAVBAR
-      ══════════════════════════════════════ */}
-      <header className={`nav${scrolled ? ' scrolled' : ''}`}>
-        <div className="nav__inner">
-          <Link href="/" className="nav__logo">
-            Event<span>Saathi</span>
-          </Link>
-
-          <nav className="nav__links es-hide-mobile" aria-label="Primary">
-            <Link href="#team-builder" className="nav__link">Build Team</Link>
-            <Link href="#emergency" className="nav__link">Emergency Help</Link>
-            <Link href="#earn" className="nav__link">Earn With Us</Link>
-            <Link href="#flow" className="nav__link">How It Works</Link>
-            <Link href="/professionals" className="nav__link">Browse Pros</Link>
-          </nav>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <Link href="/professionals" className="btn btn-secondary btn-sm es-hide-mobile">
-              Browse Crew
-            </Link>
-            <Link href="/vendor/register" className="btn btn-primary btn-sm">
-              Join as Vendor
-            </Link>
-            <button
-              onClick={() => setMobileOpen(o => !o)}
-              aria-label="Toggle menu"
-              className="es-show-mobile-flex"
+        {/* Navbar  */}
+        <nav
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 100,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: isMobile ? '12px 16px' : '20px 40px',
+            background: 'rgba(20, 13, 47, 0.45)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+          }}
+        >
+          {/* Left Side: Logo & Emergency Pill */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '10px' : '20px' }}>
+            <span
               style={{
-                display: 'none',
-                background: 'none',
-                border: '1.5px solid var(--es-border)',
-                borderRadius: 'var(--r-sm)',
-                cursor: 'pointer',
-                padding: '7px 10px',
-                color: 'var(--es-text)',
+                fontFamily: 'var(--font-display), "Playfair Display", Georgia, serif', // Screenshot ke mutabik high-end serif look ke liye
+                fontSize: isMobile ? '22px' : '28px',
+                fontWeight: 700,
+                letterSpacing: '-0.01em',
+                display: 'inline-flex',
                 alignItems: 'center',
-                justifyContent: 'center',
+                gap: '2px', // Events aur Saathi ke beech ka gap
               }}
             >
-              {mobileOpen ? (
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M18 6 6 18M6 6l12 12" /></svg>
-              ) : (
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
-              )}
+              <span style={{ color: '#FFFFFF' }}>Events</span>
+              <span
+                style={{
+                  color: 'var(--es-gold, #C49B2B)',
+                  fontWeight: 600 // 'Saathi' part thoda premium lightweight and elegant hai ss mein
+                }}
+              >
+                Saathi
+              </span>
+            </span>
+
+            {/* Emergency Button (Hidden on mobile, only shown on large screens) */}
+            {!isMobile && (
+              <button
+                onClick={() => alert('Emergency Staff Requested')}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  padding: '8px 16px',
+                  background: '#D32F2F',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  borderRadius: '999px',
+                  fontSize: '13px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 14px rgba(211, 47, 47, 0.4)',
+                  letterSpacing: '0.02em',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                <span
+                  style={{
+                    marginRight: '6px',
+                    animation: 'pulse 1.5s infinite',
+                    display: 'inline-block',
+                  }}
+                >
+                  🚨
+                </span>
+                30-Min Emergency Crew
+              </button>
+            )}
+          </div>
+
+          {/* Right Side: Instagram & Hamburger */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+            {!isMobile && (
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                style={{
+                  color: '#FFFFFF',
+                  opacity: 0.85,
+                  transition: 'opacity 0.2s',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+                onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.85')}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+              </a>
+            )}
+
+            {/* Hamburger Menu Trigger */}
+            <button
+              onClick={() => setIsMenuOpen(true)}
+              aria-label="Open Menu"
+              style={{
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                color: '#FFFFFF',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '6px',
+                padding: '4px',
+              }}
+            >
+              <span style={{ width: '28px', height: '2px', background: '#FFFFFF' }} />
+              <span style={{ width: '28px', height: '2px', background: '#FFFFFF' }} />
+              <span style={{ width: '28px', height: '2px', background: '#FFFFFF' }} />
             </button>
+          </div>
+        </nav>
+
+        {/* --- ANIMATED FULLSCREEN OVERLAY MENU --- */}
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(10, 7, 24, 0.98)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            zIndex: 200,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: isMenuOpen ? 1 : 0,
+            transform: isMenuOpen ? 'scale(1)' : 'scale(1.03)',
+            pointerEvents: isMenuOpen ? 'all' : 'none',
+            transition: 'opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+        >
+          {/* Close Button Cross (X) */}
+          <button
+            onClick={() => setIsMenuOpen(false)}
+            aria-label="Close Menu"
+            style={{
+              position: 'absolute',
+              top: isMobile ? '16px' : '32px',
+              right: isMobile ? '16px' : '40px',
+              background: 'transparent',
+              border: '1px solid rgba(255,255,255,0.2)',
+              borderRadius: '4px',
+              color: '#FFFFFF',
+              fontSize: '24px',
+              width: '44px',
+              height: '44px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              opacity: isMenuOpen ? 1 : 0,
+              transform: isMenuOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
+              transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s',
+            }}
+          >
+            ✕
+          </button>
+
+          {/* Menu Navigation Links */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: isMobile ? '24px' : '32px',
+              fontFamily: 'sans-serif',
+            }}
+          >
+            {menuLinks.map((link, index) => (
+              <div
+                key={link.label}
+                style={{
+                  opacity: isMenuOpen ? 1 : 0,
+                  transform: isMenuOpen ? 'translateY(0)' : 'translateY(20px)',
+                  // Applies an incremental animation delay for each link item
+                  transition: `opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.1 + index * 0.06}s, 
+                             transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.1 + index * 0.06}s`,
+                }}
+              >
+                <a
+                  href={link.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  style={{
+                    fontSize: isMobile ? '24px' : '34px',
+                    fontWeight: link.active ? 700 : 500,
+                    color: link.active ? '#FF7043' : '#FFFFFF',
+                    textDecoration: 'none',
+                    opacity: link.active ? 1 : 0.8,
+                    display: 'block',
+                    transition: 'transform 0.2s ease, opacity 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                    e.currentTarget.style.opacity = '1';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                    e.currentTarget.style.opacity = link.active ? '1' : '0.8';
+                  }}
+                >
+                  {link.label}
+                </a>
+              </div>
+            ))}
           </div>
         </div>
 
-        {mobileOpen && (
-          <div style={{ background: 'var(--es-bg-card)', borderTop: '1px solid var(--es-border)', padding: '20px var(--container-padding)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {[
-              { href: '#team-builder', label: 'Build Team' },
-              { href: '#emergency', label: 'Emergency Help' },
-              { href: '#earn', label: 'Earn With Us' },
-              { href: '#flow', label: 'How It Works' },
-              { href: '/professionals', label: 'Browse Professionals' },
-            ].map(({ href, label }) => (
-              <Link key={href} href={href} className="nav__link" onClick={() => setMobileOpen(false)}>
-                {label}
-              </Link>
-            ))}
-          </div>
-        )}
-      </header>
-      <main>
-
-        {/* Hero Section  */}
+        {/* --- HERO SECTION --- */}
         <section
           id="hero"
-          style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', overflow: 'hidden', background: 'var(--es-plum-light)' }}
+          style={{
+            position: 'relative',
+            minHeight: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
+            background: BRAND_COLORS.plumLight,
+          }}
         >
-          {!isMobile && (
-            <>
-              <video autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.50, filter: 'saturate(1.1)' }}>
-                <source src={bannerVideo} type="video/mp4" />
-              </video>
-              <div style={{
-                position: 'absolute', inset: 0, background: `
-linear-gradient(
-  90deg,
-  rgba(18,13,42,0.88) 0%,
-  rgba(18,13,42,0.72) 38%,
-  rgba(18,13,42,0.42) 62%,
-  rgba(18,13,42,0.18) 100%
-)
-`}} />
-              {/* <div style={{ position: 'absolute', top: '-5%', right: '5%', width: '55vw', height: '55vw', maxWidth: '700px', maxHeight: '700px', background: 'radial-gradient(ellipse at center, rgba(196,155,43,0.18) 0%, transparent 68%)', pointerEvents: 'none' }} /> */}
-              {/* <div style={{ position: 'absolute', bottom: 0, left: '-5%', width: '50vw', height: '50vw', maxWidth: '600px', maxHeight: '600px', background: 'radial-gradient(ellipse at center, rgba(196,155,43,0.18) 0%, transparent 68%)', pointerEvents: 'none' }} /> */}
-            </>
-          )}
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              opacity: 0.50,
+              filter: 'saturate(1.1)',
+              zIndex: 1,
+            }}
+          >
+            <source src={bannerVideo} type="video/mp4" />
+          </video>
 
-          {isMobile && (
-            <div style={{
-              position: 'absolute', inset: 0, background: `
-linear-gradient(
-  180deg,
-  #140D2F 0%,
-  #1B1438 38%,
-  #241B45 100%
-)
-`}}>
-              <div style={{ position: 'absolute', top: 0, right: 0, width: '280px', height: '280px', background: 'radial-gradient(ellipse at top right, rgba(196,155,43,0.10) 0%, transparent 65%)', pointerEvents: 'none' }} />
-              <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px)', backgroundSize: '24px 24px', pointerEvents: 'none' }} />
-            </div>
-          )}
-
-          {/* Desktop hero */}
-          {!isMobile && (
-            <div className="container" style={{ position: 'relative', zIndex: 2, paddingBlock: 'clamp(100px, 14vh, 140px) 80px' }}>
-              <div className="animate-fade-up" style={{ marginBottom: '28px' }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '7px 18px', background: 'rgba(196,155,43,0.12)', border: '1px solid rgba(196,155,43,0.30)', borderRadius: '999px', fontSize: '13px', fontWeight: 600, color: 'var(--es-gold-light)', letterSpacing: '0.04em' }}>
-                  <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: 'var(--es-gold)', boxShadow: '0 0 0 3px rgba(196,155,43,0.30)', animation: 'pulseSoft 2s infinite', flexShrink: 0 }} />
-                  India's Premier Event Staffing Platform
-                </span>
-              </div>
-              <h1 className="text-hero animate-fade-up delay-1" style={{ color: '#FFFFFF', maxWidth: '820px', marginBottom: '24px' }}>
-                Your Event Team,{' '}
-                <br />
-                <span style={{ background: 'linear-gradient(135deg, var(--es-gold-light) 0%, var(--es-gold) 60%, var(--es-gold-dark) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-                  Ready in Minutes.
-                </span>
-              </h1>
-              <p className="animate-fade-up delay-2" style={{ fontSize: 'clamp(16px, 2vw, 18px)', color: 'rgba(255,255,255,0.60)', maxWidth: '520px', lineHeight: 1.7, marginBottom: '44px' }}>
-                Hire verified anchors, decorators, coordinators, production crews and event managers — for any event, anywhere across India.
-              </p>
-              {/* <div className="animate-fade-up delay-3 es-hero-ctas">
-                <Link href="/professionals" className="btn btn-primary btn-lg">Book Event Crew</Link>
-                <Link href="/vendor/register" className="btn btn-vendor btn-lg">Join as a Professional</Link>
-                <Link href="#team-builder" className="btn btn-outline-light btn-lg">Explore Services</Link>
-              </div> */}
-              <div className="animate-fade-up delay-4 es-hero-stats">
-                {HERO_STATS.map(({ value, label }) => <StatCounter key={label} value={value} label={label} />)}
-              </div>
-            </div>
-          )}
-
-          {/* Mobile hero */}
-          {isMobile && (
-            <div style={{ position: 'relative', zIndex: 2, width: '100%', paddingTop: '90px', paddingBottom: '48px' }}>
-              <div style={{ position: 'relative', margin: '0 20px 32px', borderRadius: '20px', overflow: 'hidden', aspectRatio: '16/9', boxShadow: '0 24px 60px rgba(0,0,0,0.55)', border: '1px solid rgba(196,155,43,0.20)' }}>
-                <video autoPlay muted loop playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}>
-                  <source src={bannerVideo} type="video/mp4" />
-                </video>
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, rgba(14,8,32,0.70) 100%)' }} />
-                <div style={{ position: 'absolute', top: '12px', left: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', background: 'rgba(196,155,43,0.15)', border: '1px solid rgba(196,155,43,0.35)', borderRadius: '999px', backdropFilter: 'blur(8px)' }}>
-                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--es-gold)', animation: 'pulseSoft 2s infinite' }} />
-                  <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--es-gold-light)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Live Platform</span>
-                </div>
-              </div>
-
-              <div style={{ padding: '0 20px' }}>
-                <span style={{ display: 'block', fontSize: '11px', fontWeight: 700, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--es-gold)', marginBottom: '14px' }}>
-                  India's Premier Event Staffing
-                </span>
-                <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '38px', fontWeight: 800, lineHeight: 1.08, letterSpacing: '-0.03em', color: '#FFFFFF', marginBottom: '16px' }}>
-                  Your Event Team,{' '}
-                  <span style={{ background: 'linear-gradient(135deg, var(--es-gold-light) 0%, var(--es-gold) 60%, var(--es-gold-dark) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-                    Ready in Minutes.
-                  </span>
-                </h1>
-                <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.58)', lineHeight: 1.65, marginBottom: '28px' }}>
-                  Hire verified anchors, decorators, coordinators and event managers — anywhere in India.
-                </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '36px' }}>
-                  <Link href="/professionals" className="btn btn-primary btn-lg" style={{ width: '100%', justifyContent: 'center' }}>
-                    Book Event Crew
-                  </Link>
-                  <Link href="/vendor/register" className="btn btn-outline-light btn-lg" style={{ width: '100%', justifyContent: 'center' }}>
-                    Join as a Professional
-                  </Link>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', paddingTop: '28px', borderTop: '1px solid rgba(255,255,255,0.10)' }}>
-                  {HERO_STATS.map(({ value, label }) => (
-                    <div key={label}>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '24px', color: 'var(--es-gold)', lineHeight: 1, marginBottom: '4px', fontWeight: 400 }}>{value}</div>
-                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.38)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' as const }}>{label}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {!isMobile && (
-            <div style={{ position: 'absolute', bottom: '28px', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', opacity: 0.32, animation: 'fadeIn 1s ease 1.5s both' }}>
-              <span style={{ fontSize: '9px', color: '#fff', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 600 }}>Scroll</span>
-              <div style={{ width: '1px', height: '44px', background: 'linear-gradient(to bottom, rgba(255,255,255,0.7), transparent)' }} />
-            </div>
-          )}
+          {/* Centered Content Block */}
+          <div
+            style={{
+              position: 'relative',
+              zIndex: 2,
+              textAlign: 'center',
+              padding: '0 24px',
+              maxWidth: '900px',
+              width: '100%',
+            }}
+          >
+            <h1
+              style={{
+                color: '#FFFFFF',
+                fontSize: isMobile ? '38px' : 'clamp(44px, 6vw, 76px)',
+                fontWeight: 800,
+                lineHeight: isMobile ? 1.15 : 1.1,
+                letterSpacing: '-0.03em',
+                margin: 0,
+              }}
+            >
+              Your Event Team,{' '}
+              <br />
+              <span
+                style={{
+                  background: BRAND_COLORS.gold,
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
+                Ready in Minutes.
+              </span>
+            </h1>
+          </div>
         </section>
 
+        {/* CSS Keyframes for the Emergency Badge */}
+        <style jsx global>{`
+        @keyframes pulse {
+          0% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.2); opacity: 0.8; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+      `}</style>
+
+
         {/* Marque Tag */}
-        <div style={{ background: 'var(--es-plum)', borderTop: '1px solid rgba(255,255,255,0.07)', borderBottom: '1px solid rgba(255,255,255,0.07)', overflow: 'hidden', padding: '14px 0' }}>
+        <div
+          style={{
+            background: 'linear-gradient(135deg, #1E1045 0%, #120D2A 100%)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+            borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+            overflow: 'hidden',
+            padding: '16px 0'
+          }}
+        >
           <div className="ticker-track">
             {[...Array(2)].map((_, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0' }}>
-                {['2,400+ Verified Professionals', 'Weddings', 'Corporate Events', 'Concerts & Live Shows', 'Product Launches', 'College Festivals', '24 Cities Covered', '850+ Events Executed', '30-Min Emergency Response', 'Trusted by Leading Brands'].map((item) => (
-                  <span key={item} style={{ display: 'inline-flex', alignItems: 'center', gap: '18px', padding: '0 28px', fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.55)', whiteSpace: 'nowrap', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                    <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--es-gold)', flexShrink: 0 }} />
+                {[
+                  '2,400+ Verified Professionals',
+                  'Weddings',
+                  'Corporate Events',
+                  'Concerts & Live Shows',
+                  'Product Launches',
+                  'College Festivals',
+                  '24 Cities Covered',
+                  '850+ Events Executed',
+                  '30-Min Emergency Response',
+                  'Trusted by Leading Brands'
+                ].map((item) => (
+                  <span
+                    key={item}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '18px',
+                      padding: '0 28px',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: '#FFFFFF',
+                      whiteSpace: 'nowrap',
+                      letterSpacing: '0.06em',
+                      textTransform: 'uppercase'
+                    }}
+                  >
+                    <span
+                      style={{
+                        width: '6px',
+                        height: '6px',
+                        borderRadius: '50%',
+                        background: 'var(--es-gold)', // Clean solid gold accent dot
+                        flexShrink: 0
+                      }}
+                    />
                     {item}
                   </span>
                 ))}
@@ -884,93 +1127,283 @@ linear-gradient(
           </div>
         </div>
 
-        {/* Build your team */}
-        <section id="team-builder" className="section" style={{ position: 'relative', overflow: 'hidden', background: 'var(--es-bg)' }}>
-          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(45,27,105,0.08) 1.5px, transparent 1.5px)', backgroundSize: '28px 28px', pointerEvents: 'none', opacity: 0.7 }} />
+        {/*  */}
+        {/* CSS Layout and Text Animation classes */}
+        <style jsx global>{`
+        .es-stats-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 48px;
+          align-items: start;
+          max-width: 1280px;
+          margin: 0 auto;
+          width: 100%;
+        }
+
+        /* Smooth Text Switcher Transitions */
+        .changing-word {
+          transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .changing-word.fade-in {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .changing-word.fade-out {
+          opacity: 0;
+          transform: translateY(4px);
+        }
+
+        @media (min-width: 1024px) {
+          .es-stats-grid {
+            grid-template-columns: 1.1fr 1fr; 
+            gap: 56px 40px;
+          }
+          .es-stats-grid > :nth-child(3) {
+            grid-column: 1 / -1; 
+            margin-top: 12px;
+          }
+        }
+      `}</style>
+
+        <section
+          ref={sectionRef}
+          style={{
+            background: '#FFFFFF',
+            padding: 'clamp(50px, 6vw, 90px) clamp(20px, 4vw, 60px)',
+            borderTop: '1px solid #E8E2D5',
+            borderBottom: '1px solid #E8E2D5',
+            fontFamily: 'var(--font-ui), sans-serif',
+            width: '100%',
+            boxSizing: 'border-box',
+          }}
+        >
+          <div className="es-stats-grid">
+
+            {/* --- LEFT COLUMN: HEADING & ANIMATING TEXT --- */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <span
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.12em',
+                  color: 'var(--es-gold, #C49B2B)',
+                }}
+              >
+                On-Demand Staffing
+              </span>
+              <h2
+                style={{
+                  fontFamily: 'var(--font-display), sans-serif',
+                  fontSize: 'clamp(32px, 3.8vw, 44px)',
+                  fontWeight: 800,
+                  lineHeight: 1.15,
+                  color: '#1A1A2E',
+                  letterSpacing: '-0.02em',
+                  margin: 0,
+                }}
+              >
+                Book Top-Tier{' '}
+                <br />
+                <span
+                  className={`changing-word ${fadeState}`}
+                  style={{
+                    color: 'var(--es-plum-dark, #1E1045)',
+                    display: 'inline-block',
+                    borderBottom: '3px solid var(--es-gold, #C49B2B)',
+                    paddingBottom: '2px',
+                    transformOrigin: 'left center',
+                  }}
+                >
+                  {CHANGING_WORDS[wordIndex]}
+                </span>{' '}
+                <br />
+                In Record Time.
+              </h2>
+            </div>
+
+            {/* --- RIGHT COLUMN: WORKING LIVE GRID COUNTERS --- */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: '32px 24px',
+                width: '100%',
+              }}
+            >
+              {HERO_STATS.map((stat, idx) => (
+                <div key={stat.label} style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono), monospace',
+                      fontSize: 'clamp(28px, 3.2vw, 38px)',
+                      fontWeight: 800,
+                      color: '#1A1A2E',
+                      lineHeight: 1,
+                    }}
+                  >
+                    {counts[idx].toLocaleString()}
+                    <span style={{ color: 'var(--es-gold, #C49B2B)' }}>{stat.suffix}</span>
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '13px',
+                      fontWeight: 500,
+                      color: '#5C5470',
+                      lineHeight: 1.4,
+                      letterSpacing: '-0.01em',
+                    }}
+                  >
+                    {stat.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* --- BOTTOM ROW (DESKTOP): CTA CARD LINK --- */}
+            <div style={{ width: '100%' }}>
+              <Link
+                href="/professionals"
+                className="cta-action-card"
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  padding: '40px 24px',
+                  background: 'linear-gradient(135deg, #1E1045 0%, #120D2A 100%)',
+                  borderRadius: '16px',
+                  textDecoration: 'none',
+                  boxShadow: '0 12px 32px rgba(30, 16, 69, 0.12)',
+                  cursor: 'pointer',
+                  border: '2px solid rgba(196, 155, 43, 0.15)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  boxSizing: 'border-box',
+                  width: '100%',
+                }}
+              >
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '-50%',
+                    left: '-50%',
+                    width: '200%',
+                    height: '200%',
+                    background: 'radial-gradient(circle, rgba(196,155,43,0.07) 0%, transparent 65%)',
+                    pointerEvents: 'none',
+                  }}
+                />
+
+                <span
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    color: 'var(--es-gold-light, #F3E5AB)',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    marginBottom: '14px',
+                  }}
+                >
+                  Instant Deployment
+                </span>
+
+                <span
+                  style={{
+                    fontFamily: 'var(--font-display), sans-serif',
+                    fontSize: '20px',
+                    fontWeight: 800,
+                    color: '#FFFFFF',
+                    lineHeight: 1.2,
+                    marginBottom: '24px',
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  Build Your Event Team
+                </span>
+
+                <div
+                  className="inner-action-pill"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '13px 26px',
+                    background: 'var(--es-gold, #C49B2B)',
+                    color: '#1E1045',
+                    fontSize: '14px',
+                    fontWeight: 700,
+                    borderRadius: '999px',
+                    boxShadow: 'var(--shadow-gold)',
+                  }}
+                >
+                  Get Started Now
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="cta-arrow"
+                  >
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </div>
+              </Link>
+            </div>
+
+          </div>
+        </section>
+
+        {/* How it works */}
+        <section id="flow" className="section" style={{ background: 'var(--es-bg)', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '180px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--es-gold), transparent)', borderRadius: '999px' }} />
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(45,27,105,0.07) 1.5px, transparent 1.5px)', backgroundSize: '32px 32px', pointerEvents: 'none', opacity: 0.5 }} />
 
           <div className="container" style={{ position: 'relative' }}>
-            <div className="">
-              <span className="text-overline">Get Started</span>
-              <h2 className="text-display" style={{ marginBottom: '14px', color: 'var(--es-plum-dark)' }}>
-                Build Your Event Team
+            <div className="" style={{ marginBottom: '72px' }}>
+              <span className="text-overline">How It Works</span>
+              <h2 className="text-display" style={{ marginBottom: '12px', color: 'var(--es-plum-dark)' }}>
+                From Idea to Execution
               </h2>
-              <p className="text-body-lg">
-                Tell us about your event — we'll match you with the best available professionals in your city, instantly.
+              <p className="text-body-lg" style={{ maxWidth: '400px' }}>
+                Six clear steps. One powerful platform. Zero chaos.
               </p>
             </div>
 
-            <div
-              className="reveal reveal-delay-1 es-team-card"
-              style={{ background: 'var(--es-bg-card)', borderRadius: 'var(--r-xl)', padding: 'clamp(28px, 4vw, 52px)', maxWidth: '920px', margin: '0 auto', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--es-border)' }}
-            >
-              <div className="es-form-row">
-                <div className="form-group">
-                  <label className="form-label">Event Type</label>
-                  <select className="form-select" value={teamForm.eventType} onChange={e => setTeamForm(p => ({ ...p, eventType: e.target.value }))}>
-                    <option value="">Select event type</option>
-                    {EVENT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Budget Range</label>
-                  <select className="form-select" value={teamForm.budget} onChange={e => setTeamForm(p => ({ ...p, budget: e.target.value }))}>
-                    <option value="">Select budget</option>
-                    {BUDGET_RANGES.map(b => <option key={b} value={b}>{b}</option>)}
-                  </select>
-                </div>
+            <div style={{ position: 'relative' }}>
+              {/* Connector line — only at 3-col layout */}
+              <div
+                className="es-flow-connector flow-connector es-hide-mobile reveal"
+                style={{ position: 'absolute', top: '44px', left: '8%', right: '8%', height: '2px', background: 'linear-gradient(90deg, transparent, var(--es-plum-border) 20%, var(--es-gold) 50%, var(--es-plum-border) 80%, transparent)', zIndex: 0, borderRadius: '2px' }}
+              />
+              <div className="es-flow-grid">
+                {FLOW_STEPS.map((step, idx) => (
+                  <FlowCard key={step.num} step={step} idx={idx} />
+                ))}
               </div>
+            </div>
 
-              <div className="es-form-row" style={{ marginBottom: '32px' }}>
-                <div className="form-group">
-                  <label className="form-label">City</label>
-                  <select className="form-select" value={teamForm.city} onChange={e => setTeamForm(p => ({ ...p, city: e.target.value }))}>
-                    <option value="">Select your city</option>
-                    {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Expected Guest Count</label>
-                  <select className="form-select" value={teamForm.guests} onChange={e => setTeamForm(p => ({ ...p, guests: e.target.value }))}>
-                    <option value="">Select guest count</option>
-                    {GUEST_OPTIONS.map(g => <option key={g} value={g}>{g}</option>)}
-                  </select>
-                </div>
-              </div>
-
-              <div className="form-group" style={{ marginBottom: '40px' }}>
-                <label className="form-label" style={{ marginBottom: '14px', display: 'block' }}>
-                  Required Services
-                  <span style={{ fontWeight: 400, color: 'var(--es-text-3)', marginLeft: '8px' }}>— select all that apply</span>
-                </label>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                  {SERVICES.map(service => (
-                    <button key={service} type="button" onClick={() => toggleService(service)} className={`tag${teamForm.services.includes(service) ? ' active' : ''}`}>
-                      {service}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="es-form-submit-row">
-                <div>
-                  {teamForm.services.length > 0 ? (
-                    <p className="text-sm"><strong style={{ color: 'var(--es-plum)' }}>{teamForm.services.length} service{teamForm.services.length > 1 ? 's' : ''}</strong> selected</p>
-                  ) : (
-                    <p className="text-sm">Select services above for the most precise matches</p>
-                  )}
-                </div>
-                <button onClick={handleTeamSubmit} className="btn btn-primary btn-lg" disabled={!isFormValid} style={{ opacity: isFormValid ? 1 : 0.5, cursor: isFormValid ? 'pointer' : 'not-allowed', minWidth: '200px' }}>
-                  Find My Team
+            <div className="es-flow-cta" style={{ textAlign: 'center', marginTop: '64px' }}>
+              <div className="reveal">
+                <Link href="/professionals" className="btn btn-primary btn-xl">
+                  Start Building Your Event Team
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-                </button>
+                </Link>
+                <p className="text-sm" style={{ marginTop: '14px', color: 'var(--es-text-3)' }}>
+                  No registration required to browse professionals
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* =========================================
-   EMERGENCY SECTION
-========================================= */}
+        {/* Emergency section */}
         <section
           id="emergency"
           className="section es-emergency-section"
@@ -1247,50 +1680,7 @@ linear-gradient(
           </div>
         </section>
 
-        {/* ══════════════════════════════════════
-            SECTION 6 — HOW IT WORKS
-        ══════════════════════════════════════ */}
-        <section id="flow" className="section" style={{ background: 'var(--es-bg)', position: 'relative', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '180px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--es-gold), transparent)', borderRadius: '999px' }} />
-          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(45,27,105,0.07) 1.5px, transparent 1.5px)', backgroundSize: '32px 32px', pointerEvents: 'none', opacity: 0.5 }} />
 
-          <div className="container" style={{ position: 'relative' }}>
-            <div className="" style={{ marginBottom: '72px' }}>
-              <span className="text-overline">How It Works</span>
-              <h2 className="text-display" style={{ marginBottom: '12px', color: 'var(--es-plum-dark)' }}>
-                From Idea to Execution
-              </h2>
-              <p className="text-body-lg" style={{ maxWidth: '400px' }}>
-                Six clear steps. One powerful platform. Zero chaos.
-              </p>
-            </div>
-
-            <div style={{ position: 'relative' }}>
-              {/* Connector line — only at 3-col layout */}
-              <div
-                className="es-flow-connector flow-connector es-hide-mobile reveal"
-                style={{ position: 'absolute', top: '44px', left: '8%', right: '8%', height: '2px', background: 'linear-gradient(90deg, transparent, var(--es-plum-border) 20%, var(--es-gold) 50%, var(--es-plum-border) 80%, transparent)', zIndex: 0, borderRadius: '2px' }}
-              />
-              <div className="es-flow-grid">
-                {FLOW_STEPS.map((step, idx) => (
-                  <FlowCard key={step.num} step={step} idx={idx} />
-                ))}
-              </div>
-            </div>
-
-            <div className="es-flow-cta" style={{ textAlign: 'center', marginTop: '64px' }}>
-              <div className="reveal">
-                <Link href="/professionals" className="btn btn-primary btn-xl">
-                  Start Building Your Event Team
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-                </Link>
-                <p className="text-sm" style={{ marginTop: '14px', color: 'var(--es-text-3)' }}>
-                  No registration required to browse professionals
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* Footer section */}
         <footer style={{ background: 'var(--es-s-footer)', paddingTop: 'clamp(48px, 7vw, 80px)', paddingBottom: '36px' }}>
@@ -1440,14 +1830,14 @@ linear-gradient(
           alignItems: 'center',
           gap: '10px',
           padding: '14px 22px',
-          background: 'var(--es-plum)',
+          background: 'linear-gradient(135deg, #1E1045 0%, #120D2A 100%)',
           color: '#FFFFFF',
           fontSize: '14px',
           fontFamily: 'var(--font-ui)',
           fontWeight: 700,
           borderRadius: '999px',
           textDecoration: 'none',
-          boxShadow: '0 4px 24px rgba(45,27,105,0.40)',
+          boxShadow: 'var(--shadow-vendor)', // 3. Replaced purple shadow with vendor emerald glow shadow
           transition: 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease',
           transform: floatingPulse ? 'scale(1.06)' : 'scale(1)',
           border: 'none',
@@ -1470,7 +1860,7 @@ linear-gradient(
 
         <span>Become a Vendor</span>
       </a>
-    </div >
+    </div>
   );
 }
 
@@ -1540,3 +1930,4 @@ function FlowCard({ step, idx }: { step: typeof FLOW_STEPS[0]; idx: number }) {
     </div>
   );
 }
+
