@@ -802,11 +802,11 @@ linear-gradient(
               <p className="animate-fade-up delay-2" style={{ fontSize: 'clamp(16px, 2vw, 18px)', color: 'rgba(255,255,255,0.60)', maxWidth: '520px', lineHeight: 1.7, marginBottom: '44px' }}>
                 Hire verified anchors, decorators, coordinators, production crews and event managers — for any event, anywhere across India.
               </p>
-              <div className="animate-fade-up delay-3 es-hero-ctas">
+              {/* <div className="animate-fade-up delay-3 es-hero-ctas">
                 <Link href="/professionals" className="btn btn-primary btn-lg">Book Event Crew</Link>
                 <Link href="/vendor/register" className="btn btn-vendor btn-lg">Join as a Professional</Link>
                 <Link href="#team-builder" className="btn btn-outline-light btn-lg">Explore Services</Link>
-              </div>
+              </div> */}
               <div className="animate-fade-up delay-4 es-hero-stats">
                 {HERO_STATS.map(({ value, label }) => <StatCounter key={label} value={value} label={label} />)}
               </div>
@@ -971,7 +971,6 @@ linear-gradient(
         {/* =========================================
    EMERGENCY SECTION
 ========================================= */}
-
         <section
           id="emergency"
           className="section es-emergency-section"

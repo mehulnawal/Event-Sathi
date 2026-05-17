@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Syne, DM_Sans } from "next/font/google";
-import "./globals.css";
-import PageLoader from "@/app/PageLoader";
+import "@/app/globals.css";
 
 const syne = Syne({
   variable: "--font-syne",
@@ -33,16 +32,9 @@ export default function RootLayout({
       lang="en"
       className={`${syne.variable} ${dmSans.variable} scroll-smooth`}
     >
-      {/*
-        Removed: bg-[#030306] text-white font-sans
-        globals.css handles all color and typography tokens.
-        Only keep antialiased and min-h-screen from Tailwind.
-      */}
       <body className="min-h-screen antialiased">
-        <PageLoader />
         {children}
       </body>
     </html>
   );
 }
-
