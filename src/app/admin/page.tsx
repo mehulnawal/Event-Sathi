@@ -121,7 +121,7 @@ export default function AdminDashboard() {
                             </div>
 
                             {/* Geo Operations Dropdown Mock */}
-                            <div style={{ display: 'flex', gap: '12px', width: '100%', sm: 'auto', maxWidth: '320px' }} className="hide-mobile">
+                            <div style={{ display: 'flex', gap: '12px', width: '100%', maxWidth: '320px' }} className="hide-mobile">
                                 <div className="form-group" style={{ width: '100%' }}>
                                     <select className="form-select" defaultValue="all">
                                         <option value="all">🌐 National Matrix (All Cities)</option>
@@ -294,7 +294,7 @@ export default function AdminDashboard() {
                                     </div>
 
                                     {/* Search Bar Visual */}
-                                    <div style={{ position: 'relative', width: '100%', sm: 'auto', maxWidth: '240px' }} className="hide-mobile">
+                                    <div style={{ position: 'relative', width: '100%', maxWidth: '240px' }} className="hide-mobile">
                                         <Search size={14} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--es-text-3)' }} />
                                         <input
                                             type="text"
