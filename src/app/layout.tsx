@@ -39,9 +39,10 @@ export default function RootLayout({
         Only keep antialiased and min-h-screen from Tailwind.
       */}
       <body className="min-h-screen antialiased">
-        <PageLoader />
+        {/* <PageLoader /> */}
         {children}
       </body>
     </html>
   );
 }
+

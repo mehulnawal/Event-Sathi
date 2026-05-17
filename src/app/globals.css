@@ -613,27 +613,40 @@ video { background: var(--es-plum-dark); }
   aspect-ratio: 3/4;
 }
 
+/* .es-emergency-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.65) saturate(1.15);
+} */
+
+/* ONLY EMERGENCY IMAGE MOBILE FIX */
+
 .es-emergency-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center bottom;
+  object-position: center;
   display: block;
   filter: brightness(0.65) saturate(1.15);
 }
 
 @media (max-width: 768px) {
 
-  .es-emergency-image-wrap {
-    aspect-ratio: auto;
-    height: auto;
-    max-height: 420px;
+  #emergency .es-emergency-image-wrap {
+    aspect-ratio: 16/10;
+    overflow: hidden;
+    border-radius: var(--r-xl);
   }
 
-  .es-emergency-image {
-    height: auto;
-    object-fit: contain;
+  #emergency .es-emergency-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
   }
+
 }
 
 .es-image-overlay {
@@ -656,6 +669,9 @@ video { background: var(--es-plum-dark); }
   background: var(--es-coral);
   border-radius: var(--r-lg);
   padding: 20px 26px;
+    width: fit-content;
+  height: fit-content;
+max-height: max-content;
   box-shadow: var(--shadow-coral);
 }
 
@@ -678,6 +694,9 @@ video { background: var(--es-plum-dark); }
 .floating-badge-2 {
   position: absolute;
   top: 20px;
+  height: fit-content;
+  width: fit-content;
+max-height: max-content;
   right: 0;
   background: rgba(255,255,255,0.96);
   border-radius: var(--r-md);

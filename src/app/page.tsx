@@ -746,23 +746,40 @@ export default function HomePage() {
         {/* Hero Section  */}
         <section
           id="hero"
-          style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', overflow: 'hidden', background: 'var(--es-plum-dark)' }}
+          style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', overflow: 'hidden', background: 'var(--es-plum-light)' }}
         >
           {!isMobile && (
             <>
               <video autoPlay muted loop playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.50, filter: 'saturate(1.1)' }}>
                 <source src={bannerVideo} type="video/mp4" />
               </video>
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(125deg, rgba(30,16,69,0.94) 0%, rgba(45,27,105,0.72) 50%, rgba(18,13,42,0.88) 100%)' }} />
-              <div style={{ position: 'absolute', top: '-5%', right: '5%', width: '55vw', height: '55vw', maxWidth: '700px', maxHeight: '700px', background: 'radial-gradient(ellipse at center, rgba(196,155,43,0.13) 0%, transparent 65%)', pointerEvents: 'none' }} />
-              <div style={{ position: 'absolute', bottom: 0, left: '-5%', width: '50vw', height: '50vw', maxWidth: '600px', maxHeight: '600px', background: 'radial-gradient(ellipse at center, rgba(76,50,153,0.18) 0%, transparent 65%)', pointerEvents: 'none' }} />
+              <div style={{
+                position: 'absolute', inset: 0, background: `
+linear-gradient(
+  90deg,
+  rgba(18,13,42,0.88) 0%,
+  rgba(18,13,42,0.72) 38%,
+  rgba(18,13,42,0.42) 62%,
+  rgba(18,13,42,0.18) 100%
+)
+`}} />
+              {/* <div style={{ position: 'absolute', top: '-5%', right: '5%', width: '55vw', height: '55vw', maxWidth: '700px', maxHeight: '700px', background: 'radial-gradient(ellipse at center, rgba(196,155,43,0.18) 0%, transparent 68%)', pointerEvents: 'none' }} /> */}
+              {/* <div style={{ position: 'absolute', bottom: 0, left: '-5%', width: '50vw', height: '50vw', maxWidth: '600px', maxHeight: '600px', background: 'radial-gradient(ellipse at center, rgba(196,155,43,0.18) 0%, transparent 68%)', pointerEvents: 'none' }} /> */}
             </>
           )}
 
           {isMobile && (
-            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(160deg, var(--es-plum-dark) 0%, #1a0e3d 60%, #0e0820 100%)' }}>
-              <div style={{ position: 'absolute', top: 0, right: 0, width: '280px', height: '280px', background: 'radial-gradient(ellipse at top right, rgba(196,155,43,0.18) 0%, transparent 60%)', pointerEvents: 'none' }} />
-              <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(196,155,43,0.10) 1px, transparent 1px)', backgroundSize: '24px 24px', pointerEvents: 'none' }} />
+            <div style={{
+              position: 'absolute', inset: 0, background: `
+linear-gradient(
+  180deg,
+  #140D2F 0%,
+  #1B1438 38%,
+  #241B45 100%
+)
+`}}>
+              <div style={{ position: 'absolute', top: 0, right: 0, width: '280px', height: '280px', background: 'radial-gradient(ellipse at top right, rgba(196,155,43,0.10) 0%, transparent 65%)', pointerEvents: 'none' }} />
+              <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px)', backgroundSize: '24px 24px', pointerEvents: 'none' }} />
             </div>
           )}
 
