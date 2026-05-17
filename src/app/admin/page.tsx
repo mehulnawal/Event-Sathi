@@ -210,7 +210,7 @@ export default function AdminDashboard() {
                     <div style={{
                         display: 'grid',
                         gridTemplateColumns: '1fr',
-                        xl: '2fr 1fr',
+                        // xl: '2fr 1fr',
                         gap: '32px'
                     }} className="es-emergency-grid">
 
