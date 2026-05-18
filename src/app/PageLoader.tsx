@@ -10,7 +10,7 @@ export default function PageLoader() {
     // const doneTimer = setTimeout(() => setPhase('done'), 3500);
     return () => {
       clearTimeout(exitTimer);
-      clearTimeout(doneTimer);
+      // clearTimeout(doneTimer);
     };
   }, []);
 
