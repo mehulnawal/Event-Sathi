@@ -7,10 +7,10 @@ export default function PageLoader() {
 
   useEffect(() => {
     const exitTimer = setTimeout(() => setPhase('exit'), 2700);
-    // const doneTimer = setTimeout(() => setPhase('done'), 3500);
+    const doneTimer = setTimeout(() => setPhase('done'), 3500);
     return () => {
       clearTimeout(exitTimer);
-      // clearTimeout(doneTimer);
+      clearTimeout(doneTimer);
     };
   }, []);
 
