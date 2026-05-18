@@ -4,8 +4,11 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 
 const bannerVideo = '/video/banner_video.mp4';
+const bannerVideoIntro = '/video/bannerVideoIntro.mp4';
 const lastMinuteEventSectionImg = '/last-minute-event-section.png';
 const teamImg = '/team.png';
+const EarnWithSaathi = '/EarnWithSaathi.png'
+const EarnWithSaathiMobile = '/EarnWithSaathiMobile.png'
 
 interface TeamForm {
   eventType: string;
@@ -1210,9 +1213,14 @@ export default function HomePage() {
                   style={{
                     color: 'var(--es-plum-dark, #1E1045)',
                     display: 'inline-block',
+                    background: 'rgba(196, 155, 43, 0.15)',
+                    padding: '4px 12px',
+                    borderRadius: '10px',
                     borderBottom: '3px solid var(--es-gold, #C49B2B)',
-                    paddingBottom: '2px',
                     transformOrigin: 'left center',
+                    fontWeight: '700',
+                    boxDecorationBreak: 'clone',
+                    WebkitBoxDecorationBreak: 'clone',
                   }}
                 >
                   {CHANGING_WORDS[wordIndex]}
@@ -1361,43 +1369,184 @@ export default function HomePage() {
         </section>
 
         {/* How it works */}
-        <section id="flow" className="section" style={{ background: 'var(--es-bg)', position: 'relative', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '180px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--es-gold), transparent)', borderRadius: '999px' }} />
-          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(45,27,105,0.07) 1.5px, transparent 1.5px)', backgroundSize: '32px 32px', pointerEvents: 'none', opacity: 0.5 }} />
+        <section
+          id="flow"
+          className="section"
+          style={{
+            position: 'relative',
+            overflow: 'hidden',
+            background: 'linear-gradient(to bottom, #FCFAF6 0%, #F6F1E7 100%)',
+            padding: '60px 0', // Added some padding for mobile breathing room
+          }}
+        >
+          {/* CSS for responsiveness - keeping it inside the component */}
+          <style>{`
+    .flow-grid {
+      display: grid;
+      gap: 28px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 768px) {
+      .flow-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1100px) {
+      .flow-grid { grid-template-columns: repeat(3, 1fr); }
+      .desktop-offset-0 { margin-top: 0px; }
+      .desktop-offset-1 { margin-top: 80px; }
+      .desktop-offset-2 { margin-top: 30px; }
+      .desktop-offset-3 { margin-top: -10px; }
+      .desktop-offset-4 { margin-top: 80px; }
+      .desktop-offset-5 { margin-top: 20px; }
+      .connector { display: block !important; }
+    }
+    .cta-flex {
+      display: flex;
+      flex-direction: column;
+      gap: 34px;
+    }
+    @media (min-width: 768px) {
+      .cta-flex { flex-direction: row; align-items: center; justify-content: space-between; }
+    }
+    .responsive-padding { padding: 34px 24px; }
+    @media (min-width: 768px) { .responsive-padding { padding: 54px; } }
+  `}</style>
 
-          <div className="container" style={{ position: 'relative' }}>
-            <div className="" style={{ marginBottom: '72px' }}>
+          {/* Ambient Background */}
+          <div style={{ position: 'absolute', top: '-120px', left: '-120px', width: '340px', height: '340px', borderRadius: '999px', background: 'rgba(4,120,87,0.10)', filter: 'blur(90px)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', bottom: '-180px', right: '-160px', width: '420px', height: '420px', borderRadius: '999px', background: 'rgba(196,155,43,0.12)', filter: 'blur(100px)', pointerEvents: 'none' }} />
+
+          {/* Noise Texture */}
+          <div style={{ position: 'absolute', inset: 0, opacity: 0.04, backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)', backgroundSize: '24px 24px', pointerEvents: 'none' }} />
+
+          <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+
+            {/* Header */}
+            <div className="reveal" style={{ marginBottom: '60px', maxWidth: '720px' }}>
               <span className="text-overline">How It Works</span>
-              <h2 className="text-display" style={{ marginBottom: '12px', color: 'var(--es-plum-dark)' }}>
+              <h2 className="text-display" style={{ marginTop: '14px', marginBottom: '18px', color: 'var(--es-text)' }}>
                 From Idea to Execution
               </h2>
-              <p className="text-body-lg" style={{ maxWidth: '400px' }}>
+              <p className="text-body-lg" style={{ maxWidth: '520px', lineHeight: 1.8 }}>
                 Six clear steps. One powerful platform. Zero chaos.
               </p>
             </div>
 
-            <div style={{ position: 'relative' }}>
-              {/* Connector line — only at 3-col layout */}
-              <div
-                className="es-flow-connector flow-connector es-hide-mobile reveal"
-                style={{ position: 'absolute', top: '44px', left: '8%', right: '8%', height: '2px', background: 'linear-gradient(90deg, transparent, var(--es-plum-border) 20%, var(--es-gold) 50%, var(--es-plum-border) 80%, transparent)', zIndex: 0, borderRadius: '2px' }}
-              />
-              <div className="es-flow-grid">
-                {FLOW_STEPS.map((step, idx) => (
-                  <FlowCard key={step.num} step={step} idx={idx} />
-                ))}
-              </div>
+            {/* Flow Grid */}
+            <div className="flow-grid">
+              {FLOW_STEPS.map((step, idx) => (
+                <div
+                  key={step.num}
+                  className={`reveal desktop-offset-${idx}`}
+                  style={{ position: 'relative' }}
+                >
+                  {/* Floating Connector (Hidden on mobile via CSS) */}
+                  {idx !== FLOW_STEPS.length - 1 && (
+                    <div
+                      className="connector"
+                      style={{
+                        display: 'none',
+                        position: 'absolute',
+                        top: '50%',
+                        right: '-18px',
+                        width: '36px',
+                        height: '2px',
+                        background: 'linear-gradient(to right, rgba(196,155,43,0.5), transparent)',
+                        zIndex: 1,
+                      }}
+                    />
+                  )}
+
+                  {/* Card */}
+                  <div
+                    className="flow-card"
+                    style={{
+                      position: 'relative',
+                      overflow: 'hidden',
+                      padding: '34px 30px',
+                      borderRadius: '30px',
+                      background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.88) 100%)',
+                      border: '1px solid rgba(212,203,184,0.65)',
+                      backdropFilter: 'blur(14px)',
+                      boxShadow: '0 10px 40px rgba(0,0,0,0.05)',
+                      transition: 'all 0.45s cubic-bezier(0.22,1,0.36,1)',
+                      height: '100%',
+                    }}
+                  >
+                    {/* Large Background Number */}
+                    <div style={{ position: 'absolute', top: '10px', right: '18px', fontSize: '88px', fontWeight: 900, lineHeight: 1, color: 'rgba(4,120,87,0.05)', userSelect: 'none', pointerEvents: 'none' }}>
+                      {step.num}
+                    </div>
+
+                    {/* Icon */}
+                    <div style={{ width: '72px', height: '72px', borderRadius: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, rgba(4,120,87,0.12), rgba(196,155,43,0.10))', color: 'var(--es-vendor)', marginBottom: '24px' }}>
+                      {step.icon}
+                    </div>
+
+                    <h3 style={{ fontSize: '24px', fontWeight: 700, lineHeight: 1.2, marginBottom: '14px', color: 'var(--es-text)' }}>
+                      {step.title}
+                    </h3>
+
+                    <p style={{ fontSize: '15px', lineHeight: 1.75, color: 'var(--es-text-2)' }}>
+                      {step.desc}
+                    </p>
+
+                    <div style={{ marginTop: '28px', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '999px', background: 'rgba(4,120,87,0.08)', border: '1px solid rgba(4,120,87,0.10)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--es-vendor)' }}>
+                      Step {step.num}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
 
-            <div className="es-flow-cta" style={{ textAlign: 'center', marginTop: '64px' }}>
-              <div className="reveal">
-                <Link href="/professionals" className="btn btn-primary btn-xl">
-                  Start Building Your Event Team
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-                </Link>
-                <p className="text-sm" style={{ marginTop: '14px', color: 'var(--es-text-3)' }}>
-                  No registration required to browse professionals
-                </p>
+            {/* CTA */}
+            <div className="reveal" style={{ marginTop: '100px' }}>
+              <div
+                className="responsive-padding"
+                style={{
+                  position: 'relative',
+                  overflow: 'hidden',
+                  borderRadius: '36px',
+                  background: 'linear-gradient(135deg, #047857 0%, #065F46 100%)',
+                  boxShadow: '0 20px 60px rgba(4,120,87,0.20)',
+                }}
+              >
+                {/* Glow */}
+                <div style={{ position: 'absolute', top: '-120px', right: '-80px', width: '280px', height: '280px', borderRadius: '999px', background: 'rgba(255,255,255,0.12)', filter: 'blur(60px)' }} />
+
+                <div className="cta-flex">
+                  <div>
+                    <h3 style={{ fontSize: 'clamp(28px, 3vw, 44px)', fontWeight: 800, lineHeight: 1.1, color: '#fff', marginBottom: '14px' }}>
+                      Start Building Your Event Team
+                    </h3>
+                    <p style={{ maxWidth: '560px', fontSize: '16px', lineHeight: 1.8, color: 'rgba(255,255,255,0.78)' }}>
+                      Browse verified professionals, compare expertise, and build your perfect execution team without registration friction.
+                    </p>
+                  </div>
+
+                  <div>
+                    <Link
+                      href="/professionals"
+                      className="btn btn-primary btn-xl"
+                      style={{
+                        background: '#fff',
+                        color: '#065F46',
+                        borderColor: '#fff',
+                        boxShadow: '0 12px 34px rgba(255,255,255,0.18)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px'
+                      }}
+                    >
+                      Explore Professionals
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                    </Link>
+                    <p style={{ marginTop: '14px', fontSize: '13px', color: 'rgba(255,255,255,0.68)' }}>
+                      No registration required to browse professionals
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1560,24 +1709,45 @@ export default function HomePage() {
             <div className="es-earn-grid">
 
               {/* Image */}
-              <div className="es-earn-img-col reveal from-left" style={{ position: 'relative' }}>
-                <div className="earn-image-wrap es-earn-img-aspect" style={{ borderRadius: 'var(--r-xl)', overflow: 'hidden', aspectRatio: '4/5' }}>
-                  <img
-                    src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=800&q=80"
-                    alt="Event professionals"
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
+              <div
+                className="es-earn-img-col reveal from-left"
+                style={{ position: 'relative' }}
+              >
+                <div
+                  className="earn-image-wrap es-earn-img-aspect"
+                  style={{
+                    borderRadius: 'var(--r-xl)',
+                    overflow: 'hidden',
+                    aspectRatio: '4/5',
+                  }}
+                >
+                  <picture>
+                    {/* Mobile Image */}
+                    <source media="(max-width: 768px)" srcSet={EarnWithSaathiMobile} />
+
+                    {/* Desktop Image */}
+                    <img
+                      src={EarnWithSaathi}
+                      alt="Event professionals"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                      }}
+                    />
+                  </picture>
                 </div>
 
-                <div className="floating-badge-1 es-earn-float" style={{ position: 'absolute', top: '28px', right: '-20px', background: '#FFFFFF', borderRadius: 'var(--r-lg)', padding: '20px 24px', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--es-border)', minWidth: '170px' }}>
+
+                {/* <div className="floating-badge-1 es-earn-float" style={{ position: 'absolute', top: '28px', right: '-20px', background: '#FFFFFF', borderRadius: 'var(--r-lg)', padding: '20px 24px', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--es-border)', minWidth: '170px' }}>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '28px', color: 'var(--es-vendor)', lineHeight: 1, marginBottom: '5px' }}>₹40K+</div>
                   <div style={{ fontSize: '11px', color: 'var(--es-text-2)', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Avg. Monthly Earnings</div>
-                </div>
+                </div> */}
 
-                <div className="floating-badge-2 es-earn-float" style={{ position: 'absolute', bottom: '-16px', right: '20px', background: 'var(--es-vendor)', borderRadius: '999px', padding: '11px 20px', boxShadow: 'var(--shadow-vendor)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                {/* <div className="floating-badge-2 es-earn-float" style={{ position: 'absolute', bottom: '-16px', right: '20px', background: 'var(--es-vendor)', borderRadius: '999px', padding: '11px 20px', boxShadow: 'var(--shadow-vendor)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
                   <span style={{ color: '#fff', fontSize: '13px', fontWeight: 700 }}>2,400+ Professionals Earning</span>
-                </div>
+                </div> */}
               </div>
 
               {/* Content */}
@@ -1860,7 +2030,7 @@ export default function HomePage() {
 
         <span>Become a Vendor</span>
       </a>
-    </div>
+    </div >
   );
 }
 
