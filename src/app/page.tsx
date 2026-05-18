@@ -311,6 +311,15 @@ export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
+  {
+    isMenuOpen && (
+      <div style={{ /* Your full-screen menu styles here */ }}>
+        <button onClick={() => setIsMenuOpen(false)}>Close</button>
+        {/* Menu Links */}
+      </div>
+    )
+  }
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
@@ -849,30 +858,30 @@ export default function HomePage() {
           </div>
 
           {/* Right Side: Instagram & Hamburger */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-            {(
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                style={{
-                  color: '#FFFFFF',
-                  opacity: 0.85,
-                  transition: 'opacity 0.2s',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
-                onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.85')}
-              >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                </svg>
-              </a>
-            )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '16px' : '24px' }}>
+
+            {/* Removed the !isMobile check to show on both mobile and desktop */}
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              style={{
+                color: '#FFFFFF',
+                opacity: 0.85,
+                transition: 'opacity 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.85')}
+            >
+              <svg width={isMobile ? "20" : "24"} height={isMobile ? "20" : "24"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
 
             {/* Hamburger Menu Trigger */}
             <button
@@ -885,13 +894,13 @@ export default function HomePage() {
                 color: '#FFFFFF',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '6px',
+                gap: isMobile ? '5px' : '6px',
                 padding: '4px',
               }}
             >
-              <span style={{ width: '28px', height: '2px', background: '#FFFFFF' }} />
-              <span style={{ width: '28px', height: '2px', background: '#FFFFFF' }} />
-              <span style={{ width: '28px', height: '2px', background: '#FFFFFF' }} />
+              <span style={{ width: isMobile ? '24px' : '28px', height: '2px', background: '#FFFFFF' }} />
+              <span style={{ width: isMobile ? '24px' : '28px', height: '2px', background: '#FFFFFF' }} />
+              <span style={{ width: isMobile ? '24px' : '28px', height: '2px', background: '#FFFFFF' }} />
             </button>
           </div>
         </nav>
