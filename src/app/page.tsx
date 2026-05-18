@@ -304,29 +304,31 @@ export default function HomePage() {
   const [wordIndex, setWordIndex] = useState(0);
   const [fadeState, setFadeState] = useState('fade-in');
 
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      setMenuVisible(true); // Show immediately when opening
+    } else {
+      const timer = setTimeout(() => setMenuVisible(false), 420); // Hide AFTER fade-out finishes
+      return () => clearTimeout(timer);
+    }
+  }, [isMenuOpen]);
+
   const [counts, setCounts] = useState(HERO_STATS.map(() => 0));
   const [hasAnimated, setHasAnimated] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  {
-    isMenuOpen && (
-      <div style={{ /* Your full-screen menu styles here */ }}>
-        <button onClick={() => setIsMenuOpen(false)}>Close</button>
-        {/* Menu Links */}
-      </div>
-    )
-  }
-
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    setMounted(true);
+    const check = () => setIsMobile(window.innerWidth <= 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
   }, []);
 
   // 1. Snappy text rotation logic with hardware translation timers
@@ -421,15 +423,15 @@ export default function HomePage() {
 
   const isFormValid = teamForm.eventType && teamForm.budget && teamForm.city && teamForm.guests;
 
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth <= 768);
-    check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
-  }, []);
+  // useEffect(() => {
+  //   const check = () => setIsMobile(window.innerWidth <= 768);
+  //   check();
+  //   window.addEventListener('resize', check);
+  //   return () => window.removeEventListener('resize', check);
+  // }, []);
 
   return (
-    <div>
+    <div suppressHydrationWarning>
       <style>{`
         /* ════════════════════════════════════════
            RESPONSIVE SYSTEM
@@ -792,7 +794,7 @@ export default function HomePage() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: isMobile ? '12px 16px' : '20px 40px',
+            padding: mounted && isMobile ? '12px 16px' : '20px 40px',
             background: 'rgba(20, 13, 47, 0.45)',
             backdropFilter: 'blur(12px)',
             WebkitBackdropFilter: 'blur(12px)',
@@ -800,11 +802,11 @@ export default function HomePage() {
           }}
         >
           {/* Left Side: Logo & Emergency Pill */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '10px' : '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: mounted && isMobile ? '10px' : '20px' }}>
             <span
               style={{
                 fontFamily: 'var(--font-display), "Playfair Display", Georgia, serif', // Screenshot ke mutabik high-end serif look ke liye
-                fontSize: isMobile ? '22px' : '28px',
+                fontSize: mounted && isMobile ? '22px' : '28px',
                 fontWeight: 700,
                 letterSpacing: '-0.01em',
                 display: 'inline-flex',
@@ -824,7 +826,7 @@ export default function HomePage() {
             </span>
 
             {/* Emergency Button (Hidden on mobile, only shown on large screens) */}
-            {!isMobile && (
+            {(!mounted || !isMobile) && (
               <button
                 onClick={() => alert('Emergency Staff Requested')}
                 style={{
@@ -858,7 +860,7 @@ export default function HomePage() {
           </div>
 
           {/* Right Side: Instagram & Hamburger */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '16px' : '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: mounted && isMobile ? '16px' : '24px' }}>
 
             {/* Removed the !isMobile check to show on both mobile and desktop */}
             <a
@@ -876,7 +878,7 @@ export default function HomePage() {
               onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
               onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.85')}
             >
-              <svg width={isMobile ? "20" : "24"} height={isMobile ? "20" : "24"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width={mounted && isMobile ? "20" : "24"} height={mounted && isMobile ? "20" : "24"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
@@ -894,17 +896,18 @@ export default function HomePage() {
                 color: '#FFFFFF',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: isMobile ? '5px' : '6px',
+                gap: mounted && isMobile ? '5px' : '6px',
                 padding: '4px',
               }}
             >
-              <span style={{ width: isMobile ? '24px' : '28px', height: '2px', background: '#FFFFFF' }} />
-              <span style={{ width: isMobile ? '24px' : '28px', height: '2px', background: '#FFFFFF' }} />
-              <span style={{ width: isMobile ? '24px' : '28px', height: '2px', background: '#FFFFFF' }} />
+              <span style={{ width: mounted && isMobile ? '24px' : '28px', height: '2px', background: '#FFFFFF' }} />
+              <span style={{ width: mounted && isMobile ? '24px' : '28px', height: '2px', background: '#FFFFFF' }} />
+              <span style={{ width: mounted && isMobile ? '24px' : '28px', height: '2px', background: '#FFFFFF' }} />
             </button>
           </div>
         </nav>
 
+        {/* --- ANIMATED FULLSCREEN OVERLAY MENU --- */}
         {/* --- ANIMATED FULLSCREEN OVERLAY MENU --- */}
         <div
           style={{
@@ -914,14 +917,18 @@ export default function HomePage() {
             backdropFilter: 'blur(16px)',
             WebkitBackdropFilter: 'blur(16px)',
             zIndex: 200,
-            display: 'flex',
+            display: menuVisible ? 'flex' : 'none',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
+
             opacity: isMenuOpen ? 1 : 0,
-            transform: isMenuOpen ? 'scale(1)' : 'scale(1.03)',
-            pointerEvents: isMenuOpen ? 'all' : 'none',
-            transition: 'opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+            pointerEvents: isMenuOpen ? 'auto' : 'none',
+
+            transform: isMenuOpen ? 'scale(1)' : 'scale(0.98)',
+
+            transition:
+              'opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
           }}
         >
           {/* Close Button Cross (X) */}
@@ -930,8 +937,8 @@ export default function HomePage() {
             aria-label="Close Menu"
             style={{
               position: 'absolute',
-              top: isMobile ? '16px' : '32px',
-              right: isMobile ? '16px' : '40px',
+              top: mounted && isMobile ? '16px' : '32px',
+              right: mounted && isMobile ? '16px' : '40px',
               background: 'transparent',
               border: '1px solid rgba(255,255,255,0.2)',
               borderRadius: '4px',
@@ -943,9 +950,8 @@ export default function HomePage() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              opacity: isMenuOpen ? 1 : 0,
-              transform: isMenuOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
-              transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s',
+              transition:
+                'all 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s',
             }}
           >
             ✕
@@ -957,7 +963,7 @@ export default function HomePage() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: isMobile ? '24px' : '32px',
+              gap: mounted && isMobile ? '24px' : '32px',
               fontFamily: 'sans-serif',
             }}
           >
@@ -966,17 +972,19 @@ export default function HomePage() {
                 key={link.label}
                 style={{
                   opacity: isMenuOpen ? 1 : 0,
-                  transform: isMenuOpen ? 'translateY(0)' : 'translateY(20px)',
-                  // Applies an incremental animation delay for each link item
-                  transition: `opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.1 + index * 0.06}s, 
-                             transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.1 + index * 0.06}s`,
+                  transform: isMenuOpen
+                    ? 'translateY(0)'
+                    : 'translateY(20px)',
+                  transition: `opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.1 + index * 0.06
+                    }s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.1 + index * 0.06
+                    }s`,
                 }}
               >
                 <a
                   href={link.href}
                   onClick={() => setIsMenuOpen(false)}
                   style={{
-                    fontSize: isMobile ? '24px' : '34px',
+                    fontSize: mounted && isMobile ? '24px' : '34px',
                     fontWeight: link.active ? 700 : 500,
                     color: link.active ? '#FF7043' : '#FFFFFF',
                     textDecoration: 'none',
@@ -990,7 +998,9 @@ export default function HomePage() {
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.opacity = link.active ? '1' : '0.8';
+                    e.currentTarget.style.opacity = link.active
+                      ? '1'
+                      : '0.8';
                   }}
                 >
                   {link.label}
@@ -1018,13 +1028,14 @@ export default function HomePage() {
             muted
             loop
             playsInline
+            suppressHydrationWarning
             style={{
               position: 'absolute',
               inset: 0,
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              opacity: 0.50,
+              opacity: 0.5,
               filter: 'saturate(1.1)',
               zIndex: 1,
             }}
@@ -1046,15 +1057,14 @@ export default function HomePage() {
             <h1
               style={{
                 color: '#FFFFFF',
-                fontSize: isMobile ? '38px' : 'clamp(44px, 6vw, 76px)',
+                fontSize: mounted && isMobile ? '38px' : 'clamp(44px, 6vw, 76px)',
                 fontWeight: 800,
-                lineHeight: isMobile ? 1.15 : 1.1,
+                lineHeight: mounted && isMobile ? 1.15 : 1.1,
                 letterSpacing: '-0.03em',
                 margin: 0,
               }}
             >
-              Your Event Team,{' '}
-              <br />
+              Your Event Team, <br />
               <span
                 style={{
                   background: BRAND_COLORS.gold,
@@ -1070,7 +1080,7 @@ export default function HomePage() {
         </section>
 
         {/* CSS Keyframes for the Emergency Badge */}
-        <style jsx global>{`
+        <style>{`
         @keyframes pulse {
           0% { transform: scale(1); opacity: 1; }
           50% { transform: scale(1.2); opacity: 0.8; }
@@ -1140,7 +1150,7 @@ export default function HomePage() {
 
         {/*  */}
         {/* CSS Layout and Text Animation classes */}
-        <style jsx global>{`
+        <style>{`
         .es-stats-grid {
           display: grid;
           grid-template-columns: 1fr;
@@ -1662,7 +1672,7 @@ export default function HomePage() {
                 </div>
 
                 {/* FLOATING BADGES */}
-                {!isMobile && (
+                {(!mounted || !isMobile) && (
                   <>
 
                     <div className="floating-badge-1">
@@ -2108,4 +2118,3 @@ function FlowCard({ step, idx }: { step: typeof FLOW_STEPS[0]; idx: number }) {
     </div>
   );
 }
-

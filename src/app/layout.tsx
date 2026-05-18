@@ -31,7 +31,7 @@ export default function RootLayout({
       lang="en"
       className={`${syne.variable} ${dmSans.variable} scroll-smooth`}
     >
-      <body className="min-h-screen antialiased">
+      <body className="min-h-screen antialiased" suppressHydrationWarning>
         {/* Loader sirf tabhi aayega jab url exact "/" hoga (like http://localhost:3000/) */}
         {pathname === "/" && <PageLoader />}
 
