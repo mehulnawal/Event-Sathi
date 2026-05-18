@@ -1500,71 +1500,85 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Flow Grid */}
             <div className="flow-grid">
-              {FLOW_STEPS.map((step, idx) => (
-                <div
-                  key={step.num}
-                  className={`reveal desktop-offset-${idx}`}
-                  style={{ position: 'relative' }}
-                >
-                  {/* Floating Connector (Hidden on mobile via CSS) */}
-                  {idx !== FLOW_STEPS.length - 1 && (
-                    <div
-                      className="connector"
-                      style={{
-                        display: 'none',
-                        position: 'absolute',
-                        top: '50%',
-                        right: '-18px',
-                        width: '36px',
-                        height: '2px',
-                        background: 'linear-gradient(to right, rgba(196,155,43,0.5), transparent)',
-                        zIndex: 1,
-                      }}
-                    />
-                  )}
+              {FLOW_STEPS.map((step, idx) => {
+                const isFirst = idx === 0;
 
-                  {/* Card */}
+                // Wrapper component based on whether it's the first item
+                const CardWrapper = isFirst ? 'a' : 'div';
+                const wrapperProps = isFirst
+                  ? {
+                    href: "https://event-sathi.netlify.app/professionals",
+                    style: { textDecoration: 'none', display: 'block', height: '100%' }
+                  }
+                  : {};
+
+                return (
                   <div
-                    className="flow-card"
-                    style={{
-                      position: 'relative',
-                      overflow: 'hidden',
-                      padding: '34px 30px',
-                      borderRadius: '30px',
-                      background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.88) 100%)',
-                      border: '1px solid rgba(212,203,184,0.65)',
-                      backdropFilter: 'blur(14px)',
-                      boxShadow: '0 10px 40px rgba(0,0,0,0.05)',
-                      transition: 'all 0.45s cubic-bezier(0.22,1,0.36,1)',
-                      height: '100%',
-                    }}
+                    key={step.num}
+                    className={`reveal desktop-offset-${idx}`}
+                    style={{ position: 'relative' }}
                   >
-                    {/* Large Background Number */}
-                    <div style={{ position: 'absolute', top: '10px', right: '18px', fontSize: '88px', fontWeight: 900, lineHeight: 1, color: 'rgba(4,120,87,0.05)', userSelect: 'none', pointerEvents: 'none' }}>
-                      {step.num}
-                    </div>
+                    {/* Floating Connector */}
+                    {idx !== FLOW_STEPS.length - 1 && (
+                      <div
+                        className="connector"
+                        style={{
+                          display: 'none',
+                          position: 'absolute',
+                          top: '50%',
+                          right: '-18px',
+                          width: '36px',
+                          height: '2px',
+                          background: 'linear-gradient(to right, rgba(196,155,43,0.5), transparent)',
+                          zIndex: 1,
+                        }}
+                      />
+                    )}
 
-                    {/* Icon */}
-                    <div style={{ width: '72px', height: '72px', borderRadius: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, rgba(4,120,87,0.12), rgba(196,155,43,0.10))', color: 'var(--es-vendor)', marginBottom: '24px' }}>
-                      {step.icon}
-                    </div>
+                    <CardWrapper {...wrapperProps}>
+                      <div
+                        className={`flow-card ${isFirst ? 'interactive-card' : ''}`}
+                        style={{
+                          position: 'relative',
+                          overflow: 'hidden',
+                          padding: '34px 30px',
+                          borderRadius: '30px',
+                          background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.88) 100%)',
+                          border: '1px solid rgba(212,203,184,0.65)',
+                          backdropFilter: 'blur(14px)',
+                          boxShadow: '0 10px 40px rgba(0,0,0,0.05)',
+                          transition: 'all 0.45s cubic-bezier(0.22,1,0.36,1)',
+                          height: '100%',
+                          cursor: isFirst ? 'pointer' : 'default',
+                        }}
+                      >
+                        {/* Large Background Number */}
+                        <div style={{ position: 'absolute', top: '10px', right: '18px', fontSize: '88px', fontWeight: 900, lineHeight: 1, color: 'rgba(4,120,87,0.05)', userSelect: 'none', pointerEvents: 'none' }}>
+                          {step.num}
+                        </div>
 
-                    <h3 style={{ fontSize: '24px', fontWeight: 700, lineHeight: 1.2, marginBottom: '14px', color: 'var(--es-text)' }}>
-                      {step.title}
-                    </h3>
+                        {/* Icon */}
+                        <div style={{ width: '72px', height: '72px', borderRadius: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, rgba(4,120,87,0.12), rgba(196,155,43,0.10))', color: 'var(--es-vendor)', marginBottom: '24px' }}>
+                          {step.icon}
+                        </div>
 
-                    <p style={{ fontSize: '15px', lineHeight: 1.75, color: 'var(--es-text-2)' }}>
-                      {step.desc}
-                    </p>
+                        <h3 style={{ fontSize: '24px', fontWeight: 700, lineHeight: 1.2, marginBottom: '14px', color: 'var(--es-text)' }}>
+                          {step.title}
+                        </h3>
 
-                    <div style={{ marginTop: '28px', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '999px', background: 'rgba(4,120,87,0.08)', border: '1px solid rgba(4,120,87,0.10)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--es-vendor)' }}>
-                      Step {step.num}
-                    </div>
+                        <p style={{ fontSize: '15px', lineHeight: 1.75, color: 'var(--es-text-2)' }}>
+                          {step.desc}
+                        </p>
+
+                        <div style={{ marginTop: '28px', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '999px', background: 'rgba(4,120,87,0.08)', border: '1px solid rgba(4,120,87,0.10)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--es-vendor)' }}>
+                          Step {step.num}
+                        </div>
+                      </div>
+                    </CardWrapper>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* CTA */}
