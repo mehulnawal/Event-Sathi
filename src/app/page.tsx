@@ -3,8 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 
-const bannerVideo = '/video/banner_video2.mp4';
-const bannerVideoIntro = '/video/bannerVideoIntro.mp4';
+const bannerVideo = '/video/banner_video3.mp4';
 const lastMinuteEventSectionImg = '/last-minute-event-section.png';
 const teamImg = '/team.png';
 const EarnWithSaathi = '/EarnWithSaathi.png'
@@ -851,7 +850,7 @@ export default function HomePage() {
 
           {/* Right Side: Instagram & Hamburger */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-            {!isMobile && (
+            {(
               <a
                 href="https://instagram.com"
                 target="_blank"

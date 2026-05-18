@@ -7,7 +7,7 @@ export default function PageLoader() {
 
   useEffect(() => {
     const exitTimer = setTimeout(() => setPhase('exit'), 2700);
-    const doneTimer = setTimeout(() => setPhase('done'), 3500);
+    // const doneTimer = setTimeout(() => setPhase('done'), 3500);
     return () => {
       clearTimeout(exitTimer);
       clearTimeout(doneTimer);
@@ -70,7 +70,7 @@ export default function PageLoader() {
       `}</style>
 
       {/* Subtle dot grid texture */}
-      <div
+      {/* <div
         style={{
           position: 'absolute',
           inset: 0,
@@ -78,7 +78,7 @@ export default function PageLoader() {
           backgroundSize: '30px 30px',
           pointerEvents: 'none',
         }}
-      />
+      /> */}
 
       {/* Ambient gold glow */}
       <div
