@@ -271,6 +271,8 @@ function StatCounter({ value, label }: { value: string; label: string }) {
   const [inView, setInView] = useState(false);
   const display = useCountUp(value, inView);
 
+
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -344,6 +346,13 @@ export default function HomePage() {
 
     return () => clearInterval(wordInterval);
   }, []);
+
+  const [heroVisible, setHeroVisible] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setHeroVisible(true), 3000);
+    return () => clearTimeout(timer);
+  }, []); // sirf ek baar chalega
 
   // 2. Scroll-Triggered Intersection Observer + Smooth Counter Interpolation
   // 2. Scroll-Triggered Intersection Observer + Smooth Counter Interpolation
@@ -1052,6 +1061,8 @@ export default function HomePage() {
               padding: '0 24px',
               maxWidth: '900px',
               width: '100%',
+              transform: heroVisible ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'opacity 1s ease, transform 1s ease',
             }}
           >
             <h1
