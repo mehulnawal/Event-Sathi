@@ -349,10 +349,48 @@ export default function HomePage() {
 
   const [heroVisible, setHeroVisible] = useState(false)
 
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Video loop aur 3-second timing logic tracking
   useEffect(() => {
-    const timer = setTimeout(() => setHeroVisible(true), 3000);
-    return () => clearTimeout(timer);
-  }, []); // sirf ek baar chalega
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Jab bhi video start ya seek (loop back) ho, text ko pehle invisible karo
+    const handleVideoReset = () => {
+      setHeroVisible(false);
+    };
+
+    // Jab video chal rha ho, continuously check karo agar 3 seconds complete ho gaye hain
+    const handleTimeUpdate = () => {
+      if (video.currentTime >= 3) {
+        setHeroVisible(true);
+      }
+    };
+
+    video.addEventListener('play', handleVideoReset);
+    video.addEventListener('seeking', handleVideoReset);
+    video.addEventListener('seeked', handleVideoReset);
+    video.addEventListener('timeupdate', handleTimeUpdate);
+
+    return () => {
+      video.removeEventListener('play', handleVideoReset);
+      video.removeEventListener('seeking', handleVideoReset);
+      video.removeEventListener('seeked', handleVideoReset);
+      video.removeEventListener('timeupdate', handleTimeUpdate);
+    };
+  }, []);
+
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setHeroVisible(true);
+  //     if (videoRef.current) {
+  //       videoRef.current.currentTime = 0;
+  //     }
+  //   }, 6000);
+  //   return () => clearTimeout(timer);
+  // }, []);
+
 
   // 2. Scroll-Triggered Intersection Observer + Smooth Counter Interpolation
   // 2. Scroll-Triggered Intersection Observer + Smooth Counter Interpolation
@@ -1033,6 +1071,7 @@ export default function HomePage() {
           }}
         >
           <video
+            ref={videoRef}
             autoPlay
             muted
             loop
@@ -1061,8 +1100,9 @@ export default function HomePage() {
               padding: '0 24px',
               maxWidth: '900px',
               width: '100%',
+              opacity: heroVisible ? 1 : 0,
               transform: heroVisible ? 'translateY(0)' : 'translateY(20px)',
-              transition: 'opacity 1s ease, transform 1s ease',
+              transition: 'opacity 0.5s ease-in-out, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
             <h1
