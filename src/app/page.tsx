@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 
-const bannerVideo = '/video/banner_video.mp4';
+const bannerVideo = '/video/banner_video2.mp4';
 const bannerVideoIntro = '/video/bannerVideoIntro.mp4';
 const lastMinuteEventSectionImg = '/last-minute-event-section.png';
 const teamImg = '/team.png';
