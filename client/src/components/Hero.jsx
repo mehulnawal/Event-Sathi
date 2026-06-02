@@ -35,7 +35,7 @@ export default function PremiumIndianEventHero() {
           // poster="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80&w=1600"
         >
           {/* Direct stream loopable luxury Indian festive palace backdrop */}
-          <source src="/assets/hero-video.MP4" type="video/mp4" />
+          <source src="" type="video/mp4" />
         </video>
 
         {/* REFINED OVERLAYS: Balanced golden lighting with crisp text readability */}
