@@ -68,7 +68,7 @@ export const metadata = {
 
   // App Icons Engine mapping natively
   icons: {
-    icon: "/favicon.ico",
+    icon: "/assets/favicon.png",
     shortcut: "/favicon-32x32.png",
     apple: "/apple-touch-icon.png",
   },
