@@ -9,7 +9,7 @@ const STEPS = [
     title: "Tell Us Your Need",
     desc: "Share your vision, style, traditions, and expectations. We start building the perfect experience around your celebration.",
     cardVariant: "light",
-    Icon: Sparkles,
+    Icon: Sparkles, // Relocated contextually to the Step label circle node
     cardTitle: "Personalized Planning",
     cardBody:
       "Every event starts with understanding your family, emotions, and celebration priorities.",
@@ -19,7 +19,7 @@ const STEPS = [
     title: "We Match Vendors",
     desc: "We connect you with verified premium vendors perfectly aligned to your event style and requirements.",
     cardVariant: "dark",
-    Icon: Check,
+    Icon: Check, // Relocated contextually to the Step label circle node
     cardTitle: "Verified Vendor Network",
     cardBody:
       "From decor to catering, every partner is selected for quality, professionalism, and seamless execution.",
@@ -29,7 +29,7 @@ const STEPS = [
     title: "Celebrate Stress-Free",
     desc: "Enjoy your celebration while our team handles coordination, timelines, and execution behind the scenes.",
     cardVariant: "light",
-    Icon: Users,
+    Icon: Users, // Relocated contextually to the Step label circle node
     cardTitle: "On-Ground Coordination",
     cardBody:
       "Our coordinators ensure smooth execution so your family can focus entirely on making memories.",
@@ -76,7 +76,8 @@ export default function GoldenThreadJourney() {
         if (i === 0) return;
         const prev = allPts[i - 1];
         const mid = (prev.y + curr.y) / 2;
-        const swing = i % 2 === 0 ? -70 : 70;
+        // Adjusted the swing value from 70 to 52 to match tighter clean grid track rows
+        const swing = i % 2 === 0 ? -52 : 52;
         d += ` C ${prev.x + swing} ${mid}, ${curr.x - swing} ${mid}, ${curr.x} ${curr.y}`;
       });
 
@@ -169,18 +170,19 @@ export default function GoldenThreadJourney() {
 
   return (
     <section
+      id="how-it-works"
       ref={sectionRef}
-      className="relative bg-[#F5F0E8] overflow-hidden py-24 md:py-32"
+      className="relative bg-[#F5F0E8] overflow-hidden py-10 md:py-10 lg:py-10"
     >
-      {/* styles */}
+      {/* Dynamic styles injected securely */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
 
         .gtj-step {
           opacity: 0.35;
-          transform: translateY(30px);
-          filter: blur(3px);
-          transition: opacity 0.55s ease, transform 0.55s ease, filter 0.55s ease;
+          transform: translateY(20px);
+          filter: blur(2px);
+          transition: opacity 0.5s ease, transform 0.5s ease, filter 0.5s ease;
         }
         .gtj-step.gtj-active {
           opacity: 1;
@@ -188,19 +190,21 @@ export default function GoldenThreadJourney() {
           filter: blur(0px);
         }
         .gtj-step.gtj-past {
-          opacity: 0.3;
+          opacity: 0.4;
           transform: translateY(0);
-          filter: blur(2.5px);
+          filter: blur(1.5px);
         }
         .gtj-node {
           transition: transform 0.4s ease, box-shadow 0.4s ease,
-                      background-color 0.4s ease, border-color 0.4s ease;
+                      background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease;
         }
+        /* Active structural transformation behaviors for embedded nodes */
         .gtj-step.gtj-active .gtj-node {
-          transform: scale(1.25);
+          transform: scale(1.18);
           background-color: #7B1223 !important;
           border-color: #C9973A !important;
-          box-shadow: 0 0 28px rgba(201, 151, 58, 0.45);
+          color: #F5F0E8 !important;
+          box-shadow: 0 0 20px rgba(201, 151, 58, 0.4);
         }
         .gtj-orb-ping {
           animation: gtj-ping 1.5s ease-out infinite;
@@ -211,26 +215,26 @@ export default function GoldenThreadJourney() {
         }
       `}</style>
 
-      {/* Ambient glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(201,151,58,0.08),transparent_50%)] pointer-events-none" />
+      {/* Ambient glow decorative layer */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(201,151,58,0.06),transparent_50%)] pointer-events-none" />
 
       <div className="max-w-5xl mx-auto px-6 relative z-10">
-        {/* Header */}
-        <div className="text-center mb-20 md:mb-28">
-          <span className="uppercase tracking-[0.32em] text-[#C9973A] text-[11px] font-semibold block mb-3">
+        {/* Header (Unified consistent margin controls) */}
+        <div className="text-center mb-12 md:mb-16 lg:mb-20">
+          <span className="uppercase tracking-[0.32em] text-[#C9973A] text-[11px] font-bold block mb-2">
             How It Works
           </span>
           <h2
-            className="text-[#7B1223] text-4xl md:text-5xl font-bold"
+            className="text-[#7B1223] text-3xl sm:text-4xl md:text-5xl font-bold tracking-wide"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             The Golden Thread Journey
           </h2>
-          <div className="w-20 h-px bg-[#C9973A]/30 mx-auto mt-6" />
+          <div className="w-16 h-[2px] bg-[#C9973A]/40 mx-auto mt-4" />
         </div>
 
         <div className="relative">
-          {/* Thread SVG — desktop only */}
+          {/* Thread Ribbon Track Overlay SVG Graphic Canvas (Desktop/Tablet Layout Boundary) */}
           <div
             ref={threadWrapRef}
             className="hidden md:block absolute left-0 top-0 pointer-events-none z-0"
@@ -245,7 +249,7 @@ export default function GoldenThreadJourney() {
             >
               <path
                 ref={pathBaseRef}
-                stroke="rgba(201,151,58,0.13)"
+                stroke="rgba(201,151,58,0.15)"
                 strokeWidth="2"
                 fill="none"
               />
@@ -258,16 +262,16 @@ export default function GoldenThreadJourney() {
               />
             </svg>
 
-            {/* Orb */}
+            {/* Glowing Motion Head Node Orb */}
             <div
               ref={orbRef}
               style={{
                 position: "absolute",
-                width: 18,
-                height: 18,
+                width: 14,
+                height: 14,
                 borderRadius: "50%",
                 background: "#C9973A",
-                boxShadow: "0 0 30px rgba(201,151,58,0.9)",
+                boxShadow: "0 0 25px rgba(201,151,58,0.9)",
                 transform: "translate(-50%,-50%)",
                 pointerEvents: "none",
               }}
@@ -284,74 +288,69 @@ export default function GoldenThreadJourney() {
             </div>
           </div>
 
-          {/* Steps */}
+          {/* Steps Track Container Grid (Optimized row spacing for perfect screen heights) */}
           <div
             ref={stepsContainerRef}
-            className="flex flex-col gap-28 md:gap-36 relative z-10"
+            className="flex flex-col gap-12 sm:gap-16 md:gap-24 lg:gap-28 relative z-10"
           >
             {STEPS.map((step, i) => {
               const isReverse = i % 2 !== 0;
               const isDark = step.cardVariant === "dark";
-              const Icon = step.Icon;
+              const StepIcon = step.Icon;
 
               return (
                 <div
                   key={i}
                   ref={(el) => (stepEls.current[i] = el)}
-                  className={`gtj-step flex flex-col items-center justify-between gap-10 md:gap-14 ${
+                  className={`gtj-step flex flex-col items-stretch justify-between gap-6 md:gap-10 lg:gap-14 ${
                     isReverse ? "md:flex-row-reverse" : "md:flex-row"
                   }`}
                 >
-                  {/* Text side */}
-                  <div className="w-full md:w-[44%]">
-                    <div className="flex items-center gap-4 mb-5">
-                      <div
-                        className="gtj-node w-10 h-10 rounded-full border border-[#C9973A]/30"
-                        style={{ backgroundColor: "#F5F0E8" }}
-                      />
-                      <span className="text-[11px] uppercase tracking-[0.28em] text-[#8C7B6B] font-semibold">
+                  {/* Left Column Text Content Interface Block */}
+                  <div className="w-full md:w-[46%] flex flex-col justify-center">
+                    <div className="flex items-center gap-3 mb-3">
+                      {/* FIXED MAROON CIRCLE: Custom high-contrast responsive embedded step layout graphics */}
+                      <div className="gtj-node w-9 h-9 rounded-full border border-[#C9973A]/40 flex items-center justify-center text-[#7B1223] bg-[#FDFAF5] shrink-0 shadow-sm">
+                        <StepIcon className="w-4 h-4 transition-transform duration-300" />
+                      </div>
+                      <span className="text-[11px] uppercase tracking-[0.25em] text-[#8C7B6B] font-bold">
                         {step.num}
                       </span>
                     </div>
                     <h3
-                      className="text-[#7B1223] text-[28px] md:text-[32px] font-bold mb-4 leading-tight"
+                      className="text-[#7B1223] text-2xl md:text-[28px] lg:text-[32px] font-bold mb-3 leading-tight tracking-wide"
                       style={{ fontFamily: "'Playfair Display', serif" }}
                     >
                       {step.title}
                     </h3>
-                    <p className="text-[#8C7B6B] leading-relaxed text-[15px]">
+                    <p className="text-[#8C7B6B] leading-relaxed text-sm lg:text-[15px] font-normal">
                       {step.desc}
                     </p>
                   </div>
 
-                  {/* Card side */}
+                  {/* Right Column Interactive Step Accent Card Wrapper */}
                   <div
-                    className="w-full md:w-[44%] rounded-3xl p-9 relative overflow-hidden"
+                    className="w-full md:w-[46%] rounded-2xl p-6 sm:p-8 relative overflow-hidden flex flex-col justify-center"
                     style={{
                       background: isDark ? "#7B1223" : "#FDFAF5",
-                      border: "1px solid rgba(201,151,58,0.2)",
+                      border: "1px solid rgba(201,151,58,0.18)",
                       boxShadow: isDark
-                        ? "0 20px 60px rgba(123,18,35,0.18)"
-                        : "0 4px 24px rgba(0,0,0,0.04)",
+                        ? "0 15px 45px rgba(123,18,35,0.12)"
+                        : "0 4px 20px rgba(0,0,0,0.03)",
                     }}
                   >
-                    {/* Card inner glow */}
+                    {/* Metallic inner surface background gradient mesh shadows */}
                     <div
                       className="absolute inset-0 pointer-events-none"
                       style={{
                         background: isDark
-                          ? "radial-gradient(circle at bottom left, rgba(201,151,58,0.13), transparent 60%)"
-                          : "radial-gradient(circle at top right, rgba(201,151,58,0.09), transparent 55%)",
+                          ? "radial-gradient(circle at bottom left, rgba(201,151,58,0.1), transparent 60%)"
+                          : "radial-gradient(circle at top right, rgba(201,151,58,0.06), transparent 55%)",
                       }}
                     />
 
-                    <Icon
-                      className="relative z-10 mb-7"
-                      style={{ width: 22, height: 22, color: "#C9973A" }}
-                    />
-
                     <h4
-                      className="relative z-10 text-[19px] font-semibold mb-3"
+                      className="relative z-10 text-lg md:text-[20px] font-bold mb-2 tracking-wide"
                       style={{
                         fontFamily: "'Playfair Display', serif",
                         color: isDark ? "#F5F0E8" : "#7B1223",
@@ -361,9 +360,9 @@ export default function GoldenThreadJourney() {
                     </h4>
 
                     <p
-                      className="relative z-10 leading-relaxed text-[14px]"
+                      className="relative z-10 leading-relaxed text-[13px] sm:text-[14px] font-normal"
                       style={{
-                        color: isDark ? "rgba(245,240,232,0.70)" : "#8C7B6B",
+                        color: isDark ? "rgba(245,240,232,0.75)" : "#8C7B6B",
                       }}
                     >
                       {step.cardBody}

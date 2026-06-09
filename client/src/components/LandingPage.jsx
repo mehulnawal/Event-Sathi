@@ -18,6 +18,9 @@ import {
 } from "lucide-react";
 import CinematicProcessJourney from "./ProcessSection";
 import HeroSection from "./Hero";
+import WhyChooseUsSection from "./WhyChooseUs";
+
+const teamImg = "/assets/team.jfif";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -36,6 +39,9 @@ const ASSETS = {
 export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
   const componentRef = useRef(null);
   const marqueeRef = useRef(null);
+
+  const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
+  const [isEmergencyForm, setIsEmergencyForm] = useState(false);
 
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
@@ -128,6 +134,18 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
 
     return () => ctx.revert();
   }, []);
+
+  const handleOpenStandardForm = () => {
+    setIsEmergencyForm(false);
+    setIsEnquiryOpen(true);
+    if (onSubmitClick) onSubmitClick(); // Keeps existing callback signatures intact
+  };
+
+  const handleOpenEmergencyForm = () => {
+    setIsEmergencyForm(true);
+    setIsEnquiryOpen(true);
+    if (onEmergencyClick) onEmergencyClick(); // Keeps existing callback signatures intact
+  };
 
   useEffect(() => {
     const counters = gsap.utils.toArray(".count-element");
@@ -232,31 +250,18 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
 
   const whyUsData = [
     {
-      pain: "Difficulty finding verified partners?",
-      answer:
-        "Handpicked premium visual planners, luxury decorators, and culinary chefs.",
-      val: "500",
+      pain: "Struggling to find verified decor partners?",
+      answer: "We vet every single artist on our platform.",
+      val: 200,
       suffix: "+",
+      metricLabel: "Verified Vendors",
     },
     {
-      pain: "Fear of last-minute vendor dropouts?",
-      answer: "Immediate rescue backup partners dispatched within 30 minutes.",
-      val: "100",
-      suffix: "%",
-    },
-    {
-      pain: "Overwhelming management work?",
-      answer:
-        "A trusted companion of the family handles negotiating, calls, and setup panels.",
-      val: "1200",
-      suffix: "+",
-    },
-    {
-      pain: "Over-budget complications?",
-      answer:
-        "Custom wedding packages fit completely to your budget with zero quality dilution.",
-      val: "98",
-      suffix: "%",
+      pain: "Waiting days for a simple quote response?",
+      answer: "Get customized matches in half an hour.",
+      val: 30,
+      suffix: " Min",
+      metricLabel: "Average Response Time",
     },
   ];
 
@@ -398,8 +403,10 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
           </div>
         </section> */}
 
+        {/* Hero/Banner section */}
         <HeroSection />
 
+        {/*  */}
         <section
           ref={marqueeRef}
           id="marquee"
@@ -431,15 +438,13 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
           </div>
         </section>
 
-        {/* <section
-          id="services"
-          className="bg-[#F5F0E8] py-24 px-6 relative z-10"
-        ></section> */}
+        {/* How it works */}
         <CinematicProcessJourney />
 
+        {/* Service */}
         <section
           id="services"
-          className="bg-[#F5F0E8] py-24 px-6 relative z-10"
+          className="bg-[#F5F0E8]  py-16 md:py-20 lg:py-24 px-6 relative z-10"
         >
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-16">
@@ -493,57 +498,13 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
           </div>
         </section>
 
-        <section
-          id="why-us"
-          className="bg-[#F5F0E8] py-24 px-6 relative z-10 border-t border-[#C9973A]/20"
-        >
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-16">
-              <span className="font-body text-xs font-semibold tracking-widest text-[#C9973A] uppercase block mb-2">
-                WHY CHOOSE US
-              </span>
-              <h2 className="font-heading text-3xl md:text-[40px] font-bold text-[#7B1223] font-['Playfair_Display']">
-                Why Event Sathi?
-              </h2>
-            </div>
+        {/* Why choose us */}
+        <WhyChooseUsSection whyUsData={whyUsData} />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-              {whyUsData.map((item, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: idx * 0.1 }}
-                  className="bg-[#FDFAF5] border border-[#C9973A] rounded-2xl p-8 relative shadow-sm hover:shadow-md transition-shadow group"
-                >
-                  <p className="font-body text-sm text-[#8C7B6B] italic mb-2">
-                    &ldquo;{item.pain}&rdquo;
-                  </p>
-                  <h3 className="font-heading text-[22px] font-bold text-[#7B1223] leading-snug mb-6 max-w-sm font-['Playfair_Display']">
-                    {item.answer}
-                  </h3>
-                  <div className="flex items-baseline gap-2 mt-4 border-t border-[#C9973A]/20 pt-4">
-                    <span
-                      className="font-body text-4xl font-bold text-[#C9973A] count-element font-['Inter']"
-                      data-target={item.val}
-                      data-suffix={item.suffix}
-                    >
-                      0
-                    </span>
-                    <span className="font-body text-xs text-[#8C7B6B] font-medium uppercase tracking-wider">
-                      Experience & Trust Metric
-                    </span>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
+        {/* Testimonials */}
         <section
           id="testimonials"
-          className="bg-[#F5F0E8] py-24 px-4 relative z-10 border-t border-[#C9973A]/20 overflow-hidden"
+          className="bg-[#F5F0E8] py-10 md:py-10 lg:py-10 px-4 relative z-10 border-t border-[#C9973A]/20 overflow-hidden"
         >
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
@@ -556,7 +517,7 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
             </div>
 
             <div className="hidden md:flex flex-col space-y-8 relative">
-              <div className="flex space-x-6 overflow-hidden py-2 select-none">
+              <div className="flex space-x-6 overflow-hidden py-2 ">
                 <div className="flex space-x-6 animate-marquee-slow hover:[animation-play-state:paused] shrink-0">
                   {[...row1Testimonials, ...row1Testimonials].map(
                     (item, idx) => (
@@ -586,7 +547,7 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
                 </div>
               </div>
 
-              <div className="flex space-x-6 overflow-hidden py-2 select-none">
+              <div className="flex space-x-6 overflow-hidden py-2 ">
                 <div className="flex space-x-6 animate-marquee-reverse hover:[animation-play-state:paused] shrink-0">
                   {[...row2Testimonials, ...row2Testimonials].map(
                     (item, idx) => (
@@ -671,29 +632,59 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
           </div>
         </section>
 
+        {/* Emergency */}
         <section
           id="emergency"
-          className="bg-[#7B1223] py-28 px-6 text-center relative z-20 border-y border-[#C9973A]/30 font-['Inter']"
+          className="bg-[#7B1223] py-20 md:py-24 lg:py-28 px-6 text-center relative z-20 border-y border-[#C9973A]/30 font-['Inter'] overflow-hidden select-text"
         >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#1C1C1C]/40 to-transparent pointer-events-none" />
+          {/* Injected custom emergency layout keyframes */}
+          <style>{`
+    @keyframes tatkal-pulse {
+      0% { transform: scale(0.95); opacity: 0.5; box-shadow: 0 0 0 0 rgba(217, 79, 61, 0.7); }
+      70% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 10px rgba(217, 79, 61, 0); }
+      100% { transform: scale(0.95); opacity: 0.5; box-shadow: 0 0 0 0 rgba(217, 79, 61, 0); }
+    }
+    .animate-pulse-emergency {
+      animation: tatkal-pulse 2s infinite ease-in-out;
+    }
+  `}</style>
 
+          {/* Premium Background Layering Stack */}
+          {/* Layer 1: Textured geometric mesh overlay */}
+          <div
+            className="absolute inset-0 opacity-[0.03] pointer-events-none"
+            style={{
+              backgroundImage: `radial-gradient(#C9973A 1px, transparent 1px), radial-gradient(#C9973A 1px, #7B1223 1px)`,
+              backgroundSize: "40px 40px",
+              backgroundPosition: "0 0, 20px 20px",
+            }}
+          />
+
+          {/* Layer 2: Center dark radial gradient shadow vignette */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(28,28,28,0.45)_0%,transparent_75%)] pointer-events-none" />
+
+          {/* Layer 3: Dynamic soft ambient gold corner light flares */}
+          <div className="absolute -top-40 -left-40 w-96 h-96 bg-[#C9973A]/10 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-[#C9973A]/10 rounded-full blur-[100px] pointer-events-none" />
+
+          {/* Foreground Content */}
           <div className="relative z-10 max-w-3xl mx-auto">
-            <div className="flex items-center justify-center gap-2 mb-6">
-              <span className="w-3 h-3 rounded-full bg-[#D94F3D] inline-block animate-pulse-emergency" />
-              <span className="font-body text-xs font-bold text-[#D94F3D] uppercase tracking-widest">
+            <div className="flex items-center justify-center gap-2.5 mb-6">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#D94F3D] inline-block animate-pulse-emergency shadow-[0_0_12px_rgba(217,79,61,0.6)]" />
+              <span className="font-body text-xs font-bold text-[#D94F3D] uppercase tracking-[0.25em]">
                 Emergency Service (Tatkal Support)
               </span>
             </div>
 
-            <h2 className="font-heading text-3.5xl md:text-[56px] font-bold text-[#F5F0E8] leading-tight mb-4 font-['Playfair_Display']">
+            <h2 className="font-heading text-4xl md:text-[56px] font-bold text-[#F5F0E8] leading-tight mb-4 font-['Playfair_Display'] tracking-wide">
               Need Live Backup?
             </h2>
 
-            <p className="font-body text-lg md:text-xl text-[#C9973A] font-semibold mb-6">
+            <p className="font-body text-lg md:text-xl text-[#C9973A] font-bold mb-6 tracking-wide">
               Emergency Vendor Pairings in 30 Minutes
             </p>
 
-            <p className="font-body text-sm md:text-base text-[#F5F0E8]/75 max-w-lg mx-auto leading-relaxed mb-10">
+            <p className="font-body text-sm md:text-base text-[#F5F0E8]/80 max-w-lg mx-auto leading-relaxed mb-10 font-normal">
               Unexpected dropouts or planning updates? Our trusted backup
               response operators activate direct bookings and call support lines
               in under 30 minutes.
@@ -701,13 +692,14 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
 
             <button
               onClick={onEmergencyClick}
-              className="inline-block bg-[#C9973A] text-[#7B1223] px-10 py-4 rounded-full font-body font-bold text-base transition-colors hover:bg-[#F5F0E8] shadow-lg cursor-pointer transform hover:scale-105 active:scale-95 duration-200"
+              className="inline-block bg-[#C9973A] text-[#7B1223] border border-[#C9973A] px-10 py-4 rounded-full font-body font-extrabold text-base transition-all duration-300 hover:bg-[#FDFAF5] hover:border-[#FDFAF5] shadow-xl hover:shadow-[#7B1223]/40 cursor-pointer transform hover:scale-105 active:scale-95"
             >
               Get Emergency Help Now →
             </button>
           </div>
         </section>
 
+        {/* About us */}
         <section
           id="about"
           className="bg-[#F5F0E8] py-24 px-6 relative z-10 font-['Inter']"
@@ -747,7 +739,7 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
               className="relative"
             >
               <img
-                src={ASSETS.aboutImage}
+                src={teamImg}
                 alt="Event Sathi Team"
                 className="w-full h-96 object-cover rounded-2xl shadow-xl ring-4 ring-[#C9973A]/30"
               />
@@ -757,9 +749,10 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
           </div>
         </section>
 
+        {/* FAQ */}
         <section
           id="faq"
-          className="bg-[#F5F0E8] py-24 px-6 relative z-10 border-t border-[#C9973A]/20 font-['Inter']"
+          className="bg-[#F5F0E8] py-10 px-6 relative z-10 border-t border-[#C9973A]/20 font-['Inter']"
         >
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-16">
