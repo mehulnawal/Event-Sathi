@@ -44,7 +44,7 @@ export default function MobileBottomNav({ onSubmitClick, onEmergencyClick }) {
             <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#D94F3D] animate-ping opacity-75" />
             <AlertCircle className="w-5 h-5 text-[#D94F3D] transition-transform duration-200 group-hover:scale-110 group-active:scale-95" />
           </div>
-          <span className="text-[10px] font-['Inter'] font-semibold text-[#D94F3D] tracking-wide mt-0.5">
+          <span className="text-[10px] font-['Inter'] font-semibold text-white tracking-wide mt-0.5">
             Emergency
           </span>
         </button>

@@ -14,7 +14,6 @@ export default function Footer({ onSubmitClick, onEmergencyClick }) {
 
   return (
     <footer className="bg-[#1C1C1C] border-t-2 border-[#C9973A] pt-16 pb-8 px-4 relative z-20 overflow-hidden font-['Inter']">
-      {/* Visual ambient gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-[#7B1223]/10 via-transparent to-transparent pointer-events-none" />
 
       <div className="max-w-6xl mx-auto relative z-10">
@@ -147,7 +146,7 @@ export default function Footer({ onSubmitClick, onEmergencyClick }) {
         </div>
 
         {/* Bottom Copyright Strip */}
-        <div className="border-t border-[#C9973A]/20 mt-12 pt-6 flex items-center justify-between gap-4">
+        <div className="border-t border-[#C9973A]/20 mt-2 pt-6 flex items-center justify-between gap-4">
           <p className="font-body text-xs text-[#8C7B6B] w-full text-center tracking-wide">
             © 2026 Event Sathi. All Rights Reserved. | Designed with{" "}
             <Heart

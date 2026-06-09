@@ -19,6 +19,7 @@ import {
 import CinematicProcessJourney from "./ProcessSection";
 import HeroSection from "./Hero";
 import WhyChooseUsSection from "./WhyChooseUs";
+import Services from "./Services";
 
 const teamImg = "/assets/team.jfif";
 
@@ -403,10 +404,13 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
           </div>
         </section> */}
 
-        {/* Hero/Banner section */}
-        <HeroSection />
+        {/* Hero section /Banner section */}
+        <HeroSection
+          onSubmitClick={onSubmitClick}
+          onBecomeVendorClick={onSubmitClick}
+        />
 
-        {/*  */}
+        {/* Marquee */}
         <section
           ref={marqueeRef}
           id="marquee"
@@ -442,61 +446,7 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
         <CinematicProcessJourney />
 
         {/* Service */}
-        <section
-          id="services"
-          className="bg-[#F5F0E8]  py-16 md:py-20 lg:py-24 px-6 relative z-10"
-        >
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-16">
-              <span className="font-body text-xs font-semibold tracking-widest text-[#C9973A] uppercase block mb-2">
-                SERVICES
-              </span>
-              <h2 className="font-heading text-3xl md:text-[40px] font-bold text-[#7B1223] mb-4 font-['Playfair_Display']">
-                Our Wedding Services
-              </h2>
-              <p className="font-body text-sm md:text-base text-[#8C7B6B] max-w-lg mx-auto font-['Inter']">
-                A handpicked ecosystem of premium service category pairings
-                designed to plan your dream wedding.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {servicesData.map((service, index) => (
-                <motion.div
-                  key={service.id}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
-                  onClick={onSubmitClick}
-                  className="group relative h-72 rounded-2xl overflow-hidden cursor-pointer ring-0 hover:ring-2 hover:ring-[#C9973A] transition-all duration-300 shadow-md bg-gradient-to-br"
-                >
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${service.fallbackBg} opacity-80 z-0`}
-                  />
-
-                  <div className="absolute inset-0 bg-[#1C1C1C]/45 group-hover:bg-[#7B1223]/60 transition-colors duration-300 z-10" />
-
-                  <div className="absolute bottom-0 left-0 right-0 p-8 flex flex-col justify-end h-full z-20">
-                    <h3 className="font-heading text-2xl font-semibold text-[#F5F0E8] group-hover:text-[#C9973A] transition-colors duration-200">
-                      {service.name}
-                    </h3>
-                    <p className="font-body text-sm text-[#F5F0E8]/85 mt-2 max-w-sm">
-                      {service.desc}
-                    </p>
-                    <span className="font-body text-xs text-[#C9973A] mt-4 font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1.5 font-['Inter']">
-                      Submit Requirement{" "}
-                      <span className="transform translate-x-0 group-hover:translate-x-1 transition-transform">
-                        →
-                      </span>
-                    </span>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <Services onSubmitClick={onSubmitClick} />
 
         {/* Why choose us */}
         <WhyChooseUsSection whyUsData={whyUsData} />
@@ -712,10 +662,10 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
               transition={{ duration: 0.8 }}
               className="flex flex-col space-y-4"
             >
-              <span className="font-body text-xs font-semibold tracking-widest text-[#C9973A] uppercase">
+              <span className="font-body text-xs font-semibold tracking-widest text-[#C9973A] uppercase text-center">
                 ABOUT US
               </span>
-              <h2 className="font-heading text-3xl md:text-[40px] font-bold text-[#7B1223] font-['Playfair_Display']">
+              <h2 className="font-heading text-3xl md:text-[40px] font-bold text-[#7B1223] font-['Playfair_Display'] text-center pb-5">
                 Who We Are
               </h2>
               <p className="font-body text-base text-[#1C1C1C] leading-[1.8] font-medium">
@@ -755,7 +705,7 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
           className="bg-[#F5F0E8] py-10 px-6 relative z-10 border-t border-[#C9973A]/20 font-['Inter']"
         >
           <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-16">
+            <div className="text-center mb-10">
               <span className="font-body text-xs font-semibold tracking-widest text-[#C9973A] uppercase block mb-2">
                 HELP & FAQ
               </span>
