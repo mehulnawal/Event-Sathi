@@ -213,9 +213,9 @@ export default function GoldenThreadJourney() {
             className="text-[#7B1223] text-3xl sm:text-4xl md:text-5xl font-bold tracking-wide"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            The Golden Thread Journey
+            From Enquiry to Execution
           </h2>
-          <div className="w-16 h-[2px] bg-[#C9973A]/40 mx-auto mt-4" />
+          {/* <div className="w-16 h-[2px] bg-[#C9973A]/40 mx-auto mt-4" /> */}
         </div>
 
         <div className="relative">
