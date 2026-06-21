@@ -13,8 +13,8 @@ export default function Footer({ onSubmitClick, onEmergencyClick }) {
   };
 
   return (
-    <footer className="bg-[#1C1C1C] border-t-2 border-[#C9973A] pt-16 pb-8 px-4 relative z-20 overflow-hidden font-['Inter']">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-[#7B1223]/10 via-transparent to-transparent pointer-events-none" />
+    <footer className="bg-[#200e05] border-t-2 border-[#C9973A] pt-16 pb-8 px-4 relative z-20 overflow-hidden font-['Inter']">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-[#7B1223]/15 via-transparent to-transparent pointer-events-none" />
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 pb-12">
@@ -27,7 +27,7 @@ export default function Footer({ onSubmitClick, onEmergencyClick }) {
               aria-label="Scroll to Top"
             >
               <img
-                src="/assets/logo-placeholder.png"
+                src="/assets/logo-round.jpeg"
                 id="event-sathi-logo-footer"
                 alt="Event Sathi"
                 className="h-12 w-auto object-contain"

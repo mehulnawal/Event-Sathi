@@ -34,7 +34,7 @@ export default function Navbar({
   const navLinks = [
     { label: "How It Works", href: "#how-it-works" },
     { label: "Services", href: "#services" },
-    { label: "About Us", href: "#about" },
+    { label: "Why Event Sathi", href: "#why-us" },
     { label: "FAQ", href: "#faq" },
   ];
 
@@ -73,10 +73,10 @@ export default function Navbar({
             aria-label="Event Sathi Home"
           >
             <img
-              src="/assets/logo-placeholder.png"
+              src="/assets/logo-round.jpeg"
               id="event-sathi-logo"
               alt="Event Sathi"
-              className="h-10 w-auto sm:h-10 md:h-10 object-contain"
+              className="h-12 w-auto sm:h-14 md:h-16 object-contain"
             />
           </a>
 
@@ -95,9 +95,8 @@ export default function Navbar({
           </div>
 
           {/* Action Interface Area (CTA & Menu controls) */}
-          <div className="flex items-center space-x-2 sm:space-x-4">
-            {/* CTA Button: FIXED AS PER YOUR DESIGN */}
-            <button
+          {/* <div className="flex items-center space-x-2 sm:space-x-4"> */}
+          {/* <button
               onClick={onBecomeVendorClick}
               className="
                 font-sans text-[11px] sm:text-[13px] lg:text-[14px] font-medium tracking-wide
@@ -115,28 +114,28 @@ export default function Navbar({
               aria-label="Become a Vendor on Event Sathi"
             >
               Become a Vendor
-            </button>
+            </button> */}
+          {/* </div> */}
 
-            {/* Mobile Hamburger Menu Toggle Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-md transition-colors cursor-pointer text-[#F5F0E8] hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9973A]"
-              aria-expanded={mobileMenuOpen}
-              aria-label="Toggle main menu navigation"
-            >
-              <div className="w-5 h-4 relative flex flex-col justify-between items-end">
-                <span
-                  className={`h-0.5 bg-[#F5F0E8] rounded-full transition-all duration-300 ${mobileMenuOpen ? "w-5 rotate-45 translate-y-1.5" : "w-5"}`}
-                />
-                <span
-                  className={`h-0.5 bg-[#F5F0E8] rounded-full transition-all duration-200 ${mobileMenuOpen ? "w-0 opacity-0" : "w-3.5"}`}
-                />
-                <span
-                  className={`h-0.5 bg-[#F5F0E8] rounded-full transition-all duration-300 ${mobileMenuOpen ? "w-5 -rotate-45 -translate-y-2" : "w-4"}`}
-                />
-              </div>
-            </button>
-          </div>
+          {/* Mobile Hamburger Menu Toggle Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 rounded-md transition-colors cursor-pointer text-[#F5F0E8] hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9973A]"
+            aria-expanded={mobileMenuOpen}
+            aria-label="Toggle main menu navigation"
+          >
+            <div className="w-5 h-4 relative flex flex-col justify-between items-end">
+              <span
+                className={`h-0.5 bg-[#F5F0E8] rounded-full transition-all duration-300 ${mobileMenuOpen ? "w-5 rotate-45 translate-y-1.5" : "w-5"}`}
+              />
+              <span
+                className={`h-0.5 bg-[#F5F0E8] rounded-full transition-all duration-200 ${mobileMenuOpen ? "w-0 opacity-0" : "w-3.5"}`}
+              />
+              <span
+                className={`h-0.5 bg-[#F5F0E8] rounded-full transition-all duration-300 ${mobileMenuOpen ? "w-5 -rotate-45 -translate-y-2" : "w-4"}`}
+              />
+            </div>
+          </button>
         </div>
       </nav>
 

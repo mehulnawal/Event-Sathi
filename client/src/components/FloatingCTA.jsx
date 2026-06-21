@@ -63,7 +63,7 @@ export default function FloatingButtons() {
         </AnimatePresence>
 
         <motion.a
-          href="https://instagram.com/eventsathi"
+          href="https://www.instagram.com/eventsaathi_official?"
           target="_blank"
           rel="noopener noreferrer"
           onMouseEnter={() => setShowInstagramTooltip(true)}

@@ -9,7 +9,6 @@ import LandingPage from "@/components/LandingPage";
 
 // Dono modals ko sahi se import karo (Apna path cross-check kar lena)
 import EnquiryModal from "@/components/EnquiryModal";
-import EmergencyModal from "@/components/EmergencyModal";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
@@ -52,20 +51,22 @@ export default function Home() {
         onEmergencyClick={() => setEmergencyModalOpen(true)}
       />
 
+      {/* FIXED: Sahi state triggers pass kiye hain bina galat variables ke */}
       <MobileBottomNav
         onSubmitClick={() => setSubmitModalOpen(true)}
         onEmergencyClick={() => setEmergencyModalOpen(true)}
       />
 
-      {/* --- MODAL INJECTORS (Yeh missing tha, isliye form nahi khul rahe the) --- */}
       <EnquiryModal
         isOpen={submitModalOpen}
         onClose={() => setSubmitModalOpen(false)}
+        defaultMode="booking"
       />
 
-      <EmergencyModal
+      <EnquiryModal
         isOpen={emergencyModalOpen}
         onClose={() => setEmergencyModalOpen(false)}
+        defaultMode="tatkal"
       />
     </main>
   );

@@ -13,6 +13,13 @@ export default function MobileBottomNav({ onSubmitClick, onEmergencyClick }) {
     }
   };
 
+  const handleOpenEmergencyForm = () => {
+    // Parent components transitions handle karne ke liye sirf callback run hoga
+    if (onEmergencyClick) {
+      onEmergencyClick();
+    }
+  };
+
   return (
     <motion.nav
       className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-[#F5F0E8] border-t-2 border-[#C9973A] px-4 py-3 pb-safe shadow-[0_-10px_25px_rgba(0,0,0,0.1)]"
@@ -36,8 +43,8 @@ export default function MobileBottomNav({ onSubmitClick, onEmergencyClick }) {
 
         {/* Emergency Hotline (Tatkal) */}
         <button
-          onClick={onEmergencyClick}
-          className="flex flex-row gap-2 items-center justify-center bg-[#7B1223] border-2 border-[#C9973A]/40 text-[#F5F0E8] px-5 py-2.5 rounded-full cursor-pointer hover:bg-[#9B1535] active:scale-95 transition-all duration-200 shadow-md font-['Inter'] font-semibold text-xs "
+          onClick={handleOpenEmergencyForm}
+          className="flex flex-row gap-2 items-center justify-center bg-[#7B1223] border-2 border-[#C9973A]/40 text-[#F5F0E8] px-5 py-2.5 rounded-full cursor-pointer hover:bg-[#9B1535] active:scale-95 transition-all duration-200 shadow-md font-['Inter'] font-semibold text-xs"
           aria-label="Get Emergency Backup"
         >
           <div className="relative flex items-center justify-center">
@@ -51,7 +58,7 @@ export default function MobileBottomNav({ onSubmitClick, onEmergencyClick }) {
 
         {/* Primary Requirement CTA */}
         <button
-          className="flex flex-col items-center justify-center border-[#7B1223] border-1 px-5 py-2.5 rounded-full cursor-pointer hover:bg-[#9B1535] active:scale-95 transition-all duration-200 shadow-md font-['Inter'] font-semibold text-xs"
+          className="flex flex-col items-center justify-center border-[#7B1223] border-1 px-5 py-2.5 rounded-full cursor-pointer hover:bg-[#9B1535] hover:text-[#FFF] active:scale-95 transition-all duration-200 shadow-md font-['Inter'] font-semibold text-xs"
           onClick={onSubmitClick}
         >
           Submit Requirement

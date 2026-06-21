@@ -57,11 +57,11 @@ export default function WhyChooseUsSection({ whyUsData = [] }) {
       <div className="max-w-5xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">
-          <span className="font-sans text-[11px] font-bold tracking-[0.32em] text-[#C9973A] uppercase block mb-2">
+          {/* <span className="font-sans text-[11px] font-bold tracking-[0.32em] text-[#C9973A] uppercase block mb-2">
             Why Choose Us
-          </span>
+          </span> */}
           <h2 className="text-3xl sm:text-4xl md:text-[40px] font-bold text-[#7B1223] font-serif leading-tight">
-            Why Event Sathi?
+            Why Choose Us ?
           </h2>
           <div className="w-16 h-[2px] bg-[#C9973A]/40 mx-auto mt-4" />
         </div>

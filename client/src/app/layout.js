@@ -66,13 +66,16 @@ export const metadata = {
     },
   },
 
-  // App Icons Engine mapping natively
   icons: {
     icon: "/assets/favicon.png",
     shortcut: "/favicon-32x32.png",
     apple: "/apple-touch-icon.png",
   },
 };
+
+// remove black image
+// white 
+// cross 
 
 export default function RootLayout({ children }) {
   return (

@@ -25,9 +25,8 @@ export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
           controls={false}
           preload="auto"
           className="w-full h-full object-cover object-[80%_center] md:object-center scale-100"
-          poster="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80&w=1600"
         >
-          <source src="/assets/hero-video.mp4" type="video/mp4" />
+          <source src="/assets/hero-video.mp4#t=0.001" type="video/mp4" />
         </video>
 
         {/* Ambient Overlay Veil */}
@@ -52,11 +51,11 @@ export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.1, ease: "easeOut" }}
-            className="text-[38px] sm:text-[54px] md:text-[68px] lg:text-[76px] font-serif font-normal leading-[1.08] text-[#fbf9f6] tracking-wide mb-6 drop-shadow-md"
+            className="text-[35px] sm:text-[54px] md:text-[68px] lg:text-[76px] font-serif font-normal leading-[1.08] text-[#fbf9f6] tracking-wide mb-6 drop-shadow-md"
           >
-            Your Event.
+            Your Vision.
             <br />
-            Our Promise.
+            Our Execution.
           </motion.h1>
 
           {/* Subtitle Explainer Summary */}
@@ -66,8 +65,8 @@ export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
             transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
             className="font-sans text-sm md:text-[15px] leading-relaxed text-[#f0e8dd] max-w-[440px] font-normal mb-8 md:mb-10 drop-shadow-sm"
           >
-            Submit your requirements once. We connect you to the right vendors -
-            fast, reliable, and personal.
+            Event Sathi manages every detail with trusted professionals and
+            seamless execution.
           </motion.p>
 
           {/* Interactive Dual Action CTA Buttons */}
@@ -82,7 +81,7 @@ export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
               onClick={onSubmitClick}
               className="px-6 py-3.5 rounded-md border border-[#c9973a]/80 bg-[#c9973a] text-[#200e05] font-sans text-sm tracking-wide font-medium hover:bg-[#d7a24d] active:scale-[0.99] transition-all duration-300 shadow-lg text-center cursor-pointer select-none"
             >
-              Submit Your Requirement
+              Plan My Event
             </button>
 
             {/* BUTTON 2: Open Vendor Form */}

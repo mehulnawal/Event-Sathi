@@ -20,6 +20,9 @@ import CinematicProcessJourney from "./ProcessSection";
 import HeroSection from "./Hero";
 import WhyChooseUsSection from "./WhyChooseUs";
 import Services from "./Services";
+import EnquiryModal from "./EnquiryModal"; // Ensure existing EnquiryModal remains imported
+import VendorModal from "./VendorModal";
+import CityPartnerModal from "./CityPartnerModal";
 
 const teamImg = "/assets/team.jfif";
 
@@ -42,7 +45,9 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
   const marqueeRef = useRef(null);
 
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
-  const [isEmergencyForm, setIsEmergencyForm] = useState(false);
+  const [enquiryMode, setEnquiryMode] = useState("booking"); // "booking" | "tatkal"
+  const [isVendorOpen, setIsVendorOpen] = useState(false);
+  const [isCityPartnerOpen, setIsCityPartnerOpen] = useState(false);
 
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
@@ -137,13 +142,13 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
   }, []);
 
   const handleOpenStandardForm = () => {
-    setIsEmergencyForm(false);
+    setEnquiryMode("booking");
     setIsEnquiryOpen(true);
     if (onSubmitClick) onSubmitClick(); // Keeps existing callback signatures intact
   };
 
   const handleOpenEmergencyForm = () => {
-    setIsEmergencyForm(true);
+    setEnquiryMode("tatkal");
     setIsEnquiryOpen(true);
     if (onEmergencyClick) onEmergencyClick(); // Keeps existing callback signatures intact
   };
@@ -224,28 +229,60 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
 
   const faqData = [
     {
-      q: "What is Event Sathi?",
-      a: "Event Sathi is a smart platform companion that connects Indian families with verified wedding partners. We manually coordinate with the best suppliers to ensure a trusted, homely planning experience.",
+      q: "Can I engage only one event professional?",
+      a: "Depending on the nature, scale, and operational requirements of the event, Event Saathi may facilitate the deployment of a single Event Captain for supervision and coordination. However, staffing recommendations are made based on the event scope, and additional support personnel may be advised to ensure efficient execution.",
     },
     {
-      q: "What happens after I submit my requirements?",
-      a: "Our dedicated team analyzes your request, queries our matching network of service partners, and contacts you within 24 hours with custom, low-rate quotations.",
+      q: "Can Event Saathi provide a complete event team?",
+      a: "Event Saathi offers flexible staffing solutions ranging from individual event professionals to comprehensive event support teams. Team structure and deployment are determined based on event requirements, availability, and operational feasibility.",
     },
     {
-      q: "Is this service free for families?",
-      a: "Yes! Event Sathi's curation and partner matching service is 100% free for host families. We charge zero hidden processing or premium matchmaking fees.",
+      q: "Can I select only specific services?",
+      a: "Our staffing solutions are designed to be flexible and can be tailored to suit the unique requirements of each event. Service availability and scope will be confirmed during the planning process.",
     },
     {
-      q: "How fast is the emergency service?",
-      a: "Our emergency support line triggers backup options and activates matched local vendor networks within 30 minutes of form dispatch.",
+      q: "Are Event Saathi teams available outside Ahmedabad?",
+      a: "Event Saathi supports events across Gujarat and selected locations across India. Service availability is subject to workforce availability, travel logistics, local regulations, and operational considerations.",
     },
     {
-      q: "Are all event suppliers fully verified?",
-      a: "Absolutely. Every partner in our network undergoes detailed portfolios screens, manual rating verification, and absolute background checks.",
+      q: "How far in advance should I make a booking?",
+      a: "Advance booking is recommended to maximize team availability and planning support. While we endeavor to accommodate urgent or short-notice requests, confirmation remains subject to resource availability.",
     },
     {
-      q: "Can I cancel or modify my request?",
-      a: "Yes, you can edit your booking dates, scale down your requirements, or cancel at any time with no processing charges by speaking to your matched sathi coordinator.",
+      q: "What planning support is included after confirmation?",
+      a: "Clients typically receive structured pre-event coordination support, which may include virtual planning discussions, event briefing sessions, and coordination meetings with assigned team leads where applicable. The nature and frequency of support may vary depending on the event scope and service package selected.",
+    },
+    {
+      q: "Can I select staff members from individual profiles?",
+      a: "Team assignments are managed exclusively by Event Saathi. Based on the event requirements, our management team allocates personnel deemed most suitable for the assignment to maintain service quality and operational efficiency.",
+    },
+    {
+      q: "What payment methods are accepted?",
+      a: "Payments may be made through approved digital payment channels, including UPI, bank transfers, and other payment options made available by Event Saathi from time to time.",
+    },
+    {
+      q: "Are Event Saathi professionals trained?",
+      a: "Event Saathi personnel undergo internal orientation and operational training processes. Team members are additionally briefed based on the specific requirements and responsibilities of each event.",
+    },
+    {
+      q: "Can manpower requirements be revised after booking?",
+      a: "Requests for changes in staffing requirements may be considered prior to the event date. Any revisions remain subject to availability, notice period, operational feasibility, and applicable commercial adjustments.",
+    },
+    {
+      q: "Who will be my primary point of contact?",
+      a: "For most assignments, an Event Captain or designated coordinator will serve as the primary liaison between the client, assigned staff, and Event Saathi management.",
+    },
+    {
+      q: "Do you provide uniforms?",
+      a: "Uniforms, dress codes, or event-specific attire may be arranged where required and subject to availability, event requirements, and mutually agreed commercial terms.",
+    },
+    {
+      q: "What types of events does Event Saathi support?",
+      a: "Event Saathi provides staffing solutions for a wide range of events, including weddings, social celebrations, corporate events, exhibitions, conferences, product launches, festivals, concerts, private functions, and other experiential engagements.",
+    },
+    {
+      q: "Why choose Event Saathi?",
+      a: "Event Saathi combines trained event professionals, structured operational processes, and flexible staffing solutions to support seamless event execution. Our approach focuses on professionalism, coordination, and delivering dependable on-ground event support tailored to client requirements.",
     },
   ];
 
@@ -326,88 +363,13 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
         ref={componentRef}
         className="w-full bg-[#F5F0E8] overflow-x-hidden pt-0 selection:bg-[#7B1223] selection:text-[#F5F0E8]"
       >
-        {/* <video
-            src={ASSETS.heroVideo}
-            poster={ASSETS.heroPoster}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover z-0 opacity-40 md:opacity-30"
-          /> */}
-        {/* <section
-          ref={heroRef}
-          id="hero"
-          className="min-h-screen relative overflow-hidden flex items-center justify-center bg-gradient-to-br from-[#7B1223] via-[#4A1520] to-[#1C1C1C]"
-        >
-          <div className="absolute inset-0 z-10 bg-gradient-to-b from-[#7B1223]/70 via-[#1C1C1C]/60 to-[#7B1223]/80" />
-
-          <div className="relative z-20 text-center md:py-3 px-6 max-w-4xl mx-auto flex flex-col justify-center items-center h-full md:mt-20">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="flex items-center gap-2 mb-4 md:mb-6 bg-[#C9973A]/20 px-4 py-1.5 rounded-full border border-[#C9973A]/30"
-            >
-              <Sparkles className="h-4 w-4 text-[#C9973A]" />
-              <span className="font-body text-xs text-[#F5F0E8] uppercase tracking-widest font-semibold">
-                Ghar Ka Saathi - Trusted by Indian Families
-              </span>
-            </motion.div>
-
-            <h2
-              ref={hindiRef}
-              className="font-hindi text-2xl md:text-[40px] font-medium text-[#C9973A] leading-normal tracking-wide mb-3 font-['Hind']"
-            >
-              हर Event का एक साथी
-            </h2>
-
-            <h1
-              ref={englishRef}
-              className="reveal-heading font-heading text-[38px] md:text-[68px] font-bold text-[#F5F0E8] leading-[1.12] tracking-tight mb-6 font-['Playfair_Display']"
-            >
-              {"The Saathi Every Event Needs".split(" ").map((word, i) => (
-                <span
-                  key={i}
-                  className="inline-block mr-3 md:mr-4 overflow-hidden"
-                >
-                  <span className="word-span inline-block translate-y-[100%] opacity-0">
-                    {word}
-                  </span>
-                </span>
-              ))}
-            </h1>
-
-            <p
-              ref={subRef}
-              className="font-body text-base md:text-xl text-[#F5F0E8]/85 max-w-xl mx-auto leading-relaxed mb-10 font-['Inter']"
-            >
-              Aapka event, aapki khushi — hum bas saath hain. From premium
-              vendors to emergency solutions, we hold your hand throughout.
-            </p>
-
-            <button
-              ref={btnRef}
-              onClick={onSubmitClick}
-              className="bg-[#7B1223] border-2 border-[#C9973A] text-[#F5F0E8] px-10 py-4 rounded-full font-body font-semibold text-base transition-all duration-300 hover:bg-[#C9973A] hover:text-[#7B1223] shadow-xl hover:scale-105 cursor-pointer font-['Inter']"
-            >
-              Submit Your Requirement →
-            </button>
-
-            <button
-              onClick={handleScrollDown}
-              className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[#C9973A] hover:text-[#F5F0E8] transition-colors focus:outline-none cursor-pointer border-0 bg-transparent"
-              aria-label="Scroll down"
-            >
-              <ChevronDown className="h-10 w-10 animate-bounce-arrow" />
-            </button>
-          </div>
-        </section> */}
-
         {/* Hero section /Banner section */}
         <HeroSection
-          onSubmitClick={onSubmitClick}
-          onBecomeVendorClick={onSubmitClick}
+          onSubmitClick={() => {
+            setEnquiryMode("booking");
+            setIsEnquiryOpen(true);
+          }}
+          onBecomeVendorClick={() => setIsVendorOpen(true)}
         />
 
         {/* Marquee */}
@@ -442,14 +404,119 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
           </div>
         </section>
 
+        {/* Service */}
+        <Services
+          onSubmitClick={() => {
+            setEnquiryMode("booking");
+            setIsEnquiryOpen(true);
+          }}
+        />
+
         {/* How it works */}
         <CinematicProcessJourney />
 
-        {/* Service */}
-        <Services onSubmitClick={onSubmitClick} />
-
         {/* Why choose us */}
-        <WhyChooseUsSection whyUsData={whyUsData} />
+
+        {/* Emergency (Tatkal Wedding Support) Section */}
+        <section
+          id="emergency"
+          className="bg-[#7B1223] py-16 md:py-20 px-6 sm:px-12 md:px-16 text-left relative z-20 border-y border-[#C9973A]/30 font-['Inter'] overflow-hidden select-text"
+        >
+          <style>{`
+    @keyframes phone-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(201, 151, 58, 0.6); }
+      70% { box-shadow: 0 0 0 12px rgba(201, 151, 58, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(201, 151, 58, 0); }
+    }
+    .animate-phone-pulse { animation: phone-pulse 2s infinite ease-in-out; }
+  `}</style>
+
+          <div
+            className="absolute inset-0 opacity-[0.03] pointer-events-none"
+            style={{
+              backgroundImage: `radial-gradient(#C9973A 1px, transparent 1px), radial-gradient(#C9973A 1px, #7B1223 1px)`,
+              backgroundSize: "40px 40px",
+              backgroundPosition: "0 0, 20px 20px",
+            }}
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(28,28,28,0.35)_0%,transparent_85%)] pointer-events-none" />
+
+          <div className="relative z-10 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+              <div className="md:col-span-8 flex flex-col justify-center">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#C9973A] inline-block" />
+                  <span className="text-xs font-bold text-[#C9973A] uppercase tracking-[0.25em]">
+                    Tatkal Wedding Support
+                  </span>
+                </div>
+                <h2 className="text-4xl md:text-[52px] font-bold text-[#F5F0E8] leading-tight mb-6 font-['Playfair_Display'] tracking-wide">
+                  Koi Bhi Service <br className="hidden sm:inline" /> Last
+                  Minute Chahiye?
+                </h2>
+                <p className="text-sm md:text-base text-[#F5F0E8]/80 max-w-2xl leading-relaxed mb-8 font-normal">
+                  Even 2 days before your event, EventSathi's emergency team is
+                  ready. Vendor missing, coordinator needed, or anything left to
+                  arrange — we've got you covered
+                </p>
+              </div>
+
+              <div className="md:col-span-4 flex md:justify-end items-start w-full">
+                <div
+                  className="w-full sm:w-64 rounded-2xl p-6 text-center flex flex-col justify-center items-center"
+                  style={{
+                    background: "rgba(0, 0, 0, 0.12)",
+                    border: "1px solid rgba(201, 151, 58, 0.25)",
+                  }}
+                >
+                  <span className="text-5xl md:text-6xl font-bold text-[#C9973A] font-['Playfair_Display'] block leading-none mb-1">
+                    48h
+                  </span>
+                  <p className="text-[11px] uppercase tracking-[0.15em] text-[#F5F0E8]/70 max-w-[140px] leading-normal font-medium">
+                    advance booking enough for us
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-8 max-w-4xl mt-4 mb-10 text-[#F5F0E8]/90 text-sm md:text-base">
+              <div className="flex items-center gap-3">
+                <span className="text-[#C9973A] font-bold text-lg">✓</span>{" "}
+                Emergency Catering
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-[#C9973A] font-bold text-lg">✓</span>{" "}
+                Decor Backup
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-[#C9973A] font-bold text-lg">✓</span>{" "}
+                Photographer
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-[#C9973A] font-bold text-lg">✓</span>{" "}
+                Guest coordinator
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-[#C9973A] font-bold text-lg">✓</span>{" "}
+                Valet & porter
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-[#C9973A] font-bold text-lg">✓</span>{" "}
+                On-ground team
+              </div>
+            </div>
+
+            <button
+              onClick={handleOpenEmergencyForm}
+              className="animate-phone-pulse inline-flex items-center gap-3 bg-[#C9973A] text-[#7B1223] border border-[#C9973A] px-8 py-3.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-300 hover:bg-[#FDFAF5] hover:border-[#FDFAF5] shadow-xl hover:shadow-[#7B1223]/30 cursor-pointer transform hover:-translate-y-0.5 active:translate-y-0"
+            >
+              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M21.384 17.791c-1.211-1.132-2.825-1.132-4.035 0l-1.047 1.047c-.287.287-.71.353-1.066.166-.66-.347-1.396-.827-2.164-1.595-.769-.768-1.249-1.504-1.595-2.164-.187-.356-.121-.779.166-1.066l1.047-1.048c1.132-1.211 1.132-2.825 0-4.035l-2.025-2.025c-1.132-1.132-2.825-1.132-4.035 0l-1.63 1.63c-1.03 1.03-1.42 2.508-.992 3.89 1.258 4.053 4.394 8.761 9.07 13.437 4.676 4.676 9.384 7.812 13.437 9.07 1.382.428 2.861.037 3.89-.992l1.63-1.63c1.132-1.211 1.132-2.825 0-4.035l-2.025-2.025z" />
+              </svg>
+              Get Emergency Help Now
+            </button>
+          </div>
+        </section>
 
         {/* Testimonials */}
         <section
@@ -582,79 +649,12 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
           </div>
         </section>
 
-        {/* Emergency */}
-        <section
-          id="emergency"
-          className="bg-[#7B1223] py-20 md:py-24 lg:py-28 px-6 text-center relative z-20 border-y border-[#C9973A]/30 font-['Inter'] overflow-hidden select-text"
-        >
-          {/* Injected custom emergency layout keyframes */}
-          <style>{`
-    @keyframes tatkal-pulse {
-      0% { transform: scale(0.95); opacity: 0.5; box-shadow: 0 0 0 0 rgba(217, 79, 61, 0.7); }
-      70% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 10px rgba(217, 79, 61, 0); }
-      100% { transform: scale(0.95); opacity: 0.5; box-shadow: 0 0 0 0 rgba(217, 79, 61, 0); }
-    }
-    .animate-pulse-emergency {
-      animation: tatkal-pulse 2s infinite ease-in-out;
-    }
-  `}</style>
-
-          {/* Premium Background Layering Stack */}
-          {/* Layer 1: Textured geometric mesh overlay */}
-          <div
-            className="absolute inset-0 opacity-[0.03] pointer-events-none"
-            style={{
-              backgroundImage: `radial-gradient(#C9973A 1px, transparent 1px), radial-gradient(#C9973A 1px, #7B1223 1px)`,
-              backgroundSize: "40px 40px",
-              backgroundPosition: "0 0, 20px 20px",
-            }}
-          />
-
-          {/* Layer 2: Center dark radial gradient shadow vignette */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(28,28,28,0.45)_0%,transparent_75%)] pointer-events-none" />
-
-          {/* Layer 3: Dynamic soft ambient gold corner light flares */}
-          <div className="absolute -top-40 -left-40 w-96 h-96 bg-[#C9973A]/10 rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-[#C9973A]/10 rounded-full blur-[100px] pointer-events-none" />
-
-          {/* Foreground Content */}
-          <div className="relative z-10 max-w-3xl mx-auto">
-            <div className="flex items-center justify-center gap-2.5 mb-6">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#D94F3D] inline-block animate-pulse-emergency shadow-[0_0_12px_rgba(217,79,61,0.6)]" />
-              <span className="font-body text-xs font-bold text-[#D94F3D] uppercase tracking-[0.25em]">
-                Emergency Service (Tatkal Support)
-              </span>
-            </div>
-
-            <h2 className="font-heading text-4xl md:text-[56px] font-bold text-[#F5F0E8] leading-tight mb-4 font-['Playfair_Display'] tracking-wide">
-              Need Live Backup?
-            </h2>
-
-            <p className="font-body text-lg md:text-xl text-[#C9973A] font-bold mb-6 tracking-wide">
-              Emergency Vendor Pairings in 30 Minutes
-            </p>
-
-            <p className="font-body text-sm md:text-base text-[#F5F0E8]/80 max-w-lg mx-auto leading-relaxed mb-10 font-normal">
-              Unexpected dropouts or planning updates? Our trusted backup
-              response operators activate direct bookings and call support lines
-              in under 30 minutes.
-            </p>
-
-            <button
-              onClick={onEmergencyClick}
-              className="inline-block bg-[#C9973A] text-[#7B1223] border border-[#C9973A] px-10 py-4 rounded-full font-body font-extrabold text-base transition-all duration-300 hover:bg-[#FDFAF5] hover:border-[#FDFAF5] shadow-xl hover:shadow-[#7B1223]/40 cursor-pointer transform hover:scale-105 active:scale-95"
-            >
-              Get Emergency Help Now →
-            </button>
-          </div>
-        </section>
-
         {/* About us */}
         <section
           id="about"
           className="bg-[#F5F0E8] py-24 px-6 relative z-10 font-['Inter']"
         >
-          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
+          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center justify-end">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -669,15 +669,24 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
                 Who We Are
               </h2>
               <p className="font-body text-base text-[#1C1C1C] leading-[1.8] font-medium">
-                We are a dedicated local companion team that strongly believes
-                every Indian family wedding holds historic, sacred importance.
+                At Event Saathi, we believe that successful events are built on
+                flawless execution.
               </p>
               <p className="font-body text-sm text-[#8C7B6B] leading-relaxed">
-                We form a transparent, emotional bridge connecting host families
-                with certified service providers. Our platform guarantees honest
-                deals, zero-commission verifications, and professional
-                coordinators who oversee arrangements on-site, letting your
-                family enjoy pure, uninterrupted celebrations.
+                Whether it's a luxury wedding, corporate conference, exhibition,
+                concert, or private celebration — behind every memorable event
+                is a team of dedicated professionals working seamlessly behind
+                the scenes.
+              </p>
+              <p className="font-body text-sm text-[#8C7B6B] leading-relaxed">
+                From guest hospitality and logistics to vendor coordination,
+                ritual management, and event operations — our team becomes an
+                extension of yours. Flexible, scalable, and customized to your
+                specific requirements.
+              </p>
+              <p className="font-body text-sm text-[#1C1C1C] leading-relaxed font-medium italic border-l-2 border-[#C9973A] pl-4">
+                "The right people, at the right place, at the right time — so
+                you can focus on the memories, while we handle the details."
               </p>
             </motion.div>
 
@@ -751,7 +760,7 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
                           transition={{ duration: 0.35, ease: "easeInOut" }}
                           className="overflow-hidden"
                         >
-                          <p className="pt-3 pb-2 text-[#8C7B6B] font-body text-base leading-relaxed">
+                          <p className="pt-3 pb-2 text-[#4A3F35] font-body text-base leading-relaxed">
                             {faq.a}
                           </p>
                         </motion.div>
@@ -763,6 +772,125 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
             </div>
           </div>
         </section>
+
+        {/* City partner section */}
+        <section
+          id="city-partner"
+          className="relative bg-[#7B1223] border-t-2 border-[#C9973A]/40 py-24 px-6 overflow-hidden font-['Inter']"
+        >
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(123,18,35,0.5) 0%, transparent 65%)",
+            }}
+          />
+
+          {/* 3. Floating Particles Effect */}
+          <div
+            className="absolute top-12 left-[10%] w-32 h-32 rounded-full bg-[#7B1223]/20 blur-2xl pointer-events-none animate-pulse"
+            style={{ animationDuration: "3s" }}
+          />
+          <div
+            className="absolute bottom-16 right-[8%] w-40 h-40 rounded-full bg-[#C9973A]/10 blur-3xl pointer-events-none animate-pulse"
+            style={{ animationDuration: "4s" }}
+          />
+          <div
+            className="absolute top-1/2 left-[5%] w-20 h-20 rounded-full bg-[#7B1223]/15 blur-xl pointer-events-none animate-pulse"
+            style={{ animationDuration: "5s" }}
+          />
+
+          {/* 5. Corner Accents */}
+          <div className="absolute top-6 left-6 w-12 h-12 border-t border-l border-[#C9973A]/20 rounded-tl-lg pointer-events-none" />
+          <div className="absolute bottom-6 right-6 w-12 h-12 border-b border-r border-[#C9973A]/20 rounded-br-lg pointer-events-none" />
+
+          <div className="max-w-3xl mx-auto text-center relative z-10">
+            {/* Framer motion wrapper for the entire content block */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.8 }}
+            >
+              {/* Eyebrow pill badge with amount: 0.3 */}
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.5, delay: 0 }}
+                className="inline-flex items-center gap-2 bg-[#C9973A]/10 border border-[#C9973A]/30 rounded-full px-4 py-1.5 mb-6"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-[#C9973A] animate-pulse" />
+                <span className="text-[#C9973A] text-xs font-semibold tracking-widest uppercase">
+                  Now Expanding Across India
+                </span>
+              </motion.div>
+
+              {/* Heading styling with amount: 0.3 */}
+              <motion.h2
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="font-['Playfair_Display'] font-bold text-4xl md:text-5xl text-[#F5F0E8] mb-6"
+              >
+                Join as a{" "}
+                <span className="text-[#C9973A] italic">City Saathi</span>
+              </motion.h2>
+
+              {/* Body text with amount: 0.3 */}
+              <motion.p
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-sm md:text-base text-[#F5F0E8]/80 leading-relaxed max-w-2xl mx-auto mb-10 whitespace-pre-line"
+              >
+                Event Saathi is growing city by city — and we're looking for
+                driven individuals&nbsp; to lead that growth in their hometown.
+                If you have a local network, a passion&nbsp; for events, and the
+                ambition to build something meaningful, your city needs you.
+              </motion.p>
+
+              {/* 4. Horizontal Gold Divider Line */}
+              <div className="w-16 h-px bg-[#C9973A]/50 mx-auto mb-8 mt-2" />
+
+              {/* CTA Button with amount: 0.3 */}
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <button
+                  onClick={() => setIsCityPartnerOpen(true)}
+                  className="inline-block border border-[#C9973A] text-[#C9973A] bg-transparent rounded-full px-8 py-3 text-sm font-bold tracking-wide transition-all duration-300 hover:bg-[#C9973A] hover:text-[#1a0a02] hover:scale-105 active:scale-95 cursor-pointer"
+                >
+                  Apply Now →
+                </button>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        <EnquiryModal
+          isOpen={isEnquiryOpen}
+          onClose={() => setIsEnquiryOpen(false)}
+          defaultMode={enquiryMode}
+        />
+
+        <VendorModal
+          isOpen={isVendorOpen}
+          onClose={() => setIsVendorOpen(false)}
+        />
+
+        <CityPartnerModal
+          isOpen={isCityPartnerOpen}
+          onClose={() => setIsCityPartnerOpen(false)}
+        />
+
+        {/* NOTE: If explicit "Become a City Saathi" buttons exist on sibling components, */}
+        {/* pass the `onClick={() => setIsCityPartnerOpen(true)}` callback down into them. */}
       </div>
     </>
   );
