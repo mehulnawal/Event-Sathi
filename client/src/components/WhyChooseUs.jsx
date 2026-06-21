@@ -1,109 +1,164 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import {
-  motion,
-  useMotionValue,
-  useTransform,
-  animate,
-  useInView,
-} from "framer-motion";
+import { motion } from "framer-motion";
 
-// Reusable Counter Sub-Component for High Performance
-function CountingElement({ targetValue, suffix = "" }) {
-  const nodeRef = useRef(null);
-  const motionValue = useMotionValue(0);
-  const roundedValue = useTransform(motionValue, (latest) =>
-    Math.round(latest),
-  );
-  const isInView = useInView(nodeRef, { once: true, margin: "-20% 0px" });
+const WHY_CARDS = [
+  {
+    id: "01",
+    emoji: "🎯",
+    title: "Trained & Professional Staff",
+    desc: "Every team member is briefed, trained, and event-ready.",
+  },
+  {
+    id: "02",
+    emoji: "👤",
+    title: "One Point of Contact",
+    desc: "Your dedicated Event Captain handles everything, start to finish.",
+  },
+  {
+    id: "03",
+    emoji: "⚡",
+    title: "Last-Minute Support",
+    desc: "Need help 2 days before? We're available.",
+  },
+  {
+    id: "04",
+    emoji: "🎪",
+    title: "Expertise Across Events",
+    desc: "Weddings, corporates, concerts, exhibitions — we've done it all.",
+  },
+  {
+    id: "05",
+    emoji: "🤝",
+    title: "Flexible Staffing",
+    desc: "One captain or a full team — hire exactly what you need.",
+  },
+  {
+    id: "06",
+    emoji: "💛",
+    title: "Guest-Centric Approach",
+    desc: "Every guest interaction handled with care and professionalism.",
+  },
+];
 
-  useEffect(() => {
-    if (isInView) {
-      const controls = animate(motionValue, targetValue, {
-        duration: 2.0,
-        ease: "easeOut",
-      });
-      return () => controls.stop();
-    }
-  }, [isInView, motionValue, targetValue]);
-
-  // Keep rendering zero dynamically until the user scrolls it into view
-  useEffect(() => {
-    const unsubscribe = roundedValue.on("change", (latest) => {
-      if (nodeRef.current) {
-        nodeRef.current.textContent = `${latest}${suffix}`;
-      }
-    });
-    return () => unsubscribe();
-  }, [roundedValue, suffix]);
-
-  return (
-    <span
-      ref={nodeRef}
-      className="font-sans text-4xl font-extrabold text-[#C9973A] tracking-tight"
-    >
-      0{suffix}
-    </span>
-  );
-}
-
-export default function WhyChooseUsSection({ whyUsData = [] }) {
+export default function WhyChooseUsSection() {
   return (
     <section
       id="why-us"
-      className="bg-[#F5F0E8] py-16 md:py-20 lg:py-24 px-6 relative z-10 border-t border-[#C9973A]/20 "
+      className="bg-[#F5F0E8] py-16 md:py-20 lg:py-24 px-6 relative z-10 border-t border-[#C9973A]/20 overflow-hidden"
     >
-      <div className="max-w-5xl mx-auto">
-        {/* Section Header */}
-        <div className="text-center mb-12 md:mb-16">
-          {/* <span className="font-sans text-[11px] font-bold tracking-[0.32em] text-[#C9973A] uppercase block mb-2">
-            Why Choose Us
-          </span> */}
-          <h2 className="text-3xl sm:text-4xl md:text-[40px] font-bold text-[#7B1223] font-serif leading-tight">
-            Why Choose Us ?
+      {/* Left side vertical text (Desktop only) */}
+      <div className="hidden lg:flex absolute left-4 top-1/2 -translate-y-1/2 -rotate-90 items-center gap-3 select-none pointer-events-none">
+        <span className="w-12 h-px bg-[#C9973A]/40" />
+        <span className="text-[10px] font-bold tracking-[0.3em] text-[#C9973A]/60 uppercase whitespace-nowrap">
+          Why Event Saathi
+        </span>
+        <span className="w-12 h-px bg-[#C9973A]/40" />
+      </div>
+
+      <div className="max-w-5xl mx-auto relative z-10">
+        {/* Section header — left aligned */}
+        <div className="mb-10 max-w-xl text-center">
+          <span className="text-xs font-bold tracking-[0.3em] text-[#C9973A] uppercase block mb-2">
+            Our Promise
+          </span>
+          <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl font-bold text-[#7B1223]">
+            Why Choose <br className="sm:hidden" /> Event Saathi?
           </h2>
-          <div className="w-16 h-[2px] bg-[#C9973A]/40 mx-auto mt-4" />
         </div>
 
-        {/* Dynamic Responsive Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mt-10 md:mt-12">
-          {whyUsData.map((item, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-10% 0px" }}
-              transition={{ duration: 0.6, delay: idx * 0.1, ease: "easeOut" }}
-              className="bg-[#FDFAF5] border border-[#C9973A]/30 hover:border-[#C9973A]/70 rounded-2xl p-6 sm:p-8 relative shadow-sm hover:shadow-md transition-all duration-300 group flex flex-col justify-between"
-            >
-              <div>
-                {/* User Pain-point Quote */}
-                <p className="font-sans text-sm text-[#8C7B6B] italic mb-3 opacity-90 leading-relaxed">
-                  &ldquo;{item.pain}&rdquo;
-                </p>
+        {/* Desktop Bento Grid (md and above) */}
+        <div className="hidden md:grid grid-cols-3 gap-3 auto-rows-fr">
+          {/* Card 01 - Wide & Short (Spans 2 cols, 1 row) */}
+          <div className="md:col-span-2">
+            <CardWrapper card={WHY_CARDS[0]} index={0} />
+          </div>
 
-                {/* Platform Value Proposition Answer */}
-                <h3 className="font-serif text-xl sm:text-[22px] font-bold text-[#7B1223] leading-snug mb-6 max-w-sm">
-                  {item.answer}
-                </h3>
-              </div>
+          {/* Card 02 - Narrow & Tall (Spans 1 col, 2 rows) */}
+          <div className="md:row-span-2">
+            <CardWrapper card={WHY_CARDS[1]} index={1} />
+          </div>
 
-              {/* Data Counter Metrics Panel */}
-              <div className="flex items-baseline gap-3 mt-4 border-t border-[#C9973A]/15 pt-4">
-                <CountingElement
-                  targetValue={Number(item.val) || 0}
-                  suffix={item.suffix || ""}
-                />
+          {/* Card 03 - Narrow & Tall (Spans 1 col, 2 rows) */}
+          <div className="md:row-span-2">
+            <CardWrapper card={WHY_CARDS[2]} index={2} />
+          </div>
 
-                <span className="font-sans text-[11px] text-[#8C7B6B] font-bold uppercase tracking-wider">
-                  {item.metricLabel || "Trust Metric Baseline"}
-                </span>
-              </div>
-            </motion.div>
-          ))}
+          {/* Card 04 - Small Square (Spans 1 col, 1 row) */}
+          <div>
+            <CardWrapper card={WHY_CARDS[3]} index={3} />
+          </div>
+
+          {/* Card 05 - Wide & Short (Spans 2 cols, 1 row) */}
+          <div className="md:col-span-2">
+            <CardWrapper card={WHY_CARDS[4]} index={4} />
+          </div>
+
+          {/* Card 06 - Narrow & Tall (Spans 1 col, 2 rows) */}
+          <div className="md:row-span-2">
+            <CardWrapper card={WHY_CARDS[5]} index={5} />
+          </div>
+        </div>
+
+        {/* Mobile Grid (below md) - Strict 2-column layout */}
+        <div className="grid md:hidden grid-cols-2 gap-3">
+          {/* Card 01 - Full Width */}
+          <div className="col-span-2">
+            <CardWrapper card={WHY_CARDS[0]} index={0} />
+          </div>
+
+          {/* Card 02 & Card 03 - Side by Side */}
+          <div>
+            <CardWrapper card={WHY_CARDS[1]} index={1} />
+          </div>
+          <div>
+            <CardWrapper card={WHY_CARDS[2]} index={2} />
+          </div>
+
+          {/* Card 04 - Full Width */}
+          <div className="col-span-2">
+            <CardWrapper card={WHY_CARDS[3]} index={3} />
+          </div>
+
+          {/* Card 05 & Card 06 - Side by Side */}
+          <div>
+            <CardWrapper card={WHY_CARDS[4]} index={4} />
+          </div>
+          <div>
+            <CardWrapper card={WHY_CARDS[5]} index={5} />
+          </div>
         </div>
       </div>
     </section>
+  );
+}
+
+// Extracted Sub-Component to preserve performance and prevent redundant code replication
+function CardWrapper({ card, index }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.5, delay: index * 0.08 }}
+      className="bg-[#FDFAF5] border border-[#C9973A]/25 rounded-2xl p-5 relative overflow-hidden flex flex-col justify-between hover:border-[#C9973A]/60 hover:shadow-md transition-all duration-300 h-full min-h-[160px]"
+    >
+      {/* Faded background number */}
+      <span className="absolute bottom-3 right-4 font-['Playfair_Display'] text-7xl font-bold text-[#7B1223]/6 select-none pointer-events-none leading-none">
+        {card.id}
+      </span>
+
+      {/* Top Content */}
+      <div>
+        <span className="text-2xl mb-3 block">{card.emoji}</span>
+        <h3 className="font-['Playfair_Display'] text-lg font-bold text-[#7B1223] leading-snug mb-2">
+          {card.title}
+        </h3>
+        <p className="text-xs text-[#4A3F35] leading-relaxed">{card.desc}</p>
+      </div>
+
+      {/* Bottom gold line accent */}
+      <div className="w-8 h-0.5 bg-[#C9973A]/50 mt-4" />
+    </motion.div>
   );
 }

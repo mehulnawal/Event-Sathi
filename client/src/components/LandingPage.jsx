@@ -416,6 +416,7 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
         <CinematicProcessJourney />
 
         {/* Why choose us */}
+        <WhyChooseUsSection />
 
         {/* Emergency (Tatkal Wedding Support) Section */}
         <section
