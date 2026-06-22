@@ -43,7 +43,7 @@ export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
           ref={videoRef}
           autoPlay
           loop
-          muted
+          // muted
           playsInline
           controls={false}
           preload="auto"
