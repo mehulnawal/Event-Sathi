@@ -51,7 +51,7 @@ export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
           fetchPriority="high"
           className="w-full h-full object-cover object-[80%_center] md:object-center scale-100"
         >
-          <source src="/assets/hero-video.mp4" type="video/mp4" />
+          <source src="/assets/hero-video-compress.mp4" type="video/mp4" />
         </video>
 
         {/* Ambient Overlay Veil */}
