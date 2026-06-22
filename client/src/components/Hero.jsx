@@ -11,8 +11,7 @@ export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
     if (videoRef.current) {
       videoRef.current.playbackRate = 0.85;
 
-      videoRef.current.load();
-
+      // Safe cache-hit initialization check
       if (videoRef.current.readyState >= 3) {
         setIsVideoLoaded(true);
       }

@@ -20,7 +20,7 @@ import CinematicProcessJourney from "./ProcessSection";
 import HeroSection from "./Hero";
 import WhyChooseUsSection from "./WhyChooseUs";
 import Services from "./Services";
-import EnquiryModal from "./EnquiryModal"; // Ensure existing EnquiryModal remains imported
+import EnquiryModal from "./EnquiryModal";
 import VendorModal from "./VendorModal";
 import CityPartnerModal from "./CityPartnerModal";
 
@@ -29,7 +29,7 @@ const teamImg = "/assets/team.jfif";
 gsap.registerPlugin(ScrollTrigger);
 
 const ASSETS = {
-  heroVideo: "/assets/hero-video.MP4",
+  heroVideo: "/assets/hero-video-compress.MP4",
   heroPoster: "/assets/hero-poster.jpg",
   aboutImage: "/assets/about-placeholder.jpg",
   events: {
