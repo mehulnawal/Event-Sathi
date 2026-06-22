@@ -11,7 +11,8 @@ export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
     if (videoRef.current) {
       videoRef.current.playbackRate = 0.85;
 
-      // Safe cache-hit initialization check
+      videoRef.current.load();
+
       if (videoRef.current.readyState >= 3) {
         setIsVideoLoaded(true);
       }
@@ -46,8 +47,9 @@ export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
           muted
           playsInline
           controls={false}
-          preload="auto" // Tells the browser to download this immediately on page initialization
+          preload="auto"
           onCanPlayThrough={() => setIsVideoLoaded(true)}
+          fetchPriority="high"
           className="w-full h-full object-cover object-[80%_center] md:object-center scale-100"
         >
           <source src="/assets/hero-video.mp4" type="video/mp4" />

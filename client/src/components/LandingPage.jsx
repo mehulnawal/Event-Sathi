@@ -866,7 +866,7 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="text-sm md:text-base text-[#F5F0E8]/80 leading-relaxed max-w-2xl mx-auto mb-10 whitespace-pre-line"
               >
-                Event Saathi is growing city by city — and we're looking for
+                Event Saathi is growing city by city - and we're looking for
                 driven individuals&nbsp; to lead that growth in their hometown.
                 If you have a local network, a passion&nbsp; for events, and the
                 ambition to build something meaningful, your city needs you.
