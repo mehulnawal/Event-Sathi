@@ -6,8 +6,6 @@ import Loader from "@/components/Loader";
 import ScrollProgress from "@/components/ScrollProgress";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import LandingPage from "@/components/LandingPage";
-
-// Dono modals ko sahi se import karo (Apna path cross-check kar lena)
 import EnquiryModal from "@/components/EnquiryModal";
 
 import { motion, AnimatePresence } from "framer-motion";
@@ -18,17 +16,22 @@ export default function Home() {
   const [submitModalOpen, setSubmitModalOpen] = useState(false);
   const [emergencyModalOpen, setEmergencyModalOpen] = useState(false);
 
+  // NEW: State to keep track of background video buffering status
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+
   return (
     <main className="min-h-screen bg-[#F5F0E8] overflow-x-hidden relative pb-16 md:pb-0">
       <ScrollProgress />
-      <Loader />
+
+      {/* PASSING STATE: Loader will now wait for the video to be ready */}
+      <Loader isVideoLoaded={isVideoLoaded} />
+
       <FloatingButtons />
 
-      {/* Navbar par wahi function attach kar diya jo tumne bheja hai */}
       <Navbar
         onSubmitClick={() => setSubmitModalOpen(true)}
         onEmergencyClick={() => setEmergencyModalOpen(true)}
-        onBecomeVendorClick={() => setSubmitModalOpen(true)} // Ek hi button hai to directly submit form toggle kar diya
+        onBecomeVendorClick={() => setSubmitModalOpen(true)}
       />
 
       <AnimatePresence mode="wait">
@@ -39,9 +42,11 @@ export default function Home() {
           exit={{ opacity: 0, y: -16 }}
           transition={{ duration: 0.4, ease: "easeInOut" }}
         >
+          {/* PASSING SETTER: Letting the child tree change the status */}
           <LandingPage
             onSubmitClick={() => setSubmitModalOpen(true)}
             onEmergencyClick={() => setEmergencyModalOpen(true)}
+            setIsVideoLoaded={setIsVideoLoaded}
           />
         </motion.div>
       </AnimatePresence>
@@ -51,7 +56,6 @@ export default function Home() {
         onEmergencyClick={() => setEmergencyModalOpen(true)}
       />
 
-      {/* FIXED: Sahi state triggers pass kiye hain bina galat variables ke */}
       <MobileBottomNav
         onSubmitClick={() => setSubmitModalOpen(true)}
         onEmergencyClick={() => setEmergencyModalOpen(true)}

@@ -1,201 +1,276 @@
 "use client";
 
-import React from "react";
-import { ArrowUpRight } from "lucide-react";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 
-export default function Services({ onSubmitClick, servicesData = [] }) {
-  const defaultServices = [
-    {
-      id: 1,
-      name: "Premium Venues",
-      desc: "Palatial estates, luxury heritage forts, and beachside resorts curated to frame your vows.",
-      fallbackBg: "from-[#2A1115] to-[#1C1C1C]",
-    },
-    {
-      id: 2,
-      name: "Couture Decor & Scenography",
-      desc: "Immersive structural design, bespoke lighting, and masterclass floral art down to the last candle.",
-      fallbackBg: "from-[#1F2421] to-[#1C1C1C]",
-    },
-    {
-      id: 3,
-      name: "Cinematic Photography",
-      desc: "Award-winning visual storytellers catching raw heirloom emotions in editorial frames.",
-      fallbackBg: "from-[#1A1E29] to-[#1C1C1C]",
-    },
-    {
-      id: 4,
-      name: "Gourmet Catering",
-      desc: "Curated multi-cuisine culinary theater ranging from traditional roots to modern gastronomy.",
-      fallbackBg: "from-[#291A12] to-[#1C1C1C]",
-    },
-    {
-      id: 5,
-      name: "Artist & Entertainment",
-      desc: "A-list live performers, orchestral ensembles, and customized nightlife experiences.",
-      fallbackBg: "from-[#241229] to-[#1C1C1C]",
-    },
-    {
-      id: 6,
-      name: "Bridal Styling & Glam",
-      desc: "Celebrity drapers, high-fashion makeup artists, and custom trousseau coordinators.",
-      fallbackBg: "from-[#1E112A] to-[#1C1C1C]",
-    },
-  ];
+const SERVICES = [
+  {
+    id: "01",
+    image: "./assets/GuestManagement.png",
+    title: "Guest Management & Hospitality",
+    points: [
+      "Guest receiving, welcoming & escorting",
+      "VIP guest assistance & hospitality counter",
+      "Managing crowd flow during rituals & events",
+    ],
+  },
+  {
+    id: "02",
+    image: "./assets/ShadowService.png",
+    title: "Shadow Service for Bride & Groom",
+    points: [
+      "Dedicated personal assistant for bride/groom",
+      "Outfit assistance & essentials management",
+      "Coordinating entry, exit & procession timing",
+    ],
+  },
+  {
+    id: "03",
+    image: "/assets/RitualManagement.png",
+    title: "Ritual Management",
+    points: [
+      "Coordinating with pandit & managing timings",
+      "Setting up ritual space & required items",
+      "Ensuring family presence for all ceremonies",
+    ],
+  },
+  {
+    id: "04",
+    image: "/assets/VendorManagement.png",
+    title: "Vendor Management",
+    points: [
+      "Pre-event vendor coordination & setup",
+      "Managing photographer, DJ, decor & caterer",
+      "Ensuring all vendors stay on schedule",
+    ],
+  },
+  {
+    id: "05",
+    image: "/assets/FoodManagement.png",
+    title: "Food & Beverages Management",
+    points: [
+      "Coordinating with caterer for setup & timing",
+      "Monitoring buffet counters & VIP table service",
+      "Managing water, beverages & late-night service",
+    ],
+  },
+  {
+    id: "06",
+    image: "/assets/ValetManagement.png",
+    title: "Valet Management",
+    points: [
+      "Managing vehicle arrival, departure & parking",
+      "Token/parking slip system coordination",
+      "Organized parking flow during peak hours",
+    ],
+  },
 
-  const data = servicesData.length > 0 ? servicesData : defaultServices;
+  {
+    id: "07",
+    image: "/assets/photography.png",
+    title: "Photography & Videography Coordination",
+    points: [
+      "Coordinating photographer & videographer timings",
+      "Ensuring all key moments & rituals are captured",
+      "Managing shot lists, positions & family groupings",
+    ],
+  },
+  {
+    id: "08",
+    image: "/assets/nannyService.png",
+    title: "Nanny for Kids / Play Areas",
+    points: [
+      "Dedicated caretakers for children during the event",
+      "Supervised play areas to keep kids safe & engaged",
+      "Allowing parents to enjoy the event stress-free",
+    ],
+  },
+];
 
-  // Split data cleanly into two streams for mathematically perfect desktop columns
-  const leftColumnItems = data.filter((_, i) => i % 2 === 0);
-  const rightColumnItems = data.filter((_, i) => i % 2 !== 0);
+export default function Services() {
+  const [flippedCard, setFlippedCard] = useState(null);
 
   return (
     <section
       id="services"
-      className="bg-[var(--color-bg)] py-5 sm:py-10 md:py-10 lg:py-10 px-4 sm:px-6 md:px-12 lg:px-[72px] relative z-10 select-none"
+      className="bg-[#F5F0E8] py-20 px-5 md:px-8 relative z-10 overflow-hidden font-['Inter']"
     >
-      <div className="w-full max-w-[1440px] mx-auto">
-        <div className="mb-10 sm:mb-10 md:mb-10 text-center">
-          <span className="font-body text-[11px] sm:text-xs font-bold tracking-[0.3em] text-[var(--color-accent)] uppercase block mb-3 sm:mb-4">
-            Curated Ecosystem
+      {/* Global CSS injection to hide scrollbars on scrollable areas smoothly */}
+      <style>{`
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+
+      {/* === DECORATIVE SIDE ELEMENTS === */}
+      <div className="hidden lg:block absolute left-6 top-1/2 -translate-y-1/2">
+        <div className="flex flex-col items-center gap-2">
+          <div className="w-px h-24 bg-gradient-to-b from-transparent to-[#C9973A]/50" />
+          <div className="w-2 h-2 rounded-full bg-[#C9973A]/60" />
+          <div className="w-px h-24 bg-gradient-to-b from-[#C9973A]/50 to-transparent" />
+        </div>
+      </div>
+
+      <div className="hidden lg:block absolute right-6 top-1/2 -translate-y-1/2">
+        <div className="flex flex-col items-center gap-2">
+          <div className="w-px h-24 bg-gradient-to-b from-transparent to-[#C9973A]/50" />
+          <div className="w-2 h-2 rounded-full bg-[#C9973A]/60" />
+          <div className="w-px h-24 bg-gradient-to-b from-[#C9973A]/50 to-transparent" />
+        </div>
+      </div>
+
+      <div className="absolute top-8 right-8 font-['Playfair_Display'] text-[120px] font-bold text-[#7B1223]/4 leading-none select-none pointer-events-none hidden lg:block">
+        ES
+      </div>
+
+      <div className="absolute bottom-8 left-8 font-['Playfair_Display'] text-[120px] font-bold text-[#7B1223]/4 leading-none select-none pointer-events-none hidden lg:block">
+        06
+      </div>
+
+      <div
+        className="absolute inset-0 pointer-events-none opacity-20"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, #C9973A 1px, transparent 1px)",
+          backgroundSize: "32px 32px",
+        }}
+      />
+
+      {/* === SECTION HEADER === */}
+      <div className="max-w-5xl mx-auto relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <span className="text-xs font-bold tracking-[0.3em] text-[#C9973A] uppercase block mb-3">
+            What We Offer
           </span>
-          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--color-primary)] leading-[1.15] mb-6">
-            Our Wedding Services
+          <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl font-bold text-[#7B1223] mb-4">
+            Our Services
           </h2>
-          <div className="w-16 h-[2px] bg-[var(--color-accent)] mb-6 margin-center mx-auto" />
-          {/* <p className="font-body text-sm sm:text-base text-[var(--color-text-muted)] max-w-xl leading-relaxed">
-            A handpicked collective of premium service pairings structuralized
-            to execute your custom luxury wedding production flawlessly.
-          </p> */}
-        </div>
+          <div className="w-16 h-0.5 bg-[#C9973A]/50 mx-auto" />
+        </motion.div>
 
-        {/* --- DESKTOP VIEWPORT (Staggered Double Columns) --- */}
-        <div className="hidden md:grid grid-cols-2 gap-x-12 lg:gap-x-16 items-start">
-          {/* Column Left */}
-          <div className="space-y-16 lg:space-y-24">
-            {leftColumnItems.map((service, index) => (
-              <ServiceCard
-                key={service.id}
-                service={service}
-                index={index * 2 + 1}
-                onClick={onSubmitClick} // Function attached here
-                aspectRatio="aspect-[4/5]"
-              />
-            ))}
-          </div>
-
-          {/* Column Right (Offset by exactly pt-28 for clean zig-zag spacing) */}
-          <div className="space-y-16 lg:space-y-24 pt-28">
-            {rightColumnItems.map((service, index) => (
-              <ServiceCard
-                key={service.id}
-                service={service}
-                index={index * 2 + 2}
-                onClick={onSubmitClick} // Function attached here
-                aspectRatio="aspect-[4/5]"
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* --- MOBILE VIEWPORT (Smart Dynamic Layout, Fixed Forms Trigger) --- */}
-        <div className="grid md:hidden grid-cols-2 gap-4 sm:gap-6">
-          {data.map((service, index) => {
-            const isHeroRow = index === 0 || index === 3;
-            const gridClass = isHeroRow ? "col-span-2" : "col-span-1";
-            const aspectClass = isHeroRow
-              ? "h-[260px] sm:h-[320px]"
-              : "h-[220px] sm:h-[280px]";
-
-            return (
+        {/* === CARDS GRID === */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+          {SERVICES.map((service, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.5, delay: idx * 0.08 }}
+              className="h-[240px] md:h-[320px]"
+              style={{ perspective: "1000px" }}
+              onClick={() => setFlippedCard(flippedCard === idx ? null : idx)}
+            >
+              {/* Inner flipper */}
               <div
-                key={service.id}
-                onClick={onSubmitClick} // Full card block handle for reliable touch trigger
-                className={`${gridClass} ${aspectClass} relative rounded-xl overflow-hidden cursor-pointer group active:scale-[0.99] transition-transform duration-300`}
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  height: "100%",
+                  transformStyle: "preserve-3d",
+                  transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+                  transform:
+                    flippedCard === idx ? "rotateY(180deg)" : "rotateY(0deg)",
+                }}
               >
-                {/* Background Layer */}
+                {/* FRONT FACE */}
                 <div
-                  className={`absolute inset-0 bg-gradient-to-br ${service.fallbackBg} opacity-150 z-0`}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-dark)] via-[var(--color-dark)]/50 to-transparent z-10" />
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    backfaceVisibility: "hidden",
+                    WebkitBackfaceVisibility: "hidden",
+                  }}
+                >
+                  <div className="relative w-full h-full rounded-2xl overflow-hidden group cursor-pointer">
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      className="w-full h-full object-cover object-center"
+                    />
 
-                {/* Text Layout */}
-                <div className="absolute inset-0 p-4 sm:p-6 flex flex-col justify-end z-20">
-                  <span className="font-body text-[10px] text-[var(--color-accent)] font-semibold tracking-wider block mb-1">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="font-heading text-lg sm:text-xl font-bold text-[var(--color-bg)]">
-                    {service.name}
-                  </h3>
-                  {isHeroRow && (
-                    <p className="font-body text-xs text-[var(--color-bg)]/70 mt-1 line-clamp-2 max-w-sm">
-                      {service.desc}
-                    </p>
-                  )}
-                  <div className="mt-3 flex items-center gap-1 text-[10px] font-bold text-[var(--color-accent)] uppercase tracking-widest">
-                    <span>Explore</span>
-                    <ArrowUpRight className="w-3 h-3" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1C1C1C]/90 via-[#1C1C1C]/20 to-transparent" />
+
+                    <span className="absolute top-4 left-4 text-[10px] font-bold tracking-widest text-[#C9973A] uppercase">
+                      {service.id} / 08
+                    </span>
+
+                    <div className="absolute top-4 right-4 w-8 h-8 rounded-full border border-[#C9973A] flex items-center justify-center bg-[#1C1C1C]/40">
+                      <span className="text-[#C9973A] text-lg font-light leading-none">
+                        +
+                      </span>
+                    </div>
+
+                    <div className="absolute bottom-0 left-0 right-0 p-5">
+                      <h3 className="font-['Playfair_Display'] text-base md:text-lg font-bold text-[#F5F0E8] leading-snug mb-2">
+                        {service.title}
+                      </h3>
+                      <p className="text-[10px] font-semibold tracking-widest text-[#C9973A] uppercase">
+                        Tap to explore →
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* BACK FACE */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    backfaceVisibility: "hidden",
+                    WebkitBackfaceVisibility: "hidden",
+                    transform: "rotateY(180deg)",
+                  }}
+                >
+                  <div className="relative w-full h-full rounded-2xl overflow-hidden cursor-pointer bg-[#7B1223] border border-[#C9973A]/30 flex flex-col justify-between p-5 md:p-6">
+                    {/* Close indicator */}
+                    <div className="flex justify-between items-start">
+                      <span className="text-[10px] font-bold tracking-widest text-[#C9973A] uppercase">
+                        {service.id} / 08
+                      </span>
+                      <div className="w-7 h-7 rounded-full border border-[#C9973A]/50 flex items-center justify-center">
+                        <span className="text-[#C9973A] text-sm">×</span>
+                      </div>
+                    </div>
+
+                    {/* Scrollable Container Block for content overflow management */}
+                    <div className="flex-1 my-3 overflow-y-auto no-scrollbar max-h-[165px] md:max-h-[210px] pr-1">
+                      <h3 className="font-['Playfair_Display'] text-base md:text-xl font-bold text-[#F5F0E8] leading-snug mb-3">
+                        {service.title}
+                      </h3>
+
+                      {/* Points List */}
+                      <ul className="space-y-2 md:space-y-2.5">
+                        {service.points.map((point, i) => (
+                          <li
+                            key={i}
+                            className="flex items-start gap-2 md:gap-3"
+                          >
+                            <span className="text-[#C9973A] font-bold text-xs md:text-sm mt-0.5 shrink-0">
+                              ✓
+                            </span>
+                            <span className="text-xs md:text-sm text-[#F5F0E8]/85 leading-relaxed">
+                              {point}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Bottom gold line */}
+                    <div className="w-10 h-0.5 bg-[#C9973A]/60 shrink-0" />
                   </div>
                 </div>
               </div>
-            );
-          })}
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
-  );
-}
-
-{
-  /* --- REUSABLE CARD INNER ENGINE FOR DESKTOP STABILITY --- */
-}
-function ServiceCard({ service, index, onClick, aspectRatio }) {
-  return (
-    <div
-      onClick={onClick} // Triggers the prop directly up to Home shell state management cleanly
-      className={`group relative ${aspectRatio} w-full rounded-2xl overflow-hidden cursor-pointer shadow-xl bg-[var(--color-dark)]`}
-    >
-      {/* Premium Cinematic Background Layer */}
-      <div
-        className={`absolute inset-0 bg-gradient-to-br ${service.fallbackBg} opacity-100 transition-transform duration-[1.2s] ease-out group-hover:scale-105 z-0`}
-      />
-
-      {/* Luxury Subtle Mesh Texture */}
-      <div className="absolute inset-0 opacity-[0.02] mix-blend-overlay bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:32px_32px] z-10" />
-
-      {/* Lighting Shadow Mask */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-dark)] via-[var(--color-dark)]/30 to-transparent group-hover:from-[var(--color-primary)]/80 group-hover:via-[var(--color-primary)]/40 transition-colors duration-700 ease-in-out z-10" />
-
-      {/* Numerical Counter */}
-      <div className="absolute top-8 left-8 font-body text-xs font-semibold tracking-widest text-[var(--color-bg)]/30 group-hover:text-[var(--color-accent)]/60 transition-colors duration-300 z-20">
-        {String(index).padStart(2, "0")}
-      </div>
-
-      {/* Floating Call-to-Action Indicator Ring */}
-      <div className="absolute top-8 right-8 w-10 h-10 rounded-full border border-white/10 bg-black/20 backdrop-blur-md flex items-center justify-center text-[var(--color-bg)] opacity-0 transform translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out z-20">
-        <ArrowUpRight className="w-4 h-4 group-hover:text-[var(--color-accent)] transition-colors" />
-      </div>
-
-      {/* Text Deck Block */}
-      <div className="absolute inset-0 p-8 lg:p-12 flex flex-col justify-end z-20">
-        <h3 className="font-heading text-2xl lg:text-3xl font-bold text-[var(--color-bg)] group-hover:text-[var(--color-accent)] transition-colors duration-300 ease-out">
-          {service.name}
-        </h3>
-
-        {/* Animated Slide Drawer Mechanism */}
-        <div className="max-h-0 opacity-0 group-hover:max-h-24 group-hover:opacity-100 transition-all duration-500 ease-in-out overflow-hidden">
-          <p className="font-body text-sm text-[var(--color-bg)]/75 mt-3 leading-relaxed">
-            {service.desc}
-          </p>
-        </div>
-
-        {/* Anchor Accent Line */}
-        <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
-          <span className="font-body text-[11px] font-bold tracking-widest text-[var(--color-accent)] uppercase">
-            Submit Requirement
-          </span>
-        </div>
-      </div>
-    </div>
   );
 }

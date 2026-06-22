@@ -1,14 +1,20 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useState, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-// 1. Parent se aa rahe onSubmitClick aur onBecomeVendorClick functions ko receive kiya
 export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const videoRef = useRef(null);
+
   useEffect(() => {
-    const video = document.getElementById("cinematic-bg-video");
-    if (video) {
-      video.playbackRate = 0.85;
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.85;
+
+      // Safe cache-hit initialization check
+      if (videoRef.current.readyState >= 3) {
+        setIsVideoLoaded(true);
+      }
     }
   }, []);
 
@@ -16,25 +22,43 @@ export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
     <section className="relative z-10 w-full min-h-screen flex flex-col justify-between overflow-hidden">
       {/* Cinematic Background Video Track */}
       <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
+        {/* Instant visual fallback frame while video downloads under the loader */}
+        <AnimatePresence>
+          {!isVideoLoaded && (
+            <motion.div
+              initial={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6, ease: "easeInOut" }}
+              className="absolute inset-0 w-full h-full bg-[#200e05] z-10"
+              style={{
+                backgroundImage: "url('/assets/hero-fallback.jpg')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
+          )}
+        </AnimatePresence>
+
         <video
-          id="cinematic-bg-video"
+          ref={videoRef}
           autoPlay
           loop
           muted
           playsInline
           controls={false}
-          preload="auto"
+          preload="auto" // Tells the browser to download this immediately on page initialization
+          onCanPlayThrough={() => setIsVideoLoaded(true)}
           className="w-full h-full object-cover object-[80%_center] md:object-center scale-100"
         >
-          <source src="/assets/hero-video.mp4#t=0.001" type="video/mp4" />
+          <source src="/assets/hero-video.mp4" type="video/mp4" />
         </video>
 
         {/* Ambient Overlay Veil */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#200e05] via-[#200e05]/95 via-[40%] lg:via-[20%] to-[#200e05]/20 opacity-100" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#200e05] via-[#200e05]/95 via-[40%] lg:via-[20%] to-[#200e05]/20 opacity-100 z-20" />
       </div>
 
       {/* Main Content Deck Layout Grid */}
-      <div className="relative z-10 w-full max-w-[1440px] mx-auto h-full flex flex-col justify-center flex-grow px-6 md:px-12 lg:px-[72px] pt-32 md:pt-40 pb-24 md:pb-20">
+      <div className="relative z-30 w-full max-w-[1440px] mx-auto h-full flex flex-col justify-center flex-grow px-6 md:px-12 lg:px-[72px] pt-32 md:pt-40 pb-24 md:pb-20">
         <div className="flex flex-col justify-center text-left max-w-2xl">
           {/* Top Elegant Gold Label */}
           <motion.p
@@ -76,7 +100,6 @@ export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
             transition={{ duration: 0.9, delay: 0.3, ease: "easeOut" }}
             className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:max-w-md lg:max-w-full"
           >
-            {/* BUTTON 1: Open Requirement Form */}
             <button
               onClick={onSubmitClick}
               className="px-6 py-3.5 rounded-md border border-[#c9973a]/80 bg-[#c9973a] text-[#200e05] font-sans text-sm tracking-wide font-medium hover:bg-[#d7a24d] active:scale-[0.99] transition-all duration-300 shadow-lg text-center cursor-pointer select-none"
@@ -84,7 +107,6 @@ export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
               Plan My Event
             </button>
 
-            {/* BUTTON 2: Open Vendor Form */}
             <button
               onClick={onBecomeVendorClick || onSubmitClick}
               className="px-6 py-3.5 rounded-md border border-[#c9973a]/40 bg-transparent text-white font-sans text-sm tracking-wide font-medium flex items-center justify-center gap-2 hover:border-[#c9973a]/80 hover:bg-white/5 active:scale-[0.99] transition-all duration-300 cursor-pointer select-none"
@@ -100,7 +122,6 @@ export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
             transition={{ duration: 1, delay: 0.5 }}
             className="grid grid-cols-3 divide-x divide-[#c9973a]/30 gap-2 md:gap-4 pt-12 md:pt-16 lg:pt-20 border-t border-transparent w-full max-w-[480px]"
           >
-            {/* Stat 1 */}
             <div className="flex flex-col pr-4">
               <span className="text-2xl md:text-[28px] font-serif font-medium text-[#d7a24d] drop-shadow-sm">
                 500+
@@ -110,7 +131,6 @@ export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
               </span>
             </div>
 
-            {/* Stat 2 */}
             <div className="flex flex-col px-4">
               <span className="text-2xl md:text-[28px] font-serif font-medium text-[#d7a24d] drop-shadow-sm">
                 200+
@@ -120,7 +140,6 @@ export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
               </span>
             </div>
 
-            {/* Stat 3 */}
             <div className="flex flex-col px-4">
               <span className="text-2xl md:text-[28px] font-serif font-medium text-[#d7a24d] drop-shadow-sm">
                 30 Min
@@ -134,7 +153,7 @@ export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
       </div>
 
       {/* Bottom Luxury Symmetrical Mughal Ornament Ribbon Strip */}
-      <div className="absolute bottom-0 inset-x-0 w-full z-20 flex flex-col items-center pointer-events-none">
+      <div className="absolute bottom-0 inset-x-0 w-full z-40 flex flex-col items-center pointer-events-none">
         <div
           className="relative w-48 sm:w-56 md:w-64 h-10 md:h-12 bg-[#3b1d0a] border-t border-x border-[#c9973a]/60 flex items-center justify-center"
           style={{
@@ -151,8 +170,6 @@ export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
             <span className="text-[10px] md:text-xs">⚜</span>
           </div>
         </div>
-
-        {/* Golden Bottom Accent Ribbon */}
         <div className="w-full h-1.5 md:h-2 bg-gradient-to-r from-[#200e05] via-[#c9973a] to-[#200e05] border-t border-[#d7a24d]/40 opacity-90" />
       </div>
     </section>

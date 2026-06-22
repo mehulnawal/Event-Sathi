@@ -125,6 +125,22 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
   }, []);
 
   useEffect(() => {
+    // If ANY of the three modals are open, freeze the scroll
+    if (isEnquiryOpen || isVendorOpen || isCityPartnerOpen) {
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+    } else {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    };
+  }, [isEnquiryOpen, isVendorOpen, isCityPartnerOpen]); // Track all three state variables
+
+  useEffect(() => {
     if (!marqueeRef.current) return;
     const track = marqueeRef.current.querySelector(".marquee-track");
     if (!track) return;
@@ -508,7 +524,10 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
             </div>
 
             <button
-              onClick={handleOpenEmergencyForm}
+              onClick={() => {
+                setEnquiryMode("tatkal");
+                setIsEnquiryOpen(true);
+              }}
               className="animate-phone-pulse inline-flex items-center gap-3 bg-[#C9973A] text-[#7B1223] border border-[#C9973A] px-8 py-3.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-300 hover:bg-[#FDFAF5] hover:border-[#FDFAF5] shadow-xl hover:shadow-[#7B1223]/30 cursor-pointer transform hover:-translate-y-0.5 active:translate-y-0"
             >
               <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -653,7 +672,7 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
         {/* About us */}
         <section
           id="about"
-          className="bg-[#F5F0E8] py-24 px-6 relative z-10 font-['Inter']"
+          className="bg-[#F5F0E8] py-4 px-6 relative z-10 font-['Inter']"
         >
           <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center justify-end">
             <motion.div

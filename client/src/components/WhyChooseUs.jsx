@@ -44,22 +44,19 @@ const WHY_CARDS = [
 export default function WhyChooseUsSection() {
   const renderCard = (index) => {
     const card = WHY_CARDS[index];
-    if (!card) return null;
-
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.5, delay: index * 0.08 }}
-        className="bg-[#FDFAF5] border border-[#C9973A]/25 rounded-2xl p-5 relative overflow-hidden flex flex-col justify-between hover:border-[#C9973A]/60 hover:shadow-md transition-all duration-300 h-full min-h-[150px]"
+        className="bg-[#FDFAF5] border border-[#C9973A]/25 rounded-2xl p-5 relative overflow-hidden flex flex-col justify-between hover:border-[#C9973A]/60 hover:shadow-md transition-all duration-300 h-full"
       >
         {/* Faded background number */}
-        <span className="absolute bottom-3 right-4 font-['Playfair_Display'] text-7xl font-bold text-[#7B1223]/6 select-none pointer-events-none leading-none">
+        <span className="absolute bottom-3 right-4 font-['Playfair_Display'] text-7xl font-bold text-[#7B1223]/5 select-none pointer-events-none leading-none">
           {card.id}
         </span>
 
-        {/* Top Content */}
         <div>
           <span className="text-2xl mb-3 block">{card.emoji}</span>
           <h3 className="font-['Playfair_Display'] text-lg font-bold text-[#7B1223] leading-snug mb-2">
@@ -68,68 +65,67 @@ export default function WhyChooseUsSection() {
           <p className="text-xs text-[#4A3F35] leading-relaxed">{card.desc}</p>
         </div>
 
-        {/* Bottom gold line accent */}
         <div className="w-8 h-0.5 bg-[#C9973A]/50 mt-4" />
       </motion.div>
     );
   };
 
   return (
-    <section
-      id="why-us"
-      className="bg-[#F5F0E8] py-12 md:py-16 lg:py-20 px-6 relative z-10 overflow-hidden"
-    >
-      {/* Left side vertical text (Desktop only) */}
-      <div className="hidden lg:flex absolute left-4 top-1/2 -translate-y-1/2 -rotate-90 items-center gap-3 select-none pointer-events-none">
-        <span className="w-12 h-px bg-[#C9973A]/40" />
-        <span className="text-[10px] font-bold tracking-[0.3em] text-[#C9973A]/60 uppercase whitespace-nowrap">
-          Why Event Saathi
-        </span>
-        <span className="w-12 h-px bg-[#C9973A]/40" />
-      </div>
-
-      <div className="max-w-5xl mx-auto relative z-10">
-        {/* Section Header */}
-        <div className="mb-10 text-center">
-          <span className="text-xs font-bold tracking-[0.3em] text-[#C9973A] uppercase block mb-2">
-            Our Promise
+    <section className="bg-[#F5F0E8] py-16 md:py-24 relative overflow-hidden">
+      <div className="max-w-5xl mx-auto px-6 relative z-10">
+        {/* Header Section */}
+        <div className="text-center mb-12 md:mb-16">
+          <span className="uppercase tracking-[0.32em] text-[#C9973A] text-[10px] md:text-xs font-bold block mb-3">
+            Our Premium Edge
           </span>
           <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl font-bold text-[#7B1223]">
             Why Choose <br className="sm:hidden" /> Event Saathi?
           </h2>
         </div>
 
-        {/* Main Clean Responsive Grid Container */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 auto-rows-fr">
-          {/* Card 01 - Desktop: Wide (2 Cols) | Mobile: Wide (2 Cols) */}
-          <div className="col-span-2 md:col-span-2 md:row-span-1">
-            {renderCard(0)}
-          </div>
+        {/* Desktop Grid Layout (md and above) */}
+        <div
+          className="hidden md:grid"
+          style={{
+            gridTemplateColumns: "2fr 1fr 1fr",
+            gridTemplateRows: "200px 200px 200px",
+            gridTemplateAreas: `
+              "c0 c1 c1"
+              "c0 c2 c3"
+              "c4 c4 c5"
+            `,
+            gap: "12px",
+            alignItems: "stretch",
+          }}
+        >
+          <div style={{ gridArea: "c0", height: "100%" }}>{renderCard(0)}</div>
+          <div style={{ gridArea: "c1", height: "100%" }}>{renderCard(1)}</div>
+          <div style={{ gridArea: "c2", height: "100%" }}>{renderCard(2)}</div>
+          <div style={{ gridArea: "c3", height: "100%" }}>{renderCard(3)}</div>
+          <div style={{ gridArea: "c4", height: "100%" }}>{renderCard(4)}</div>
+          <div style={{ gridArea: "c5", height: "100%" }}>{renderCard(5)}</div>
+        </div>
 
-          {/* Card 02 - Desktop: Tall (2 Rows) | Mobile: Normal (1 Col) */}
-          <div className="col-span-1 md:col-span-1 md:row-span-2">
-            {renderCard(1)}
-          </div>
-
-          {/* Card 03 - Desktop: Tall (2 Rows) | Mobile: Normal (1 Col) */}
-          <div className="col-span-1 md:col-span-1 md:row-span-2">
-            {renderCard(2)}
-          </div>
-
-          {/* Card 04 - Desktop: Standard | Mobile: Wide (2 Cols) */}
-          <div className="col-span-2 md:col-span-1 md:row-span-1">
-            {renderCard(3)}
-          </div>
-
-          {/* Card 05 - Desktop: Wide (2 Cols) | Mobile: Normal (1 Col) */}
-          <div className="col-span-1 md:col-span-2 md:row-span-1">
-            {renderCard(4)}
-          </div>
-
-          {/* Card 06 - Desktop: Tall (2 Rows) | Mobile: Normal (1 Col) */}
-          <div className="col-span-1 md:col-span-1 md:row-span-2">
-            {renderCard(5)}
-          </div>
+        {/* Mobile Grid Layout (below md) */}
+        <div
+          className="grid md:hidden"
+          style={{
+            gridTemplateColumns: "1fr 1fr",
+            gridTemplateAreas: `
+              "c0 c0"
+              "c1 c2"
+              "c3 c3"
+              "c4 c5"
+            `,
+            gap: "10px",
+          }}
+        >
+          <div style={{ gridArea: "c0", height: "100%" }}>{renderCard(0)}</div>
+          <div style={{ gridArea: "c1", height: "100%" }}>{renderCard(1)}</div>
+          <div style={{ gridArea: "c2", height: "100%" }}>{renderCard(2)}</div>
+          <div style={{ gridArea: "c3", height: "100%" }}>{renderCard(3)}</div>
+          <div style={{ gridArea: "c4", height: "100%" }}>{renderCard(4)}</div>
+          <div style={{ gridArea: "c5", height: "100%" }}>{renderCard(5)}</div>
         </div>
       </div>
     </section>

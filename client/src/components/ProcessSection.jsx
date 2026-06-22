@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Sparkles, Check, Users } from "lucide-react";
+import { Sparkles, Users } from "lucide-react";
 
 const STEPS = [
   {
@@ -36,11 +36,17 @@ export default function GoldenThreadJourney() {
   const threadWrapRef = useRef(null);
   const stepEls = useRef([]);
 
+  // Mobile-specific layout performance DOM trackers
+  const mobileTrackActiveRef = useRef(null);
+  const mobileOrbRef = useRef(null);
+
   useEffect(() => {
     let pathLength = 0;
     let rafId;
 
     function buildPath() {
+      if (window.innerWidth < 768) return;
+
       const container = stepsContainerRef.current;
       const svg = svgRef.current;
       const pathBase = pathBaseRef.current;
@@ -53,20 +59,17 @@ export default function GoldenThreadJourney() {
       const w = containerRect.width;
       const cx = w / 2;
 
-      // Filter out any null elements in case data changed dynamically
       const activeEls = stepEls.current.slice(0, STEPS.length);
 
       const pts = activeEls.map((el) => {
         if (!el) return { x: cx, y: h / 2, swing: 52 };
         const r = el.getBoundingClientRect();
 
-        // DYNAMIC DIRECTION: Find the node icon element to curve towards it perfectly
         const nodeEl = el.querySelector(".gtj-node");
-        let swingDirection = 52; // Default right swing
+        let swingDirection = 52;
 
         if (nodeEl) {
           const nodeRect = nodeEl.getBoundingClientRect();
-          // If the node sits on the left half of the container, swing left (-52)
           if (nodeRect.left + nodeRect.width / 2 - containerRect.left < cx) {
             swingDirection = -52;
           }
@@ -90,8 +93,6 @@ export default function GoldenThreadJourney() {
         if (i === 0) return;
         const prev = allPts[i - 1];
         const mid = (prev.y + curr.y) / 2;
-
-        // DYNAMIC SWING: Uses the actual DOM-calculated position instead of static indexes
         const currentSwing = curr.swing;
 
         d += ` C ${prev.x + currentSwing} ${mid}, ${curr.x - currentSwing} ${mid}, ${curr.x} ${curr.y}`;
@@ -122,19 +123,30 @@ export default function GoldenThreadJourney() {
 
     function updateFromScroll() {
       const container = stepsContainerRef.current;
-      const pathActive = pathActiveRef.current;
-      if (!container || !pathActive) return;
+      if (!container) return;
 
       const containerRect = container.getBoundingClientRect();
       const viewH = window.innerHeight;
 
-      // FIXED TRAVEL BOUNDS: Smooth calculation so orb doesn't finish early
       const totalTravel = containerRect.height;
       const scrolled = -containerRect.top + viewH * 0.5;
       const progress = Math.max(0, Math.min(1, scrolled / totalTravel));
 
-      pathActive.style.strokeDashoffset = pathLength * (1 - progress);
-      setOrbPosition(progress);
+      if (window.innerWidth >= 768) {
+        const pathActive = pathActiveRef.current;
+        if (pathActive) {
+          pathActive.style.strokeDashoffset = pathLength * (1 - progress);
+          setOrbPosition(progress);
+        }
+      } else {
+        const mobileTrackActive = mobileTrackActiveRef.current;
+        const mobileOrb = mobileOrbRef.current;
+
+        if (mobileTrackActive && mobileOrb) {
+          mobileTrackActive.style.height = `${progress * 100}%`;
+          mobileOrb.style.transform = `translate(-50%, -50%) translateY(${progress * totalTravel}px)`;
+        }
+      }
 
       const activeEls = stepEls.current.slice(0, STEPS.length);
       activeEls.forEach((step, i) => {
@@ -198,7 +210,7 @@ export default function GoldenThreadJourney() {
         .gtj-step { opacity: 0.35; transform: translateY(20px); filter: blur(2px); transition: all 0.5s ease; }
         .gtj-step.gtj-active { opacity: 1; transform: translateY(0); filter: blur(0px); }
         .gtj-step.gtj-past { opacity: 0.4; transform: translateY(0); filter: blur(1.5px); }
-        .gtj-node { transition: all 0.4s ease; }
+        .gtj-node { transition: all 0.4s ease; will-change: transform; }
         .gtj-step.gtj-active .gtj-node { transform: scale(1.18); background-color: #7B1223 !important; border-color: #C9973A !important; color: #F5F0E8 !important; box-shadow: 0 0 20px rgba(201, 151, 58, 0.4); }
         .gtj-orb-ping { animation: gtj-ping 1.5s ease-out infinite; }
         @keyframes gtj-ping { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(2.5); opacity: 0; } }
@@ -215,11 +227,10 @@ export default function GoldenThreadJourney() {
           >
             From Enquiry to Execution
           </h2>
-          {/* <div className="w-16 h-[2px] bg-[#C9973A]/40 mx-auto mt-4" /> */}
         </div>
 
         <div className="relative">
-          {/* Thread Graphic Deck */}
+          {/* DESKTOP TIMELINE DECK */}
           <div
             ref={threadWrapRef}
             className="hidden md:block absolute left-0 top-0 pointer-events-none z-0"
@@ -262,7 +273,28 @@ export default function GoldenThreadJourney() {
             </div>
           </div>
 
-          {/* Dynamic Map Loop */}
+          {/* HIGH-PERFORMANCE LOW-LOAD MOBILE TIMELINE TRACK TRACKER */}
+          <div className="block md:hidden absolute left-[18px] top-0 bottom-0 w-[2px] bg-rgba(201,151,58,0.15) pointer-events-none z-0">
+            <div className="absolute inset-0 bg-[#C9973A]/15 w-full h-full rounded-full" />
+            <div
+              ref={mobileTrackActiveRef}
+              className="absolute top-0 left-0 w-full bg-[#C9973A] rounded-full origin-top transition-transform duration-75 ease-out"
+              style={{ height: "0%" }}
+            />
+            <div
+              ref={mobileOrbRef}
+              className="absolute left-[1px] top-0 w-3.5 h-3.5 rounded-full bg-[#C9973A]"
+              style={{
+                boxShadow: "0 0 16px rgba(201, 151, 58, 0.9)",
+                transform: "translate(-50%, -50%) translateY(0px)",
+                willChange: "transform",
+              }}
+            >
+              <div className="gtj-orb-ping absolute inset-0 rounded-full bg-rgba(201,151,58,0.4)" />
+            </div>
+          </div>
+
+          {/* Map Layout Deck Loop */}
           <div
             ref={stepsContainerRef}
             className="flex flex-col gap-12 sm:gap-16 md:gap-24 relative z-10"
@@ -276,21 +308,20 @@ export default function GoldenThreadJourney() {
                 <div
                   key={i}
                   ref={(el) => (stepEls.current[i] = el)}
-                  className={`gtj-step flex flex-col items-stretch justify-between gap-6 md:gap-10 ${isReverse ? "md:flex-row-reverse" : "md:flex-row"}`}
+                  /* Added pl-14 pr-2 on mobile layout container to safely clear thread structure */
+                  className={`gtj-step flex flex-col items-stretch justify-between gap-6 md:gap-10 pl-14 pr-2 md:px-0 ${isReverse ? "md:flex-row-reverse" : "md:flex-row"}`}
                 >
+                  {/* Text Container Deck */}
                   <div className="w-full md:w-[46%] flex flex-col justify-center">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="gtj-node w-9 h-9 rounded-full border border-[#C9973A]/40 flex items-center justify-center text-[#7B1223] bg-[#FDFAF5] shrink-0 shadow-sm">
+                      <div className="gtj-node absolute left-0 md:relative w-9 h-9 rounded-full border border-[#C9973A]/40 flex items-center justify-center text-[#7B1223] bg-[#FDFAF5] shrink-0 shadow-sm z-10">
                         <StepIcon className="w-4 h-4" />
                       </div>
                       <span className="text-[11px] uppercase tracking-[0.25em] text-[#8C7B6B] font-bold">
                         {step.num}
                       </span>
                     </div>
-                    <h3
-                      className="text-[#7B1223] text-2xl md:text-[28px] font-bold mb-3"
-                      style={{ fontFamily: "'Playfair Display', serif" }}
-                    >
+                    <h3 className="text-[#7B1223] text-2xl md:text-[28px] font-bold mb-3 font-['Playfair_Display']">
                       {step.title}
                     </h3>
                     <p className="text-[#8C7B6B] text-sm leading-relaxed">
@@ -298,6 +329,7 @@ export default function GoldenThreadJourney() {
                     </p>
                   </div>
 
+                  {/* Informational Accent Card Display */}
                   <div
                     className="w-full md:w-[46%] rounded-2xl p-6 sm:p-8 relative overflow-hidden flex flex-col justify-center"
                     style={{
@@ -306,9 +338,8 @@ export default function GoldenThreadJourney() {
                     }}
                   >
                     <h4
-                      className="relative z-10 text-lg font-bold mb-2"
+                      className="relative z-10 text-lg font-bold mb-2 font-['Playfair_Display']"
                       style={{
-                        fontFamily: "'Playfair Display', serif",
                         color: isDark ? "#F5F0E8" : "#7B1223",
                       }}
                     >
