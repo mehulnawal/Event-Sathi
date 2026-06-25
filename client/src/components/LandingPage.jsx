@@ -323,7 +323,7 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
     {
       name: "Anjali & Rahul Mehta",
       role: "Parents of the Bride",
-      text: "Event Sathi saved our daughter’s wedding in Delhi when the decorator backed out. Absolute lifesavers!",
+      text: "Event saathi saved our daughter’s wedding in Delhi when the decorator backed out. Absolute lifesavers!",
       location: "New Delhi",
     },
     {
@@ -402,8 +402,8 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
                 <span className="text-[18px] mx-6">✦</span> Pan-India Network{" "}
                 <span className="text-[18px] mx-6">✦</span> Emergency Support
                 Available <span className="text-[18px] mx-6">✦</span> Verified
-                Vendors <span className="text-[18px] mx-6">✦</span> Hassle Free
-                Planning
+                Vendors <span className="text-[18px] mx-6">✦</span> Hassle free
+                Execution
               </span>
             </div>
             <div className="flex space-x-12 shrink-0 pr-12">
@@ -472,7 +472,7 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
                   Minute Chahiye?
                 </h2>
                 <p className="text-sm md:text-base text-[#F5F0E8]/80 max-w-2xl leading-relaxed mb-8 font-normal">
-                  Even 2 days before your event, EventSathi's emergency team is
+                  Even 2 days before your event, Eventsaathi's emergency team is
                   ready. Vendor missing, coordinator needed, or anything left to
                   arrange — we've got you covered
                 </p>
@@ -719,7 +719,7 @@ export default function LandingPage({ onSubmitClick, onEmergencyClick }) {
             >
               <img
                 src={teamImg}
-                alt="Event Sathi Team"
+                alt="Event saathi Team"
                 className="w-full h-96 object-cover rounded-2xl shadow-xl ring-4 ring-[#C9973A]/30"
               />
               <div className="absolute -bottom-4 -left-4 w-24 h-24 border-b-2 border-l-2 border-[#7B1223]/40 rounded-bl-xl z-[-1] pointer-events-none" />

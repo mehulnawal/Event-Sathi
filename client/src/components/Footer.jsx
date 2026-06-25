@@ -28,8 +28,8 @@ export default function Footer({ onSubmitClick, onEmergencyClick }) {
             >
               <img
                 src="/assets/logo-round.jpeg"
-                id="event-sathi-logo-footer"
-                alt="Event Sathi"
+                id="event-saathi-logo-footer"
+                alt="Event saathi"
                 className="h-12 w-auto object-contain"
               />
             </a>
@@ -100,7 +100,7 @@ export default function Footer({ onSubmitClick, onEmergencyClick }) {
               <div className="flex items-center text-[#8C7B6B] gap-2">
                 <Mail className="h-4 w-4 text-[#C9973A]" />
                 <span className="font-body text-sm hover:text-[#F5F0E8] transition-colors cursor-pointer">
-                  contact@eventsathi.com
+                  contact@eventsaathi.com
                 </span>
               </div>
               <div className="flex items-center text-[#8C7B6B] gap-2">
@@ -114,7 +114,7 @@ export default function Footer({ onSubmitClick, onEmergencyClick }) {
             {/* Social Handle Channels */}
             <div className="flex items-center gap-3 pt-2">
               {/* <a
-                href="https://instagram.com/eventsathi"
+                href="https://instagram.com/eventsaathi"
                 target="_blank"
                 rel="noreferrer"
                 className="w-10 h-10 rounded-full flex items-center justify-center border border-[#8C7B6B]/30 text-[#8C7B6B] hover:text-pink-400 hover:border-pink-400/60 hover:scale-105 transition-all duration-200"
@@ -148,7 +148,7 @@ export default function Footer({ onSubmitClick, onEmergencyClick }) {
         {/* Bottom Copyright Strip */}
         <div className="border-t border-[#C9973A]/20 mt-2 pt-6 flex items-center justify-between gap-4">
           <p className="font-body text-xs text-[#8C7B6B] w-full text-center tracking-wide">
-            © 2026 Event Sathi. All Rights Reserved. | Designed with{" "}
+            © 2026 Event saathi. All Rights Reserved. | Designed with{" "}
             <Heart
               className="h-3 w-3 text-[#D94F3D] inline mx-0.5 align-middle"
               fill="currentColor"

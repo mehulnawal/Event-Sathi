@@ -85,6 +85,17 @@ const SERVICES = [
       "Allowing parents to enjoy the event stress-free",
     ],
   },
+  {
+    id: "09",
+    image: "/assets/ElderCare.png",
+    title: "Elder Guest Care",
+    points: [
+      "Wheelchair assistance available at additional cost",
+      "Dedicated assistance for elderly guests throughout the event",
+      "Escorting to seating, rituals & functions safely",
+      "Coordination with family for special needs & comfort",
+    ],
+  },
 ];
 
 export default function Services() {
@@ -197,7 +208,7 @@ export default function Services() {
                     <div className="absolute inset-0 bg-gradient-to-t from-[#1C1C1C]/90 via-[#1C1C1C]/20 to-transparent" />
 
                     <span className="absolute top-4 left-4 text-[10px] font-bold tracking-widest text-[#C9973A] uppercase">
-                      {service.id} / 08
+                      {service.id} / {SERVICES.length}
                     </span>
 
                     <div className="absolute top-4 right-4 w-8 h-8 rounded-full border border-[#C9973A] flex items-center justify-center bg-[#1C1C1C]/40">
@@ -231,7 +242,7 @@ export default function Services() {
                     {/* Close indicator */}
                     <div className="flex justify-between items-start">
                       <span className="text-[10px] font-bold tracking-widest text-[#C9973A] uppercase">
-                        {service.id} / 08
+                        {service.id} / {SERVICES.length}
                       </span>
                       <div className="w-7 h-7 rounded-full border border-[#C9973A]/50 flex items-center justify-center">
                         <span className="text-[#C9973A] text-sm">×</span>

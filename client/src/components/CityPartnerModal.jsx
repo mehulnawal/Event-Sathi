@@ -45,6 +45,9 @@ export default function CityPartnerModal({ isOpen, onClose }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState(INITIAL_STATE);
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   // Scroll lock on body
   useEffect(() => {
@@ -56,6 +59,9 @@ export default function CityPartnerModal({ isOpen, onClose }) {
       setFormData(INITIAL_STATE);
       setCurrentStep(1);
       setErrors({});
+      setIsSubmitting(false);
+      setSubmitSuccess(false);
+      setSubmitError("");
     }
     return () => {
       document.body.style.overflow = "";
@@ -144,11 +150,55 @@ export default function CityPartnerModal({ isOpen, onClose }) {
     setCurrentStep((prev) => prev - 1);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateStep(4)) {
-      console.log("City Partner Application Submitted Data:", formData);
-      onClose();
+    if (!validateStep(4)) return;
+
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("fullName", formData.fullName);
+      formDataToSend.append("mobile", formData.mobile);
+      formDataToSend.append("email", formData.email);
+      formDataToSend.append("city", formData.city);
+      formDataToSend.append("state", formData.state);
+      formDataToSend.append("currentOccupation", formData.currentOccupation);
+      formDataToSend.append("organizationName", formData.organizationName || "");
+      formDataToSend.append("experienceYears", formData.experienceYears);
+      formDataToSend.append("linkedinProfile", formData.linkedinProfile || "");
+      formDataToSend.append("targetCity", formData.targetCity);
+      formDataToSend.append("hasVendorNetwork", formData.hasVendorNetwork);
+      formDataToSend.append("vendorConnectionsCount", formData.vendorConnectionsCount || "");
+      formDataToSend.append("hasEventExperience", formData.hasEventExperience);
+      formDataToSend.append("whyJoin", formData.whyJoin);
+      formDataToSend.append("howContribute", formData.howContribute);
+      formDataToSend.append("socialMediaLinks", formData.socialMediaLinks || "");
+      formDataToSend.append("agreedDeclaration", formData.agreedDeclaration);
+      if (formData.resumeFile) {
+        formDataToSend.append("resumeFile", formData.resumeFile);
+      }
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/city-partner`,
+        {
+          method: "POST",
+          body: formDataToSend,
+        }
+      );
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Submission failed");
+
+      setSubmitSuccess(true);
+      setTimeout(() => {
+        onClose();
+      }, 2000);
+    } catch (err) {
+      setSubmitError("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -174,7 +224,7 @@ export default function CityPartnerModal({ isOpen, onClose }) {
                   Become a City Saathi
                 </h2>
                 <p className="text-xs text-[#8C7B6B]">
-                  Represent EventSathi in your city
+                  Represent Eventsaathi in your city
                 </p>
               </div>
             </div>
@@ -544,7 +594,7 @@ export default function CityPartnerModal({ isOpen, onClose }) {
             {currentStep === 4 && (
               <div className="space-y-4">
                 <h3 className="text-base font-bold text-[#1C1C1C] border-b border-[#8C7B6B]/20 pb-1">
-                  Why Join EventSathi?
+                  Why Join Eventsaathi?
                 </h3>
 
                 <div>
@@ -568,7 +618,8 @@ export default function CityPartnerModal({ isOpen, onClose }) {
 
                 <div>
                   <label className="block text-xs font-bold text-[#1C1C1C] mb-1">
-                    How can you contribute to growing EventSathi in your city? *
+                    How can you contribute to growing Eventsaathi in your city?
+                    *
                   </label>
                   <textarea
                     name="howContribute"
@@ -650,7 +701,7 @@ export default function CityPartnerModal({ isOpen, onClose }) {
                       className="mt-1 accent-[#7B1223] h-4 w-4 rounded"
                     />
                     <span className="text-xs font-medium text-[#1C1C1C] group-hover:text-black transition-colors">
-                      I agree to represent EventSathi professionally and uphold
+                      I agree to represent Eventsaathi professionally and uphold
                       brand values. *
                     </span>
                   </label>
@@ -665,41 +716,60 @@ export default function CityPartnerModal({ isOpen, onClose }) {
           </form>
 
           {/* Action Footer Navigation Buttons */}
-          <div className="px-6 py-4 bg-[#F5F0E8] border-t border-[#8C7B6B]/20 flex items-center justify-between">
-            {currentStep > 1 ? (
-              <button
-                type="button"
-                onClick={handleBack}
-                className="px-5 py-2 text-sm font-semibold text-[#7B1223] hover:text-[#C9973A] transition-colors"
-              >
-                ← Back
-              </button>
-            ) : (
-              <div />
+          <div className="px-6 py-4 bg-[#F5F0E8] border-t border-[#8C7B6B]/20 flex flex-col gap-2">
+            {submitError && (
+              <p className="text-xs text-[#D94F3D] font-semibold text-center">{submitError}</p>
             )}
+            {submitSuccess && (
+              <p className="text-xs text-green-700 font-semibold text-center">✓ Application submitted! We'll review and reach out soon.</p>
+            )}
+            <div className="flex items-center justify-between">
+              {currentStep > 1 ? (
+                <button
+                  type="button"
+                  onClick={handleBack}
+                  disabled={isSubmitting}
+                  className="px-5 py-2 text-sm font-semibold text-[#7B1223] hover:text-[#C9973A] transition-colors disabled:opacity-50"
+                >
+                  ← Back
+                </button>
+              ) : (
+                <div />
+              )}
 
-            {currentStep < 4 ? (
-              <button
-                type="button"
-                onClick={handleNext}
-                className="flex items-center gap-1 bg-[#7B1223] text-[#F5F0E8] border border-[#C9973A] rounded-full px-6 py-2 text-sm font-bold shadow-md hover:bg-[#C9973A] hover:text-[#7B1223] transition-all duration-300"
-              >
-                Next Step <ChevronRight className="h-4 w-4" />
-              </button>
-            ) : (
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                disabled={!formData.agreedDeclaration}
-                className={`flex items-center gap-1.5 bg-[#7B1223] text-[#F5F0E8] border border-[#C9973A] rounded-full px-7 py-2.5 text-sm font-bold shadow-md transition-all duration-300 ${
-                  formData.agreedDeclaration
-                    ? "hover:bg-[#C9973A] hover:text-[#7B1223] cursor-pointer"
-                    : "opacity-50 cursor-not-allowed"
-                }`}
-              >
-                Apply as City Saathi →
-              </button>
-            )}
+              {currentStep < 4 ? (
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  className="flex items-center gap-1 bg-[#7B1223] text-[#F5F0E8] border border-[#C9973A] rounded-full px-6 py-2 text-sm font-bold shadow-md hover:bg-[#C9973A] hover:text-[#7B1223] transition-all duration-300"
+                >
+                  Next Step <ChevronRight className="h-4 w-4" />
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  onClick={handleSubmit}
+                  disabled={!formData.agreedDeclaration || isSubmitting || submitSuccess}
+                  className={`flex items-center gap-1.5 bg-[#7B1223] text-[#F5F0E8] border border-[#C9973A] rounded-full px-7 py-2.5 text-sm font-bold shadow-md transition-all duration-300 ${
+                    formData.agreedDeclaration && !isSubmitting
+                      ? "hover:bg-[#C9973A] hover:text-[#7B1223] cursor-pointer"
+                      : "opacity-50 cursor-not-allowed"
+                  }`}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                      Submitting...
+                    </>
+                  ) : (
+                    "Apply as City Saathi →"
+                  )}
+                </button>
+              )}
+            </div>
           </div>
         </motion.div>
       </div>

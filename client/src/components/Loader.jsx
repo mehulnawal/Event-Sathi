@@ -59,7 +59,7 @@ export default function Loader() {
 
               <img
                 src="/assets/logo-placeholder.png"
-                alt="Event Sathi Logo"
+                alt="Event saathi Logo"
                 className="h-16 md:h-20 w-auto object-contain relative z-20 filtering-gold drop-shadow-[0_4px_12px_rgba(201,151,58,0.2)]"
               />
             </motion.div>

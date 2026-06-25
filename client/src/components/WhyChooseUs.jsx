@@ -7,37 +7,37 @@ const WHY_CARDS = [
     id: "01",
     emoji: "🎯",
     title: "Trained & Professional Staff",
-    desc: "Every team member is briefed, trained, and event-ready.",
+    desc: "Every team member is briefed, trained, and event-ready. From guest handling to vendor coordination - our staff knows exactly what to do.",
   },
   {
     id: "02",
     emoji: "👤",
     title: "One Point of Contact",
-    desc: "Your dedicated Event Captain handles everything, start to finish.",
+    desc: "Your dedicated Event Captain handles everything, start to finish. No confusion, no multiple calls - one person, full accountability.",
   },
   {
     id: "03",
     emoji: "⚡",
     title: "Last-Minute Support",
-    desc: "Need help 2 days before? We're available.",
+    desc: "Need help 2 days before? We're available. Emergencies happen - we're built to respond fast without compromising quality.",
   },
   {
     id: "04",
     emoji: "🎪",
     title: "Expertise Across Events",
-    desc: "Weddings, corporates, concerts, exhibitions — we've done it all.",
+    desc: "Weddings, corporates, concerts, exhibitions - we've done it all. Every event type has unique demands, and we're prepared for each one.",
   },
   {
     id: "05",
     emoji: "🤝",
     title: "Flexible Staffing",
-    desc: "One captain or a full team — hire exactly what you need.",
+    desc: "One captain or a full team - hire exactly what you need. Scale up or down based on your event size and budget.",
   },
   {
     id: "06",
     emoji: "💛",
     title: "Guest-Centric Approach",
-    desc: "Every guest interaction handled with care and professionalism.",
+    desc: "Every guest interaction handled with care and professionalism. Because your guests' experience is what people remember long after the event.",
   },
 ];
 
@@ -50,11 +50,15 @@ export default function WhyChooseUsSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.5, delay: index * 0.08 }}
-        className="bg-[#FDFAF5] border border-[#C9973A]/25 rounded-2xl p-5 relative overflow-hidden flex flex-col justify-between hover:border-[#C9973A]/60 hover:shadow-md transition-all duration-300 h-full"
+        className="bg-[#FDFAF5] border border-[#C9973A]/25 rounded-2xl p-5 relative overflow-hidden flex flex-col gap-4 hover:border-[#C9973A]/60 hover:shadow-md transition-all duration-300 h-full"
       >
         {/* Faded background number */}
         <span className="absolute bottom-3 right-4 font-['Playfair_Display'] text-7xl font-bold text-[#7B1223]/5 select-none pointer-events-none leading-none">
           {card.id}
+        </span>
+
+        <span className="absolute inset-0 flex items-center justify-center font-['Playfair_Display'] text-[160px] opacity-[0.04] select-none pointer-events-none leading-none">
+          {card.emoji}
         </span>
 
         <div>
@@ -65,7 +69,7 @@ export default function WhyChooseUsSection() {
           <p className="text-xs text-[#4A3F35] leading-relaxed">{card.desc}</p>
         </div>
 
-        <div className="w-8 h-0.5 bg-[#C9973A]/50 mt-4" />
+        <div className="w-8 h-0.5 bg-[#C9973A]/50 mt-auto" />
       </motion.div>
     );
   };

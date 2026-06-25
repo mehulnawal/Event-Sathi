@@ -34,7 +34,7 @@ export default function Navbar({
   const navLinks = [
     { label: "Services", href: "#services" },
     { label: "How It Works", href: "#how-it-works" },
-    { label: "Why Event Sathi", href: "#why-us" },
+    { label: "Why Event saathi", href: "#why-us" },
     { label: "FAQ", href: "#faq" },
   ];
 
@@ -70,12 +70,12 @@ export default function Navbar({
             href="#hero"
             onClick={(e) => handleLinkClick(e, "#hero")}
             className="flex items-center active:scale-95 transition-transform duration-200 focus:outline-none rounded-sm shrink-0"
-            aria-label="Event Sathi Home"
+            aria-label="Event saathi Home"
           >
             <img
               src="/assets/logo-round.jpeg"
-              id="event-sathi-logo"
-              alt="Event Sathi"
+              id="event-saathi-logo"
+              alt="Event saathi"
               className="h-12 w-auto sm:h-14 md:h-16 object-contain"
             />
           </a>
@@ -111,7 +111,7 @@ export default function Navbar({
                 active:scale-[0.97]
                 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9973A]
               "
-              aria-label="Become a Vendor on Event Sathi"
+              aria-label="Become a Vendor on Event saathi"
             >
               Become a Vendor
             </button> */}

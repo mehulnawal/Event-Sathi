@@ -3,11 +3,11 @@ import "./globals.css";
 // Industry-Standard Production Level Metadata Engine
 export const metadata = {
   title: {
-    default: "EventSathi | Premium Wedding Planners & Verified Vendors",
-    template: "%s | EventSathi",
+    default: "Eventsaathi | Premium Wedding Planners & Verified Vendors",
+    template: "%s | Eventsaathi",
   },
   description:
-    "EventSathi is India's premier wedding planning companion connecting families with top-tier verified venues, couture decor, gourmet catering, and cinematic photography with instant 30-minute support.",
+    "Eventsaathi is India's premier wedding planning companion connecting families with top-tier verified venues, couture decor, gourmet catering, and cinematic photography with instant 30-minute support.",
   keywords: [
     "wedding planners in india",
     "verified wedding vendors",
@@ -16,30 +16,30 @@ export const metadata = {
     "emergency wedding planning",
     "tatkal event backup",
     "best wedding venues",
-    "event sathi planner",
+    "event saathi planner",
   ],
-  authors: [{ name: "EventSathi Team" }],
-  creator: "EventSathi",
-  publisher: "EventSathi",
+  authors: [{ name: "Eventsaathi Team" }],
+  creator: "Eventsaathi",
+  publisher: "Eventsaathi",
 
   // Geolocation targets to secure Indian Local SEO dominance
   category: "Wedding Planning & Event Management",
 
   // Open Graph (OG) Structure for Beautiful Rich Card Previews on WhatsApp, iMessage, Instagram & FB
   openGraph: {
-    title: "EventSathi | Every Indian Wedding Needs a Trusted Saathi",
+    title: "Eventsaathi | Every Indian Wedding Needs a Trusted Saathi",
     description:
       "Discover verified wedding partners, custom budget quotes, and a 30-minute live backup response network for a stress-free ghar jaisa luxury celebration.",
-    url: "https://eventsathi.com", // Aap apna actual verified domain yahan replace kar sakte hain
-    siteName: "EventSathi",
+    url: "https://eventsaathi.com", // Aap apna actual verified domain yahan replace kar sakte hain
+    siteName: "Eventsaathi",
     locale: "en_IN",
     type: "website",
     images: [
       {
-        url: "https://eventsathi.com/assets/og-preview-banner.jpg", // WhatsApp share visual file target path
+        url: "https://eventsaathi.com/assets/og-preview-banner.jpg", // WhatsApp share visual file target path
         width: 1200,
         height: 630,
-        alt: "EventSathi Premium Wedding Planning Ecosystem",
+        alt: "Eventsaathi Premium Wedding Planning Ecosystem",
       },
     ],
   },
@@ -47,10 +47,10 @@ export const metadata = {
   // Twitter/X Cards Optimization
   twitter: {
     card: "summary_large_image",
-    title: "EventSathi | Premium Wedding Planners & Verified Vendors",
+    title: "Eventsaathi | Premium Wedding Planners & Verified Vendors",
     description:
       "Handpicked premium service pairings and emergency backup infrastructure designed to execute flawless luxury weddings.",
-    images: ["https://eventsathi.com/assets/og-preview-banner.jpg"],
+    images: ["https://eventsaathi.com/assets/og-preview-banner.jpg"],
   },
 
   // Search Engine Bot Crawl Parameters
@@ -74,8 +74,8 @@ export const metadata = {
 };
 
 // remove black image
-// white 
-// cross 
+// white
+// cross
 
 export default function RootLayout({ children }) {
   return (
@@ -88,8 +88,8 @@ export default function RootLayout({ children }) {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
-              name: "EventSathi",
-              image: "https://eventsathi.com/assets/logo-placeholder.png",
+              name: "Eventsaathi",
+              image: "https://eventsaathi.com/assets/logo-placeholder.png",
               description:
                 "Premium wedding planning platform and verified event vendor network in India.",
               address: {
@@ -98,7 +98,7 @@ export default function RootLayout({ children }) {
               },
               priceRange: "$$$",
               telephone: "", // Agar official helpline number ho toh render karein
-              url: "https://eventsathi.com",
+              url: "https://eventsaathi.com",
             }),
           }}
         />

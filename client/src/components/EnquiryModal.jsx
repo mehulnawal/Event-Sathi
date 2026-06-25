@@ -30,17 +30,17 @@ const ADDITIONAL_SAATHIS_CONFIG = [
   {
     id: "porterService",
     label: "Porter Service",
-    desc: "Carrying & managing guest luggage at hotel/venue",
+    desc: "A dedicated support team that assists with carrying, shifting, loading/unloading, and placing event-related items smoothly across the venue, hotel, backstage, guest areas, and entry point",
   },
   {
     id: "shadowService",
-    label: "Shadow Service for Bride/Groom",
-    desc: "Dedicated assistant for bride or groom during the event",
+    label: "Shadow Service",
+    desc: "Dedicated assistant for the bride, groom, or any family member who needs it",
   },
   {
     id: "foodBeverages",
     label: "Food & Beverages Management",
-    desc: "Supervising food service, buffet & beverage counters",
+    desc: "Supervising food service, buffet & beverage counters, including plate count and food tasting with the host before the event starts",
   },
   {
     id: "vendorManagement",
@@ -75,12 +75,12 @@ const ADDITIONAL_SAATHIS_CONFIG = [
   {
     id: "elderPeople",
     label: "Elder People Management",
-    desc: "Dedicated assistance for elderly guests throughout the event",
+    desc: "Dedicated 1-on-1 assistance for an elderly guest throughout the event",
   },
   {
     id: "nannyKids",
     label: "Nanny for Kids / Play Areas",
-    desc: "Supervising and caring for children during the event",
+    desc: "Dedicated 1-on-1 nanny to supervise and care for one child during the event",
   },
 ];
 
@@ -120,6 +120,9 @@ export default function EnquiryModal({
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState(INITIAL_STATE);
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   useEffect(() => {
     if (isOpen) {
@@ -132,6 +135,9 @@ export default function EnquiryModal({
       setFormData(INITIAL_STATE);
       setCurrentStep(1);
       setErrors({});
+      setIsSubmitting(false);
+      setSubmitSuccess(false);
+      setSubmitError("");
     }
     return () => {
       document.body.style.overflow = "";
@@ -213,14 +219,49 @@ export default function EnquiryModal({
     setCurrentStep((prev) => prev - 1);
   };
 
-  const handleFormSubmission = (e) => {
+  const handleFormSubmission = async (e) => {
     e.preventDefault();
-    if (validateStep(3)) {
-      console.log("Submitted Data Payload:", {
-        ...formData,
-        isEmergencyMode: isTatkalMode,
-      });
-      onClose();
+    if (!validateStep(3)) return;
+
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const payload = {
+        type: isTatkalMode ? "tatkal" : "booking",
+        fullName: formData.fullName,
+        mobileNumber: formData.mobileNumber,
+        emailAddress: formData.emailAddress,
+        city: formData.city,
+        eventType: formData.eventType,
+        customEventType: formData.customEventType,
+        eventDate: formData.eventDate,
+        eventLocation: formData.eventLocation,
+        guestCount: formData.guestCount,
+        estimatedBudget: formData.estimatedBudget,
+        saathis: formData.saathis,
+      };
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/enquiry`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Submission failed");
+
+      setSubmitSuccess(true);
+      setTimeout(() => {
+        onClose();
+      }, 2000);
+    } catch (err) {
+      setSubmitError("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -648,38 +689,62 @@ export default function EnquiryModal({
           </div>
 
           {/* Action Footer */}
-          <div className="px-5 py-4 bg-[#F5F0E8] border-t border-[#C9973A]/20 flex items-center justify-between shrink-0">
-            {currentStep > 1 ? (
-              <button
-                type="button"
-                onClick={handlePrevStep}
-                className="text-sm font-bold text-[#7B1223] hover:text-[#C9973A] transition-colors"
-              >
-                ← Back
-              </button>
-            ) : (
-              <div />
+          <div className="px-5 py-4 bg-[#F5F0E8] border-t border-[#C9973A]/20 flex flex-col gap-2 shrink-0">
+            {submitError && (
+              <p className="text-xs text-[#D94F3D] font-semibold text-center">
+                {submitError}
+              </p>
             )}
+            {submitSuccess && (
+              <p className="text-xs text-green-700 font-semibold text-center">
+                ✓ Submitted successfully! We'll be in touch soon.
+              </p>
+            )}
+            <div className="flex items-center justify-between">
+              {currentStep > 1 ? (
+                <button
+                  type="button"
+                  onClick={handlePrevStep}
+                  disabled={isSubmitting}
+                  className="text-sm font-bold text-[#7B1223] hover:text-[#C9973A] transition-colors disabled:opacity-50"
+                >
+                  ← Back
+                </button>
+              ) : (
+                <div />
+              )}
 
-            {currentStep < 3 ? (
-              <button
-                type="button"
-                onClick={handleNextStep}
-                className="flex items-center gap-1 bg-[#7B1223] text-[#F5F0E8] border border-[#C9973A] rounded-full px-6 py-2 text-xs font-bold uppercase tracking-wider shadow-md hover:bg-[#C9973A] hover:text-[#7B1223] transition-all duration-300"
-              >
-                Next Step <ChevronRight className="h-4 w-4" />
-              </button>
-            ) : (
-              <button
-                type="submit"
-                onClick={handleFormSubmission}
-                className={`w-full sm:w-auto text-xs font-bold uppercase tracking-widest px-8 py-3 rounded-full shadow-lg transition-all duration-300 ${isTatkalMode ? "bg-[#D94F3D] text-white hover:bg-[#7B1223]" : "bg-[#7B1223] text-[#F5F0E8] border border-[#C9973A] hover:bg-[#C9973A] hover:text-[#7B1223]"}`}
-              >
-                {isTatkalMode
-                  ? "Request Emergency Help →"
-                  : "Submit Your Requirement →"}
-              </button>
-            )}
+              {currentStep < 3 ? (
+                <button
+                  type="button"
+                  onClick={handleNextStep}
+                  className="flex items-center gap-1 bg-[#7B1223] text-[#F5F0E8] border border-[#C9973A] rounded-full px-6 py-2 text-xs font-bold uppercase tracking-wider shadow-md hover:bg-[#C9973A] hover:text-[#7B1223] transition-all duration-300"
+                >
+                  Next Step <ChevronRight className="h-4 w-4" />
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  onClick={handleFormSubmission}
+                  disabled={isSubmitting || submitSuccess}
+                  className={`w-full sm:w-auto text-xs font-bold uppercase tracking-widest px-8 py-3 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed ${isTatkalMode ? "bg-[#D94F3D] text-white hover:bg-[#7B1223]" : "bg-[#7B1223] text-[#F5F0E8] border border-[#C9973A] hover:bg-[#C9973A] hover:text-[#7B1223]"}`}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                      Submitting...
+                    </>
+                  ) : isTatkalMode ? (
+                    "Request Emergency Help →"
+                  ) : (
+                    "Submit Your Requirement →"
+                  )}
+                </button>
+              )}
+            </div>
           </div>
         </motion.div>
       </div>

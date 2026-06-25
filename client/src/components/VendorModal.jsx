@@ -60,6 +60,9 @@ export default function VendorModal({ isOpen, onClose }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState(INITIAL_STATE);
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   // Scroll lock on body
   useEffect(() => {
@@ -71,6 +74,9 @@ export default function VendorModal({ isOpen, onClose }) {
       setFormData(INITIAL_STATE);
       setCurrentStep(1);
       setErrors({});
+      setIsSubmitting(false);
+      setSubmitSuccess(false);
+      setSubmitError("");
     }
     return () => {
       document.body.style.overflow = "";
@@ -138,6 +144,8 @@ export default function VendorModal({ isOpen, onClose }) {
         newErrors.experience = "Please select your years of experience";
       if (!formData.areasServed.trim())
         newErrors.areasServed = "Please specify areas/cities served";
+      if (!formData.socialLink.trim())
+        newErrors.socialLink = "Website or Instagram link is required";
     } else if (step === 3) {
       if (!formData.address.trim()) newErrors.address = "Address is required";
     }
@@ -156,11 +164,55 @@ export default function VendorModal({ isOpen, onClose }) {
     setCurrentStep((prev) => prev - 1);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateStep(3)) {
-      console.log("Vendor Registration Submitted Data:", formData);
-      onClose();
+    if (!validateStep(3)) return;
+
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("businessName", formData.businessName);
+      formDataToSend.append("contactName", formData.contactName);
+      formDataToSend.append("mobile", formData.mobile);
+      formDataToSend.append("email", formData.email);
+      formDataToSend.append("city", formData.city);
+      formDataToSend.append("state", formData.state);
+      formDataToSend.append("category", JSON.stringify(formData.category));
+      formDataToSend.append("otherCategoryText", formData.otherCategoryText || "");
+      formDataToSend.append("experience", formData.experience);
+      formDataToSend.append("areasServed", formData.areasServed);
+      formDataToSend.append("teamSize", formData.teamSize || "");
+      formDataToSend.append("socialLink", formData.socialLink);
+      formDataToSend.append("portfolioLink", formData.portfolioLink || "");
+      formDataToSend.append("gstNumber", formData.gstNumber || "");
+      formDataToSend.append("address", formData.address);
+      formDataToSend.append("emergencyAvailability", formData.emergencyAvailability);
+      formDataToSend.append("aboutServices", formData.aboutServices || "");
+      if (formData.companyProfile) {
+        formDataToSend.append("companyProfile", formData.companyProfile);
+      }
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/vendor`,
+        {
+          method: "POST",
+          body: formDataToSend,
+        }
+      );
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Submission failed");
+
+      setSubmitSuccess(true);
+      setTimeout(() => {
+        onClose();
+      }, 2000);
+    } catch (err) {
+      setSubmitError("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -186,7 +238,7 @@ export default function VendorModal({ isOpen, onClose }) {
                   Become a Verified Vendor
                 </h2>
                 <p className="text-xs text-[#8C7B6B]">
-                  Join the EventSathi partner network
+                  Join the Eventsaathi partner network
                 </p>
               </div>
             </div>
@@ -521,10 +573,7 @@ export default function VendorModal({ isOpen, onClose }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-[#1C1C1C] mb-1">
-                      Website / Instagram Link{" "}
-                      <span className="text-[#8C7B6B] font-normal">
-                        (optional)
-                      </span>
+                      Website / Instagram Link *
                     </label>
                     <input
                       type="url"
@@ -532,8 +581,13 @@ export default function VendorModal({ isOpen, onClose }) {
                       value={formData.socialLink}
                       onChange={handleInputChange}
                       placeholder="https://instagram.com/yourhandle"
-                      className="w-full px-3 py-2 text-sm bg-white border border-[#8C7B6B]/40 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#7B1223]"
+                      className={`w-full px-3 py-2 text-sm bg-white border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#7B1223] ${errors.socialLink ? "border-[#D94F3D]" : "border-[#8C7B6B]/40"}`}
                     />
+                    {errors.socialLink && (
+                      <span className="text-xs text-[#D94F3D] mt-0.5 block">
+                        {errors.socialLink}
+                      </span>
+                    )}
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-[#1C1C1C] mb-1">
@@ -687,36 +741,56 @@ export default function VendorModal({ isOpen, onClose }) {
           </form>
 
           {/* Action Footer Navigation Buttons */}
-          <div className="px-6 py-4 bg-[#F5F0E8] border-t border-[#8C7B6B]/20 flex items-center justify-between">
-            {currentStep > 1 ? (
-              <button
-                type="button"
-                onClick={handleBack}
-                className="px-5 py-2 text-sm font-semibold text-[#7B1223] hover:text-[#C9973A] transition-colors"
-              >
-                ← Back
-              </button>
-            ) : (
-              <div />
+          <div className="px-6 py-4 bg-[#F5F0E8] border-t border-[#8C7B6B]/20 flex flex-col gap-2">
+            {submitError && (
+              <p className="text-xs text-[#D94F3D] font-semibold text-center">{submitError}</p>
             )}
+            {submitSuccess && (
+              <p className="text-xs text-green-700 font-semibold text-center">✓ Registration submitted! We'll review and get back to you.</p>
+            )}
+            <div className="flex items-center justify-between">
+              {currentStep > 1 ? (
+                <button
+                  type="button"
+                  onClick={handleBack}
+                  disabled={isSubmitting}
+                  className="px-5 py-2 text-sm font-semibold text-[#7B1223] hover:text-[#C9973A] transition-colors disabled:opacity-50"
+                >
+                  ← Back
+                </button>
+              ) : (
+                <div />
+              )}
 
-            {currentStep < 3 ? (
-              <button
-                type="button"
-                onClick={handleNext}
-                className="flex items-center gap-1 bg-[#7B1223] text-[#F5F0E8] border border-[#C9973A] rounded-full px-6 py-2 text-sm font-bold shadow-md hover:bg-[#C9973A] hover:text-[#7B1223] transition-all duration-300"
-              >
-                Next Step <ChevronRight className="h-4 w-4" />
-              </button>
-            ) : (
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                className="flex items-center gap-1.5 bg-[#7B1223] text-[#F5F0E8] border border-[#C9973A] rounded-full px-7 py-2.5 text-sm font-bold shadow-md hover:bg-[#C9973A] hover:text-[#7B1223] transition-all duration-300"
-              >
-                Register as Vendor →
-              </button>
-            )}
+              {currentStep < 3 ? (
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  className="flex items-center gap-1 bg-[#7B1223] text-[#F5F0E8] border border-[#C9973A] rounded-full px-6 py-2 text-sm font-bold shadow-md hover:bg-[#C9973A] hover:text-[#7B1223] transition-all duration-300"
+                >
+                  Next Step <ChevronRight className="h-4 w-4" />
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  onClick={handleSubmit}
+                  disabled={isSubmitting || submitSuccess}
+                  className="flex items-center gap-1.5 bg-[#7B1223] text-[#F5F0E8] border border-[#C9973A] rounded-full px-7 py-2.5 text-sm font-bold shadow-md hover:bg-[#C9973A] hover:text-[#7B1223] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                      Submitting...
+                    </>
+                  ) : (
+                    "Register as Vendor →"
+                  )}
+                </button>
+              )}
+            </div>
           </div>
         </motion.div>
       </div>

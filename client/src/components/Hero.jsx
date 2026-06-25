@@ -90,7 +90,7 @@ export default function HeroSection({ onSubmitClick, onBecomeVendorClick }) {
             transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
             className="font-sans text-sm md:text-[15px] leading-relaxed text-[#f0e8dd] max-w-[440px] font-normal mb-8 md:mb-10 drop-shadow-sm"
           >
-            Event Sathi manages every detail with trusted professionals and
+            Event saathi manages every detail with trusted professionals and
             seamless execution.
           </motion.p>
 

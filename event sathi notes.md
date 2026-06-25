@@ -1,9 +1,9 @@
-## Event Sathi — Master Checklist
+## Event saathi — Master Checklist
 
 ### 🔴 Critical — Fix First
 
 1. "We Match Vendors" step remove karo How It Works se — client ne confirm kiya, Step 1 → Step 3 direct
-2. "Why Event Sathi?" section broken — counters 0+ dikh rahe hain, JS fail ho raha hai
+2. "Why Event saathi?" section broken — counters 0+ dikh rahe hain, JS fail ho raha hai
 3. Hero CTA — "Submit Your Requirement" hatao, "Plan My Event" ya "Let's Plan Together" rakho
 
 ---
@@ -91,7 +91,7 @@ Hero Section ✅
 How It Works ✅
 Emergency Service ✅
 **Services ◀
-Why Event Sathi ◀**
+Why Event saathi ◀**
 Join as Event Saathi (City Partner Program) - ✅
 About Us ✅
 Testimonials (placeholder) ✅
@@ -105,5 +105,17 @@ Loader ✅
 
 aur fix body/html when form open ✅
 update how it works - add thread in mobile also ✅
-Why Event Sathi 
+Why Event saathi 
 Services
+
+
+
+
+1. Loader page - 
+2. Why event sathi 
+3. Pop up 
+4. Hero section 
+5. logo highlight 
+6. Static ChatBot 
+7. Images optimization 
+8. Full Checking - Backend + Frontend 
