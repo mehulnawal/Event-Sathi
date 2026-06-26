@@ -2,7 +2,19 @@
 
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Bot, User, Phone, MessageCircle, Mail, RotateCcw, Search, CornerDownLeft, HelpCircle, MessageSquare } from "lucide-react";
+import {
+  X,
+  Bot,
+  User,
+  Phone,
+  MessageCircle,
+  Mail,
+  RotateCcw,
+  Search,
+  CornerDownLeft,
+  HelpCircle,
+  MessageSquare,
+} from "lucide-react";
 import Fuse from "fuse.js";
 
 // ====================================
@@ -12,52 +24,103 @@ const faqData = [
   {
     id: 1,
     question: "How do I register as a vendor on Event Sathi?",
-    answer: "To register as a vendor, click on the 'Join as Vendor' button on our homepage. Fill out your business profile, service categories, pricing packages, and upload high-quality pictures of your past events. Our onboarding team will review and approve your profile within 24-48 hours.",
-    keywords: ["vendor registration", "become vendor", "join vendor", "seller signup", "vendr", "register merchant"],
-    popular: true
+    answer:
+      "To register as a vendor, click on the 'Join as Vendor' button on our homepage. Fill out your business profile, service categories, pricing packages, and upload high-quality pictures of your past events. Our onboarding team will review and approve your profile within 24-48 hours.",
+    keywords: [
+      "vendor registration",
+      "become vendor",
+      "join vendor",
+      "seller signup",
+      "vendr",
+      "register merchant",
+    ],
+    popular: true,
   },
   {
     id: 2,
     question: "What are the payment and booking terms?",
-    answer: "Bookings are locked upon paying a partial advance token amount specified by the vendor via the Event Sathi platform. The remaining balance is handled directly with the vendor based on the milestone terms signed in the service contract. All booking logs are tracked safely in your dashboard.",
-    keywords: ["payment", "bookingg", "advance money", "token amount", "price terms", "fees"],
-    popular: true
+    answer:
+      "Bookings are locked upon paying a partial advance token amount specified by the vendor via the Event Sathi platform. The remaining balance is handled directly with the vendor based on the milestone terms signed in the service contract. All booking logs are tracked safely in your dashboard.",
+    keywords: [
+      "payment",
+      "bookingg",
+      "advance money",
+      "token amount",
+      "price terms",
+      "fees",
+    ],
+    popular: true,
   },
   {
     id: 3,
     question: "Can I cancel or reschedule a booked event?",
-    answer: "Yes, cancellations and rescheduling depend strictly on the individual vendor's policy shown at the time of booking. Go to 'My Bookings', select the event, and check options. Any eligible refunds are processed into your native account within 5-7 business days.",
-    keywords: ["cancel booking", "reschedule event", "change date", "refund money", "cancelation policy"],
-    popular: false
+    answer:
+      "Yes, cancellations and rescheduling depend strictly on the individual vendor's policy shown at the time of booking. Go to 'My Bookings', select the event, and check options. Any eligible refunds are processed into your native account within 5-7 business days.",
+    keywords: [
+      "cancel booking",
+      "reschedule event",
+      "change date",
+      "refund money",
+      "cancelation policy",
+    ],
+    popular: false,
   },
   {
     id: 4,
     question: "How does Event Sathi verify vendors?",
-    answer: "Every partner on Event Sathi goes through a multi-step verification program including government identity checks, physical portfolio evaluation, and past client feedback analysis to ensure top-notch luxury standards for your premium events.",
-    keywords: ["verify vendor", "trusted partners", "safe booking", "fraud check", "quality service"],
-    popular: true
+    answer:
+      "Every partner on Event Sathi goes through a multi-step verification program including government identity checks, physical portfolio evaluation, and past client feedback analysis to ensure top-notch luxury standards for your premium events.",
+    keywords: [
+      "verify vendor",
+      "trusted partners",
+      "safe booking",
+      "fraud check",
+      "quality service",
+    ],
+    popular: true,
   },
   {
     id: 5,
     question: "Are there any hidden service fees or charges?",
-    answer: "No, transparency is our core principle. The prices you see from verified vendors are all-inclusive of native taxes unless specified otherwise in their custom optional add-ons setup.",
-    keywords: ["hidden charges", "extra fees", "service tax", "pricing cost", "commission"],
-    popular: false
+    answer:
+      "No, transparency is our core principle. The prices you see from verified vendors are all-inclusive of native taxes unless specified otherwise in their custom optional add-ons setup.",
+    keywords: [
+      "hidden charges",
+      "extra fees",
+      "service tax",
+      "pricing cost",
+      "commission",
+    ],
+    popular: false,
   },
   {
     id: 6,
     question: "How do I reach customer support if a vendor doesn't respond?",
-    answer: "If a vendor fails to respond within 12 hours of a premium request, you can instantly escalate it by tapping our emergency helpline or mailing support@eventsathi.com. A dedicated Event Buddy will be assigned to resolve it.",
-    keywords: ["support team", "no response", "complain vendor", "help desk", "customer care"],
-    popular: true
+    answer:
+      "If a vendor fails to respond within 12 hours of a premium request, you can instantly escalate it by tapping our emergency helpline or mailing support@eventsathi.com. A dedicated Event Buddy will be assigned to resolve it.",
+    keywords: [
+      "support team",
+      "no response",
+      "complain vendor",
+      "help desk",
+      "customer care",
+    ],
+    popular: true,
   },
   {
     id: 7,
     question: "Can I book multiple vendors for a single wedding event?",
-    answer: "Absolutely! You can use our centralized Event Sathi Cart feature to select separate vendors for catering, photography, decoration, and music, managing them under a unified single master timeline dashboard.",
-    keywords: ["multiple vendors", "wedding planning", "catering photo package", "cart system", "partnr"],
-    popular: true
-  }
+    answer:
+      "Absolutely! You can use our centralized Event Sathi Cart feature to select separate vendors for catering, photography, decoration, and music, managing them under a unified single master timeline dashboard.",
+    keywords: [
+      "multiple vendors",
+      "wedding planning",
+      "catering photo package",
+      "cart system",
+      "partnr",
+    ],
+    popular: true,
+  },
 ];
 
 // ====================================
@@ -66,11 +129,11 @@ const faqData = [
 const fuseOptions = {
   keys: [
     { name: "question", weight: 0.6 },
-    { name: "keywords", weight: 0.4 }
+    { name: "keywords", weight: 0.4 },
   ],
   threshold: 0.35,
   distance: 100,
-  ignoreLocation: true
+  ignoreLocation: true,
 };
 
 let fuseInstance = null;
@@ -80,18 +143,19 @@ const searchFAQs = (query, data) => {
     fuseInstance = new Fuse(data, fuseOptions);
   }
   const results = fuseInstance.search(query);
-  return results.map(result => result.item).slice(0, 5);
+  return results.map((result) => result.item).slice(0, 5);
 };
 
 // ====================================
 // 3. SUB-COMPONENTS
 // ====================================
 
-// --- CHAT MESSAGE COMPONENT ---
 function ChatMessage({ type, text }) {
   const isBot = type === "bot";
   return (
-    <div className={`flex items-start gap-2.5 ${isBot ? "justify-start" : "justify-end"}`}>
+    <div
+      className={`flex items-start gap-2.5 ${isBot ? "justify-start" : "justify-end"}`}
+    >
       {isBot && (
         <div className="w-7 h-7 rounded-full bg-[var(--color-primary)] text-white flex items-center justify-center shrink-0 border border-[var(--color-accent)]/30 shadow-xs">
           <Bot className="w-3.5 h-3.5" />
@@ -115,7 +179,6 @@ function ChatMessage({ type, text }) {
   );
 }
 
-// --- SUGGESTION LIST COMPONENT ---
 function SuggestionList({ items, onSelect, highlight }) {
   const highlightText = (text, target) => {
     if (!target) return text;
@@ -124,12 +187,15 @@ function SuggestionList({ items, onSelect, highlight }) {
       <span>
         {parts.map((part, i) =>
           part.toLowerCase() === target.toLowerCase() ? (
-            <span key={i} className="text-[var(--color-primary)] font-bold underline bg-[var(--color-accent)]/10">
+            <span
+              key={i}
+              className="text-[var(--color-primary)] font-bold underline bg-[var(--color-accent)]/10"
+            >
               {part}
             </span>
           ) : (
             part
-          )
+          ),
         )}
       </span>
     );
@@ -161,16 +227,14 @@ function SuggestionList({ items, onSelect, highlight }) {
   );
 }
 
-// --- CHAT INPUT COMPONENT ---
-function ChatInput({ value, onChange, onClear, disabled, suggestions, onSelectTopSuggestion }) {
-  const inputRef = useRef(null);
-
-  useEffect(() => {
-    if (!disabled && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [disabled]);
-
+function ChatInput({
+  value,
+  onChange,
+  onClear,
+  disabled,
+  suggestions,
+  onSelectTopSuggestion,
+}) {
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !disabled && suggestions.length > 0) {
       e.preventDefault();
@@ -184,7 +248,6 @@ function ChatInput({ value, onChange, onClear, disabled, suggestions, onSelectTo
         <Search className="w-4 h-4 opacity-70" />
       </div>
       <input
-        ref={inputRef}
         type="text"
         value={disabled ? "Click back button to search..." : value}
         onChange={(e) => onChange(e.target.value)}
@@ -210,11 +273,14 @@ function ChatInput({ value, onChange, onClear, disabled, suggestions, onSelectTo
   );
 }
 
-// --- CHAT WINDOW COMPONENT ---
+// ====================================
+// 3. CHAT WINDOW COMPONENT
+// ====================================
 function ChatWindow({ onClose }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [selectedFAQ, setSelectedFAQ] = useState(null);
+  const [showManualInput, setShowManualInput] = useState(false); // Controls input visibility
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -228,7 +294,7 @@ function ChatWindow({ onClose }) {
   }, [debouncedQuery]);
 
   const popularFAQs = useMemo(() => {
-    return faqData.filter(item => item.popular).slice(0, 6);
+    return faqData.filter((item) => item.popular).slice(0, 6);
   }, []);
 
   const handleSelectFAQ = (faq) => {
@@ -239,9 +305,11 @@ function ChatWindow({ onClose }) {
   const handleReset = () => {
     setSelectedFAQ(null);
     setSearchQuery("");
+    setShowManualInput(false); // Hide input again when returning to main list
   };
 
-  const hasNoResults = debouncedQuery.length > 1 && suggestions.length === 0 && !selectedFAQ;
+  const hasNoResults =
+    debouncedQuery.length > 1 && suggestions.length === 0 && !selectedFAQ;
 
   return (
     <motion.div
@@ -249,7 +317,7 @@ function ChatWindow({ onClose }) {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 20, scale: 0.95 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
-      className="w-[360px] sm:w-[400px] h-[520px] max-h-[80vh] bg-[var(--color-bg)] rounded-2xl border border-[var(--color-accent)]/30 shadow-2xl flex flex-col overflow-hidden"
+      className="w-[calc(100vw-2rem)] max-w-[380px] sm:w-[400px] h-[500px] max-h-[75vh] bg-[var(--color-bg)] rounded-2xl border border-[var(--color-accent)]/30 shadow-2xl flex flex-col overflow-hidden mb-3"
     >
       {/* HEADER BAR */}
       <div className="bg-[var(--color-primary)] p-4 flex items-center justify-between border-b border-[var(--color-accent)]/20">
@@ -288,7 +356,7 @@ function ChatWindow({ onClose }) {
             >
               <ChatMessage type="user" text={selectedFAQ.question} />
               <ChatMessage type="bot" text={selectedFAQ.answer} />
-              
+
               <div className="pt-2 flex justify-start">
                 <button
                   onClick={handleReset}
@@ -340,14 +408,39 @@ function ChatWindow({ onClose }) {
                   </a>
                 </div>
               </div>
+              <div className="pt-2">
+                <button
+                  onClick={handleReset}
+                  className="text-xs font-semibold text-[var(--color-primary)] underline"
+                >
+                  Go Back
+                </button>
+              </div>
             </motion.div>
-          ) : searchQuery.trim().length > 0 ? (
+          ) : showManualInput ? (
             <motion.div key="suggestions-list">
-              <SuggestionList
-                items={suggestions}
-                onSelect={handleSelectFAQ}
-                highlight={searchQuery}
-              />
+              <div className="flex justify-between items-center mb-2 px-1">
+                <span className="text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider">
+                  Search Box Active
+                </span>
+                <button
+                  onClick={() => setShowManualInput(false)}
+                  className="text-xs text-[var(--color-primary)] font-medium hover:underline"
+                >
+                  View FAQs
+                </button>
+              </div>
+              {searchQuery.trim().length > 0 ? (
+                <SuggestionList
+                  items={suggestions}
+                  onSelect={handleSelectFAQ}
+                  highlight={searchQuery}
+                />
+              ) : (
+                <p className="text-xs text-[var(--color-text-muted)] text-center py-8">
+                  Start typing below to search FAQs...
+                </p>
+              )}
             </motion.div>
           ) : (
             <motion.div
@@ -374,27 +467,39 @@ function ChatWindow({ onClose }) {
                   </button>
                 ))}
               </div>
+
+              {/* TRIGGER TO SHOW INPUT BOX */}
+              <div className="pt-2 text-center">
+                <button
+                  onClick={() => setShowManualInput(true)}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--color-primary)] hover:text-[var(--color-accent)] bg-white border border-[var(--color-primary)]/20 px-4 py-2.5 rounded-xl transition-all shadow-xs w-full justify-center hover:shadow-sm"
+                >
+                  <Search className="w-3.5 h-3.5" />
+                  Type your own question...
+                </button>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      {/* FOOTER INPUT */}
-      <ChatInput
-        value={searchQuery}
-        onChange={setSearchQuery}
-        onClear={() => setSearchQuery("")}
-        disabled={!!selectedFAQ}
-        suggestions={suggestions}
-        onSelectTopSuggestion={() => {
-          if (suggestions.length > 0) handleSelectFAQ(suggestions[0]);
-        }}
-      />
+      {/* FOOTER INPUT (Only renders when explicitly requested or inside an answer view) */}
+      {(showManualInput || !!selectedFAQ) && (
+        <ChatInput
+          value={searchQuery}
+          onChange={setSearchQuery}
+          onClear={() => setSearchQuery("")}
+          disabled={!!selectedFAQ}
+          suggestions={suggestions}
+          onSelectTopSuggestion={() => {
+            if (suggestions.length > 0) handleSelectFAQ(suggestions[0]);
+          }}
+        />
+      )}
     </motion.div>
   );
 }
 
-// --- CHAT BUBBLE COMPONENT ---
 function ChatBubble({ isOpen, onClick }) {
   return (
     <motion.button
@@ -404,11 +509,7 @@ function ChatBubble({ isOpen, onClick }) {
       whileHover={{ y: -2 }}
       animate={{ y: [0, -4, 0] }}
       transition={{
-        animate: {
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }
+        animate: { duration: 3, repeat: Infinity, ease: "easeInOut" },
       }}
     >
       <AnimatePresence mode="wait">
@@ -467,8 +568,36 @@ export default function Chatbot() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
+  // COMPLETE FREEZE: Locks both HTML and Body scrollbars
+  useEffect(() => {
+    const htmlNode = document.documentElement;
+    const bodyNode = document.body;
+
+    if (isOpen) {
+      htmlNode.style.overflow = "hidden";
+      htmlNode.style.touchAction = "none";
+      bodyNode.style.overflow = "hidden";
+      bodyNode.style.touchAction = "none";
+    } else {
+      htmlNode.style.overflow = "";
+      htmlNode.style.touchAction = "";
+      bodyNode.style.overflow = "";
+      bodyNode.style.touchAction = "";
+    }
+
+    return () => {
+      htmlNode.style.overflow = "";
+      htmlNode.style.touchAction = "";
+      bodyNode.style.overflow = "";
+      bodyNode.style.touchAction = "";
+    };
+  }, [isOpen]);
+
   return (
-    <div ref={containerRef} className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 select-none">
+    <div
+      ref={containerRef}
+      className="fixed bottom-4 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:bottom-6 sm:right-6 z-50 flex flex-col items-center sm:items-end select-none"
+    >
       <AnimatePresence>
         {isOpen && <ChatWindow onClose={() => setIsOpen(false)} />}
       </AnimatePresence>

@@ -1,14 +1,14 @@
 "use client";
+import { useAdminAuth } from "../useAdminAuth";
 import { AdminListPage } from "../AdminListPage";
 
 const formatDate = (d) =>
-  new Date(d).toLocaleDateString("en-IN", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
+  new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
 
 export default function BookingsPage() {
+  const { checked } = useAdminAuth();
+  if (!checked) return null;
+
   return (
     <AdminListPage
       title="Booking Enquiries"
