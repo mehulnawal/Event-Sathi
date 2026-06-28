@@ -6,7 +6,7 @@ export default function AdminLayout({ children }) {
   const pathname = usePathname();
   const isLoginPage = pathname === "/admin/login";
 
-  // Login page — no sidebar, no auth wrapper
+  // Login page  no sidebar, no auth wrapper
   if (isLoginPage) {
     return <>{children}</>;
   }

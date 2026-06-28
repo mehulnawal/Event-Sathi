@@ -119,3 +119,20 @@ Services
 6. Static ChatBot 
 7. Images optimization 
 8. Full Checking - Backend + Frontend 
+
+
+Vendor form changes frontend - 
+1. if they are actual or not - website or instagram link, Portfolio link
+2. check if gst number is correct format 
+
+Vendor form changes backend - 
+1. there is no option to view pdf 
+
+Event booking & emergency also frontend 
+1. problem - can enter text in budget  
+
+city partner backend  - 
+1. there is no option to view pdf 
+
+
+
