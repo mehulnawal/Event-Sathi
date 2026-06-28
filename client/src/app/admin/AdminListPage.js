@@ -78,7 +78,7 @@ export function AdminListPage({
   }
 
   return (
-    <div className="p-6 space-y-5">
+    <div className="p-3 sm:p-6 space-y-5">
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
@@ -108,8 +108,8 @@ export function AdminListPage({
         className="w-full max-w-sm px-4 py-2.5 text-sm border border-[#C9973A]/30 rounded-lg bg-white focus:outline-none focus:border-[#7B1223] text-[#1C1C1C]"
       />
 
-      {/* Table */}
-      <div className="bg-white rounded-xl border border-[#C9973A]/20 overflow-hidden">
+      {/* Desktop Table View (Visible on md and above) */}
+      <div className="hidden md:block bg-white rounded-xl border border-[#C9973A]/20 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -139,11 +139,8 @@ export function AdminListPage({
                 </tr>
               ) : (
                 filtered.map((item) => (
-                  <>
-                    <tr
-                      key={item._id}
-                      className="border-t border-[#F5F0E8] hover:bg-[#FDFAF5] transition-colors"
-                    >
+                  <React.Fragment key={item._id}>
+                    <tr className="border-t border-[#F5F0E8] hover:bg-[#FDFAF5] transition-colors">
                       {rowMapper(item).map((cell, j) => (
                         <td
                           key={j}
@@ -164,7 +161,7 @@ export function AdminListPage({
                       </td>
                     </tr>
                     {expanded === item._id && (
-                      <tr key={`${item._id}-detail`} className="bg-[#FDFAF5]">
+                      <tr className="bg-[#FDFAF5]">
                         <td
                           colSpan={columns.length + 1}
                           className="px-4 py-4 border-t border-[#C9973A]/10"
@@ -173,12 +170,66 @@ export function AdminListPage({
                         </td>
                       </tr>
                     )}
-                  </>
+                  </React.Fragment>
                 ))
               )}
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Mobile Card View (Visible below md breakpoint) */}
+      <div className="block md:hidden space-y-4">
+        {filtered.length === 0 ? (
+          <div className="bg-white rounded-xl border border-[#C9973A]/20 p-8 text-center text-sm text-[#8C7B6B]">
+            No entries found
+          </div>
+        ) : (
+          filtered.map((item) => {
+            const cells = rowMapper(item);
+            return (
+              <div
+                key={item._id}
+                className="bg-white rounded-xl border border-[#C9973A]/20 overflow-hidden"
+              >
+                {/* Card Fields */}
+                <div className="p-4 space-y-3">
+                  {columns.map((col, idx) => (
+                    <div key={col}>
+                      <p className="text-[10px] font-bold text-[#8C7B6B] uppercase tracking-wider">
+                        {col}
+                      </p>
+                      <div className="text-sm text-[#1C1C1C] mt-0.5 break-words">
+                        {cells[idx]}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Card Actions Footer */}
+                <div className="bg-[#F5F0E8]/40 border-t border-[#C9973A]/10 px-4 py-2.5 flex justify-end">
+                  <button
+                    onClick={() =>
+                      setExpanded(expanded === item._id ? null : item._id)
+                    }
+                    className="text-xs font-bold text-[#7B1223] hover:text-[#C9973A] transition-colors"
+                  >
+                    {expanded === item._id
+                      ? "Hide Details ▲"
+                      : "View Details ▼"}
+                  </button>
+                </div>
+
+                {/* Mobile Expanded Detail Section */}
+                {expanded === item._id && (
+                  <div className="bg-[#FDFAF5] p-4 border-t border-[#C9973A]/10">
+                    <DetailView item={item} />
+                  </div>
+                )}
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );
@@ -189,7 +240,7 @@ function DetailView({ item }) {
   const entries = Object.entries(item).filter(([k]) => !skip.includes(k));
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-3">
       {entries.map(([key, val]) => {
         let display = val;
         if (typeof val === "object" && val !== null && !Array.isArray(val)) {
