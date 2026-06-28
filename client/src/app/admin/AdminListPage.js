@@ -1,8 +1,9 @@
 "use client";
-// Shared admin data list page — used by bookings, tatkal, vendors, city-partners
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { adminFetch } from "./adminAuth";
+import React from "react";
 
 const formatDate = (d) =>
   new Date(d).toLocaleString("en-IN", {
