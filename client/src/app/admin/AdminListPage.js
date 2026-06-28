@@ -193,7 +193,6 @@ function DetailView({ item }) {
       {entries.map(([key, val]) => {
         let display = val;
         if (typeof val === "object" && val !== null && !Array.isArray(val)) {
-          // saathis object — show non-zero only
           const nonZero = Object.entries(val).filter(([, v]) => v > 0);
           display =
             nonZero.length > 0
@@ -210,9 +209,21 @@ function DetailView({ item }) {
             <p className="text-[10px] font-bold text-[#8C7B6B] uppercase tracking-wider">
               {key.replace(/([A-Z])/g, " $1").trim()}
             </p>
-            <p className="text-sm text-[#1C1C1C] mt-0.5 break-words">
-              {display || "—"}
-            </p>
+            {(key === "companyProfilePath" || key === "resumeFilePath") &&
+            val ? (
+              <a
+                href={process.env.NEXT_PUBLIC_API_URL + "/uploads/" + val}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-[#7B1223] underline hover:text-[#C9973A] transition-colors"
+              >
+                View / Download PDF
+              </a>
+            ) : (
+              <p className="text-sm text-[#1C1C1C] mt-0.5 break-words">
+                {display || "—"}
+              </p>
+            )}
           </div>
         );
       })}

@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -33,28 +34,32 @@ const EXPERIENCE_OPTIONS = [
 ];
 
 const INITIAL_STATE = {
-  // Step 1
   businessName: "",
   contactName: "",
   mobile: "",
   email: "",
   city: "",
   state: "",
-  // Step 2
-  category: [], // Multiple selection ke liye array banaya gaya hai
-  otherCategoryText: "", // Custom service name store karne ke liye
+  category: [],
+  otherCategoryText: "",
   experience: "",
   areasServed: "",
   teamSize: "",
   socialLink: "",
   portfolioLink: "",
   companyProfile: null,
-  // Step 3
   gstNumber: "",
   address: "",
   emergencyAvailability: "No",
   aboutServices: "",
 };
+
+// URL validation helper pattern
+const URL_REGEX =
+  /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/i;
+
+// Official 15-character Indian GSTIN Validation Pattern
+const GST_REGEX = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/i;
 
 export default function VendorModal({ isOpen, onClose }) {
   const [currentStep, setCurrentStep] = useState(1);
@@ -64,13 +69,11 @@ export default function VendorModal({ isOpen, onClose }) {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
-  // Scroll lock on body
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
-      // Reset form when modal closes
       setFormData(INITIAL_STATE);
       setCurrentStep(1);
       setErrors({});
@@ -121,6 +124,7 @@ export default function VendorModal({ isOpen, onClose }) {
 
   const validateStep = (step) => {
     const newErrors = {};
+
     if (step === 1) {
       if (!formData.businessName.trim())
         newErrors.businessName = "Business name is required";
@@ -133,21 +137,50 @@ export default function VendorModal({ isOpen, onClose }) {
       if (!formData.city.trim()) newErrors.city = "City is required";
       if (!formData.state.trim()) newErrors.state = "State is required";
     } else if (step === 2) {
-      if (!formData.category || formData.category.length === 0)
+      if (!formData.category || formData.category.length === 0) {
         newErrors.category = "Please select at least one vendor category";
+      }
       if (
         formData.category.includes("Other") &&
         !formData.otherCategoryText.trim()
-      )
+      ) {
         newErrors.otherCategoryText = "Please specify your service name";
-      if (!formData.experience)
+      }
+      if (!formData.experience) {
         newErrors.experience = "Please select your years of experience";
-      if (!formData.areasServed.trim())
+      }
+      if (!formData.areasServed.trim()) {
         newErrors.areasServed = "Please specify areas/cities served";
-      if (!formData.socialLink.trim())
+      }
+
+      // Required social link format check (Accepts website URL or Instagram profile URL)
+      if (!formData.socialLink.trim()) {
         newErrors.socialLink = "Website or Instagram link is required";
+      } else if (!URL_REGEX.test(formData.socialLink.trim())) {
+        newErrors.socialLink =
+          "Please enter a valid URL (e.g., https://instagram.com/handle)";
+      }
+
+      // Optional portfolio link format check (Only validates if the user types into it)
+      if (
+        formData.portfolioLink.trim() &&
+        !URL_REGEX.test(formData.portfolioLink.trim())
+      ) {
+        newErrors.portfolioLink = "Please enter a valid portfolio web link URL";
+      }
     } else if (step === 3) {
-      if (!formData.address.trim()) newErrors.address = "Address is required";
+      if (!formData.address.trim()) {
+        newErrors.address = "Address is required";
+      }
+
+      // Optional GST Number check (Passes if blank, but tests format if filled out)
+      if (
+        formData.gstNumber.trim() &&
+        !GST_REGEX.test(formData.gstNumber.trim().toUpperCase())
+      ) {
+        newErrors.gstNumber =
+          "Invalid GST structure format. Must be a valid 15-digit code.";
+      }
     }
 
     setErrors(newErrors);
@@ -180,27 +213,36 @@ export default function VendorModal({ isOpen, onClose }) {
       formDataToSend.append("city", formData.city);
       formDataToSend.append("state", formData.state);
       formDataToSend.append("category", JSON.stringify(formData.category));
-      formDataToSend.append("otherCategoryText", formData.otherCategoryText || "");
+      formDataToSend.append(
+        "otherCategoryText",
+        formData.otherCategoryText || "",
+      );
       formDataToSend.append("experience", formData.experience);
       formDataToSend.append("areasServed", formData.areasServed);
       formDataToSend.append("teamSize", formData.teamSize || "");
-      formDataToSend.append("socialLink", formData.socialLink);
-      formDataToSend.append("portfolioLink", formData.portfolioLink || "");
-      formDataToSend.append("gstNumber", formData.gstNumber || "");
+      formDataToSend.append("socialLink", formData.socialLink.trim());
+      formDataToSend.append(
+        "portfolioLink",
+        formData.portfolioLink.trim() || "",
+      );
+      formDataToSend.append(
+        "gstNumber",
+        formData.gstNumber.trim().toUpperCase() || "",
+      );
       formDataToSend.append("address", formData.address);
-      formDataToSend.append("emergencyAvailability", formData.emergencyAvailability);
+      formDataToSend.append(
+        "emergencyAvailability",
+        formData.emergencyAvailability,
+      );
       formDataToSend.append("aboutServices", formData.aboutServices || "");
       if (formData.companyProfile) {
         formDataToSend.append("companyProfile", formData.companyProfile);
       }
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/vendor`,
-        {
-          method: "POST",
-          body: formDataToSend,
-        }
-      );
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/vendor`, {
+        method: "POST",
+        body: formDataToSend,
+      });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Submission failed");
@@ -602,8 +644,13 @@ export default function VendorModal({ isOpen, onClose }) {
                       value={formData.portfolioLink}
                       onChange={handleInputChange}
                       placeholder="e.g. Drive or Dropbox link"
-                      className="w-full px-3 py-2 text-sm bg-white border border-[#8C7B6B]/40 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#7B1223]"
+                      className={`w-full px-3 py-2 text-sm bg-white border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#7B1223] ${errors.portfolioLink ? "border-[#D94F3D]" : "border-[#8C7B6B]/40"}`}
                     />
+                    {errors.portfolioLink && (
+                      <span className="text-xs text-[#D94F3D] mt-0.5 block">
+                        {errors.portfolioLink}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -667,8 +714,13 @@ export default function VendorModal({ isOpen, onClose }) {
                     value={formData.gstNumber}
                     onChange={handleInputChange}
                     placeholder="e.g. 27AAPFU0939F1ZV"
-                    className="w-full px-3 py-2 text-sm bg-white border border-[#8C7B6B]/40 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#7B1223]"
+                    className={`w-full px-3 py-2 text-sm bg-white border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#7B1223] uppercase ${errors.gstNumber ? "border-[#D94F3D]" : "border-[#8C7B6B]/40"}`}
                   />
+                  {errors.gstNumber && (
+                    <span className="text-xs text-[#D94F3D] mt-0.5 block">
+                      {errors.gstNumber}
+                    </span>
+                  )}
                 </div>
 
                 <div>
@@ -743,10 +795,14 @@ export default function VendorModal({ isOpen, onClose }) {
           {/* Action Footer Navigation Buttons */}
           <div className="px-6 py-4 bg-[#F5F0E8] border-t border-[#8C7B6B]/20 flex flex-col gap-2">
             {submitError && (
-              <p className="text-xs text-[#D94F3D] font-semibold text-center">{submitError}</p>
+              <p className="text-xs text-[#D94F3D] font-semibold text-center">
+                {submitError}
+              </p>
             )}
             {submitSuccess && (
-              <p className="text-xs text-green-700 font-semibold text-center">✓ Registration submitted! We'll review and get back to you.</p>
+              <p className="text-xs text-green-700 font-semibold text-center">
+                ✓ Registration submitted! We'll review and get back to you.
+              </p>
             )}
             <div className="flex items-center justify-between">
               {currentStep > 1 ? (
@@ -779,9 +835,25 @@ export default function VendorModal({ isOpen, onClose }) {
                 >
                   {isSubmitting ? (
                     <>
-                      <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      <svg
+                        className="animate-spin h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                        />
                       </svg>
                       Submitting...
                     </>

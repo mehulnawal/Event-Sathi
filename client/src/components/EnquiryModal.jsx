@@ -153,6 +153,14 @@ export default function EnquiryModal({
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
+  // Sanitizes budget input to only allow digits, commas, and the rupee symbol
+  const handleBudgetChange = (e) => {
+    const cleanValue = e.target.value.replace(/[^0-9,₹\s]/g, "");
+    setFormData((prev) => ({ ...prev, estimatedBudget: cleanValue }));
+    if (errors.estimatedBudget)
+      setErrors((prev) => ({ ...prev, estimatedBudget: "" }));
+  };
+
   const handleMobileChange = (e) => {
     const value = e.target.value.replace(/\D/g, "").slice(0, 10);
     setFormData((prev) => ({ ...prev, mobileNumber: value }));
@@ -248,7 +256,7 @@ export default function EnquiryModal({
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       const data = await res.json();
@@ -601,7 +609,7 @@ export default function EnquiryModal({
                         type="text"
                         name="estimatedBudget"
                         value={formData.estimatedBudget}
-                        onChange={handleInputChange}
+                        onChange={handleBudgetChange}
                         placeholder="Optional — e.g. ₹2,00,000"
                         className="w-full bg-[#FDFAF5] border border-[#C9973A]/30 rounded-lg p-2.5 text-sm text-[#1C1C1C] focus:outline-none focus:border-[#7B1223] transition-colors"
                       />
@@ -731,9 +739,25 @@ export default function EnquiryModal({
                 >
                   {isSubmitting ? (
                     <>
-                      <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      <svg
+                        className="animate-spin h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                        />
                       </svg>
                       Submitting...
                     </>
