@@ -212,7 +212,7 @@ function DetailView({ item }) {
             {(key === "companyProfilePath" || key === "resumeFilePath") &&
             val ? (
               <a
-                href={process.env.NEXT_PUBLIC_API_URL + "/uploads/" + val}
+                href={"/uploads/" + val}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-[#7B1223] underline hover:text-[#C9973A] transition-colors"
