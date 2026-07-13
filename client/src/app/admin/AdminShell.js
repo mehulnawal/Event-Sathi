@@ -85,7 +85,7 @@ export default function AdminShell({ children }) {
               className="text-xl font-bold text-[#F5F0E8]"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              EventSathi
+              EventSaathi
             </h1>
             <p className="text-xs text-[#C9973A] mt-0.5 tracking-wider font-medium">
               Admin Portal
