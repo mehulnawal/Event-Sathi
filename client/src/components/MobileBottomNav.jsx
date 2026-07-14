@@ -22,12 +22,12 @@ export default function MobileBottomNav({ onSubmitClick, onEmergencyClick }) {
 
   return (
     <motion.nav
-      className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-[#F5F0E8] border-t-2 border-[#C9973A] px-4 py-3 pb-safe shadow-[0_-10px_25px_rgba(0,0,0,0.1)]"
+      className="fixed bottom-0 left-0 right-0 z-50  bg-[#F5F0E8] border-t-2 border-[#C9973A] px-4 py-3 pb-safe shadow-[0_-10px_25px_rgba(0,0,0,0.1)]"
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       transition={{ delay: 1.5, duration: 0.4, ease: "easeOut" }}
     >
-      <div className="flex items-center justify-between max-w-sm mx-auto">
+      <div className="flex items-center justify-between gap-4 max-w-sm mx-auto md:max-w-none md:mx-0 md:w-full">
         {/* Home Navigation
         <a
           href="#hero"

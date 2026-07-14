@@ -11,6 +11,7 @@ import EnquiryModal from "@/components/EnquiryModal";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import FloatingButtons from "@/components/FloatingCTA";
+import PromoPopup from "@/components/popUp";
 
 export default function Home() {
   const [submitModalOpen, setSubmitModalOpen] = useState(false);
@@ -27,6 +28,7 @@ export default function Home() {
       <Loader isVideoLoaded={isVideoLoaded} />
 
       <FloatingButtons />
+      <PromoPopup />
 
       <Navbar
         onSubmitClick={() => setSubmitModalOpen(true)}

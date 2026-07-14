@@ -7,12 +7,12 @@ const STEPS = [
   {
     num: "Step 01",
     title: "Tell Us Your Need",
-    desc: "Share your vision, style, traditions, and expectations. We start building the perfect experience around your celebration.",
+    desc: "Share your vision, style, traditions, and expectations. We turn them into a clear plan of action for your celebration.",
     cardVariant: "light",
     Icon: Sparkles,
-    cardTitle: "Personalized Planning",
+    cardTitle: "Built For Execution",
     cardBody:
-      "Every event starts with understanding your family, emotions, and celebration priorities.",
+      "We don't just note down your priorities — we turn them into a step-by-step execution plan from day one.",
   },
   {
     num: "Step 02",

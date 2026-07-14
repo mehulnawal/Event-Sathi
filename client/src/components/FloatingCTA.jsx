@@ -494,7 +494,7 @@ export default function FloatingButtons() {
   return (
     <div
       ref={containerRef}
-      className="fixed right-6 z-[1000] flex flex-col items-end gap-4 select-none bottom-20 md:bottom-6"
+      className="fixed right-6 z-[1000] flex flex-col items-end gap-4 select-none bottom-20"
     >
       {/* --- CHAT WINDOW CONTAINER --- */}
       <AnimatePresence>
