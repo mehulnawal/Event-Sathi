@@ -1,4 +1,5 @@
 import "./globals.css";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 // Industry-Standard Production Level Metadata Engine
 export const metadata = {
@@ -22,21 +23,19 @@ export const metadata = {
   creator: "Eventsaathi",
   publisher: "Eventsaathi",
 
-  // Geolocation targets to secure Indian Local SEO dominance
   category: "Wedding Planning & Event Management",
 
-  // Open Graph (OG) Structure for Beautiful Rich Card Previews on WhatsApp, iMessage, Instagram & FB
   openGraph: {
     title: "Eventsaathi | Every Indian Wedding Needs a Trusted Saathi",
     description:
       "Discover verified wedding partners, custom budget quotes, and a 30-minute live backup response network for a stress-free ghar jaisa luxury celebration.",
-    url: "https://eventsaathi.com", // Aap apna actual verified domain yahan replace kar sakte hain
+    url: "https://eventsaathi.com",
     siteName: "Eventsaathi",
     locale: "en_IN",
     type: "website",
     images: [
       {
-        url: "https://eventsaathi.com/assets/og-preview-banner.jpg", // WhatsApp share visual file target path
+        url: "https://eventsaathi.com/assets/og-preview-banner.jpg",
         width: 1200,
         height: 630,
         alt: "Eventsaathi Premium Wedding Planning Ecosystem",
@@ -44,7 +43,6 @@ export const metadata = {
     ],
   },
 
-  // Twitter/X Cards Optimization
   twitter: {
     card: "summary_large_image",
     title: "Eventsaathi | Premium Wedding Planners & Verified Vendors",
@@ -53,7 +51,6 @@ export const metadata = {
     images: ["https://eventsaathi.com/assets/og-preview-banner.jpg"],
   },
 
-  // Search Engine Bot Crawl Parameters
   robots: {
     index: true,
     follow: true,
@@ -73,15 +70,11 @@ export const metadata = {
   },
 };
 
-// remove black image
-// white
-// cross
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* Local Business Structured Data (JSON-LD Schema) for Google Rich Snippets */}
+        {/* Local Business Structured Data (JSON-LD Schema) */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -97,13 +90,17 @@ export default function RootLayout({ children }) {
                 addressCountry: "IN",
               },
               priceRange: "$$$",
-              telephone: "", // Agar official helpline number ho toh render karein
+              telephone: "",
               url: "https://eventsaathi.com",
             }),
           }}
         />
       </head>
-      <body suppressHydrationWarning={true}>{children}</body>
+
+      <body suppressHydrationWarning={true}>
+        <GoogleTagManager gtmId="GTM-PPVP793P" />
+        {children}
+      </body>
     </html>
   );
 }
