@@ -1,23 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 
-// ---- CONTROL FLAG ----
-// true = popup enabled (har page load/refresh pe aayega)
-// false = disabled
 const SHOW_POPUP = true;
-
-// Delay before popup appears (ms)
 const POPUP_DELAY = 4000;
 
-export default function PromoPopup() {
+export default function PromoPopup({ onEnquire }) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (!SHOW_POPUP) return;
-    const timer = setTimeout(() => setIsOpen(true), POPUP_DELAY);
+
+    const timer = setTimeout(() => {
+      setIsOpen(true);
+    }, POPUP_DELAY);
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -34,41 +33,62 @@ export default function PromoPopup() {
     <AnimatePresence>
       {isOpen && (
         <motion.div
+          className="fixed inset-0 z-[9999] flex items-center justify-center px-4"
+          style={{ background: "rgba(0,0,0,.65)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[2000] flex items-center justify-center px-4"
-          style={{ background: "rgba(28,28,28,0.6)" }}
           onClick={() => setIsOpen(false)}
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.92, y: 20 }}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.92, y: 20 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ duration: 0.25 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-md rounded-2xl p-8 text-center bg-[var(--color-bg)] border border-[var(--color-accent)]/25 shadow-2xl"
+            className="relative w-full max-w-lg rounded-3xl bg-[#FDF8F3] p-8 shadow-2xl text-center border border-[#C9973A]/30"
           >
             <button
               onClick={() => setIsOpen(false)}
-              aria-label="Close popup"
-              className="absolute top-4 right-4 text-[var(--color-primary)]/60 hover:text-[var(--color-primary)] transition cursor-pointer"
+              className="absolute top-5 right-5 text-[#7B1223]/60 hover:text-[#7B1223] transition cursor-pointer"
             >
-              <X className="w-5 h-5" />
+              <X size={24} />
             </button>
 
-            {/* PLACEHOLDER CONTENT — client ka final content aane ke baad yaha replace karna */}
-            <h3 className="font-['Playfair_Display'] text-2xl font-bold text-[var(--color-primary)] mb-2">
-              Popup Title Here
-            </h3>
-            <p className="text-sm text-[var(--color-text-muted)] mb-6">
-              Placeholder description text — content pending.
+            <span className="uppercase tracking-[3px] text-xs text-[#C9973A] font-semibold">
+              LIMITED TIME OFFER
+            </span>
+
+            <h2 className="mt-3 font-['Playfair_Display'] text-4xl font-bold text-[#7B1223] leading-tight">
+              Save Up To
+              <br />
+              30% OFF
+            </h2>
+
+            <p className="mt-5 text-[#5E5E5E] leading-7">
+              Book your event with <strong>Event Saathi</strong> and enjoy
+              <strong> up to 30% OFF </strong>
+              on the
+              <strong> first 10 confirmed bookings.</strong>
             </p>
+
+            <p className="mt-3 text-xs text-[#8A8A8A]">
+              *Offer valid only for the first 10 confirmed bookings.
+              <br />
+              Subject to Terms & Conditions.
+            </p>
+
             <button
-              className="px-6 py-2.5 rounded-full bg-[var(--color-primary)] text-white font-semibold text-sm hover:bg-[#9B1535] transition-colors"
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false);
+
+                if (onEnquire) {
+                  onEnquire();
+                }
+              }}
+              className="mt-8 bg-[#7B1223] hover:bg-[#96152D] text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 cursor-pointer"
             >
-              Placeholder CTA
+              Enquire Now
             </button>
           </motion.div>
         </motion.div>

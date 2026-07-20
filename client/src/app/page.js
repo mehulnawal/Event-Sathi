@@ -28,7 +28,12 @@ export default function Home() {
       <Loader isVideoLoaded={isVideoLoaded} />
 
       <FloatingButtons />
-      <PromoPopup />
+
+      <PromoPopup
+        onEnquire={() => {
+          setSubmitModalOpen(true);
+        }}
+      />
 
       <Navbar
         onSubmitClick={() => setSubmitModalOpen(true)}
