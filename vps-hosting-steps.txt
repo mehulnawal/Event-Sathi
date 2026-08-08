@@ -1,0 +1,29 @@
+# 1. SSH Login
+ssh root@187.127.175.68
+
+# 2. Project folder me jao
+cd /var/www/eventsaathi/client
+
+# 3. Latest code pull karo
+git pull origin main
+
+# Agar branch master hai to:
+# git pull origin master
+
+# 4. Dependencies install karo (agar package.json change hua ho)
+npm install
+
+# 5. Production build
+npm run build
+
+# 6. PM2 restart
+pm2 restart eventsaathi-frontend
+
+# 7. Check status
+pm2 status
+
+# 8. Live logs (optional)
+pm2 logs eventsaathi-frontend --lines 50
+
+# 9. Exit
+exit
