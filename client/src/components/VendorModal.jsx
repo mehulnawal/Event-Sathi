@@ -28,9 +28,9 @@ const CATEGORIES = [
 
 const EXPERIENCE_OPTIONS = [
   "Less than 1 year",
-  "1â€“3 years",
-  "3â€“5 years",
-  "5â€“10 years",
+  "1–3 years",
+  "3–5 years",
+  "5–10 years",
   "10+ years",
 ];
 
@@ -768,7 +768,7 @@ export default function VendorModal({ isOpen, onClose }) {
                     ))}
                   </div>
                   <p className="text-xs text-[#8C7B6B] italic mt-1.5">
-                    "Can you take bookings within 2â€“3 days of an event?"
+                    "Can you take bookings within 2–3 days of an event?"
                   </p>
                 </div>
 
@@ -801,7 +801,7 @@ export default function VendorModal({ isOpen, onClose }) {
             )}
             {submitSuccess && (
               <p className="text-xs text-green-700 font-semibold text-center">
-                âœ“ Registration submitted! We'll review and get back to you.
+                ✓ Registration submitted! We'll review and get back to you.
               </p>
             )}
             <div className="flex items-center justify-between">
@@ -812,7 +812,7 @@ export default function VendorModal({ isOpen, onClose }) {
                   disabled={isSubmitting}
                   className="px-5 py-2 text-sm font-semibold text-[#7B1223] hover:text-[#C9973A] transition-colors disabled:opacity-50"
                 >
-                  â† Back
+                  ← Back
                 </button>
               ) : (
                 <div />
@@ -858,7 +858,7 @@ export default function VendorModal({ isOpen, onClose }) {
                       Submitting...
                     </>
                   ) : (
-                    "Register as Vendor â†’"
+                    "Register as Vendor →"
                   )}
                 </button>
               )}

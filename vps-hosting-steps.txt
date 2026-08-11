@@ -17,7 +17,7 @@ npm install
 npm run build
 
 # 6. PM2 restart
-pm2 restart eventsaathi-frontend
+pm2 restart  eventsathi-frontend
 
 # 7. Check status
 pm2 status
