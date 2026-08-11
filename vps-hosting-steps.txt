@@ -2,7 +2,7 @@
 ssh root@187.127.175.68
 
 # 2. Project folder me jao
-cd /var/www/eventsaathi/client
+cd /var/www/eventsathi/client
 
 # 3. Latest code pull karo
 git pull origin main

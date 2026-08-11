@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Store,
@@ -27,9 +28,9 @@ const CATEGORIES = [
 
 const EXPERIENCE_OPTIONS = [
   "Less than 1 year",
-  "1–3 years",
-  "3–5 years",
-  "5–10 years",
+  "1â€“3 years",
+  "3â€“5 years",
+  "5â€“10 years",
   "10+ years",
 ];
 
@@ -62,6 +63,7 @@ const URL_REGEX =
 const GST_REGEX = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/i;
 
 export default function VendorModal({ isOpen, onClose }) {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState(INITIAL_STATE);
   const [errors, setErrors] = useState({});
@@ -248,9 +250,7 @@ export default function VendorModal({ isOpen, onClose }) {
       if (!res.ok) throw new Error(data.message || "Submission failed");
 
       setSubmitSuccess(true);
-      setTimeout(() => {
-        onClose();
-      }, 2000);
+      router.push("/thank-you");
     } catch (err) {
       setSubmitError("Something went wrong. Please try again.");
     } finally {
@@ -768,7 +768,7 @@ export default function VendorModal({ isOpen, onClose }) {
                     ))}
                   </div>
                   <p className="text-xs text-[#8C7B6B] italic mt-1.5">
-                    "Can you take bookings within 2–3 days of an event?"
+                    "Can you take bookings within 2â€“3 days of an event?"
                   </p>
                 </div>
 
@@ -801,7 +801,7 @@ export default function VendorModal({ isOpen, onClose }) {
             )}
             {submitSuccess && (
               <p className="text-xs text-green-700 font-semibold text-center">
-                ✓ Registration submitted! We'll review and get back to you.
+                âœ“ Registration submitted! We'll review and get back to you.
               </p>
             )}
             <div className="flex items-center justify-between">
@@ -812,7 +812,7 @@ export default function VendorModal({ isOpen, onClose }) {
                   disabled={isSubmitting}
                   className="px-5 py-2 text-sm font-semibold text-[#7B1223] hover:text-[#C9973A] transition-colors disabled:opacity-50"
                 >
-                  ← Back
+                  â† Back
                 </button>
               ) : (
                 <div />
@@ -858,7 +858,7 @@ export default function VendorModal({ isOpen, onClose }) {
                       Submitting...
                     </>
                   ) : (
-                    "Register as Vendor →"
+                    "Register as Vendor â†’"
                   )}
                 </button>
               )}

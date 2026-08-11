@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -54,8 +55,8 @@ const ADDITIONAL_SAATHIS_CONFIG = [
   },
   {
     id: "productionManager",
-    label: "Production Manager for Décor",
-    desc: "Overseeing décor setup, stage, and mandap installation",
+    label: "Production Manager for DÃ©cor",
+    desc: "Overseeing dÃ©cor setup, stage, and mandap installation",
   },
   {
     id: "ritualManagement",
@@ -116,6 +117,7 @@ export default function EnquiryModal({
   onClose,
   defaultMode = "booking",
 }) {
+  const router = useRouter();
   const [isTatkalMode, setIsTatkalMode] = useState(defaultMode === "tatkal");
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState(INITIAL_STATE);
@@ -155,7 +157,7 @@ export default function EnquiryModal({
 
   // Sanitizes budget input to only allow digits, commas, and the rupee symbol
   const handleBudgetChange = (e) => {
-    const cleanValue = e.target.value.replace(/[^0-9,₹\s]/g, "");
+    const cleanValue = e.target.value.replace(/[^0-9,â‚¹\s]/g, "");
     setFormData((prev) => ({ ...prev, estimatedBudget: cleanValue }));
     if (errors.estimatedBudget)
       setErrors((prev) => ({ ...prev, estimatedBudget: "" }));
@@ -263,9 +265,7 @@ export default function EnquiryModal({
       if (!res.ok) throw new Error(data.message || "Submission failed");
 
       setSubmitSuccess(true);
-      setTimeout(() => {
-        onClose();
-      }, 2000);
+      router.push("/thank-you");
     } catch (err) {
       setSubmitError("Something went wrong. Please try again.");
     } finally {
@@ -326,7 +326,7 @@ export default function EnquiryModal({
             {isTatkalMode && (
               <div className="pt-1 border-t border-white/10 flex justify-start">
                 <span className="text-[11px] font-medium text-white/90 italic tracking-wide animate-fadeIn">
-                  * Only for events within 2–3 days
+                  * Only for events within 2â€“3 days
                 </span>
               </div>
             )}
@@ -610,7 +610,7 @@ export default function EnquiryModal({
                         name="estimatedBudget"
                         value={formData.estimatedBudget}
                         onChange={handleBudgetChange}
-                        placeholder="Optional — e.g. ₹2,00,000"
+                        placeholder="Optional â€” e.g. â‚¹2,00,000"
                         className="w-full bg-[#FDFAF5] border border-[#C9973A]/30 rounded-lg p-2.5 text-sm text-[#1C1C1C] focus:outline-none focus:border-[#7B1223] transition-colors"
                       />
                     </div>
@@ -630,10 +630,10 @@ export default function EnquiryModal({
                       Always Included
                     </span>
                     <h4 className="text-sm font-bold text-[#F5F0E8] mt-1.5">
-                      Event Captain — 1
+                      Event Captain â€” 1
                     </h4>
                     <p className="text-xs text-[#F5F0E8]/80 mt-1 leading-relaxed">
-                      Your Event Captain manages everything on ground —
+                      Your Event Captain manages everything on ground â€”
                       coordinates vendors, guests, and team throughout the
                       event.
                     </p>
@@ -705,7 +705,7 @@ export default function EnquiryModal({
             )}
             {submitSuccess && (
               <p className="text-xs text-green-700 font-semibold text-center">
-                ✓ Submitted successfully! We'll be in touch soon.
+                âœ“ Submitted successfully! We'll be in touch soon.
               </p>
             )}
             <div className="flex items-center justify-between">
@@ -716,7 +716,7 @@ export default function EnquiryModal({
                   disabled={isSubmitting}
                   className="text-sm font-bold text-[#7B1223] hover:text-[#C9973A] transition-colors disabled:opacity-50"
                 >
-                  ← Back
+                  â† Back
                 </button>
               ) : (
                 <div />
@@ -762,9 +762,9 @@ export default function EnquiryModal({
                       Submitting...
                     </>
                   ) : isTatkalMode ? (
-                    "Request Emergency Help →"
+                    "Request Emergency Help â†’"
                   ) : (
-                    "Submit Your Requirement →"
+                    "Submit Your Requirement â†’"
                   )}
                 </button>
               )}

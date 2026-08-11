@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin,
@@ -11,8 +12,8 @@ import {
 
 const EXPERIENCE_OPTIONS = [
   "Less than 1 year",
-  "1–3 years",
-  "3–5 years",
+  "1â€“3 years",
+  "3â€“5 years",
   "5+ years",
 ];
 
@@ -42,6 +43,7 @@ const INITIAL_STATE = {
 };
 
 export default function CityPartnerModal({ isOpen, onClose }) {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState(INITIAL_STATE);
   const [errors, setErrors] = useState({});
@@ -192,9 +194,7 @@ export default function CityPartnerModal({ isOpen, onClose }) {
       if (!res.ok) throw new Error(data.message || "Submission failed");
 
       setSubmitSuccess(true);
-      setTimeout(() => {
-        onClose();
-      }, 2000);
+      router.push("/thank-you");
     } catch (err) {
       setSubmitError("Something went wrong. Please try again.");
     } finally {
@@ -721,7 +721,7 @@ export default function CityPartnerModal({ isOpen, onClose }) {
               <p className="text-xs text-[#D94F3D] font-semibold text-center">{submitError}</p>
             )}
             {submitSuccess && (
-              <p className="text-xs text-green-700 font-semibold text-center">✓ Application submitted! We'll review and reach out soon.</p>
+              <p className="text-xs text-green-700 font-semibold text-center">âœ“ Application submitted! We'll review and reach out soon.</p>
             )}
             <div className="flex items-center justify-between">
               {currentStep > 1 ? (
@@ -731,7 +731,7 @@ export default function CityPartnerModal({ isOpen, onClose }) {
                   disabled={isSubmitting}
                   className="px-5 py-2 text-sm font-semibold text-[#7B1223] hover:text-[#C9973A] transition-colors disabled:opacity-50"
                 >
-                  ← Back
+                  â† Back
                 </button>
               ) : (
                 <div />
@@ -765,7 +765,7 @@ export default function CityPartnerModal({ isOpen, onClose }) {
                       Submitting...
                     </>
                   ) : (
-                    "Apply as City Saathi →"
+                    "Apply as City Saathi â†’"
                   )}
                 </button>
               )}
