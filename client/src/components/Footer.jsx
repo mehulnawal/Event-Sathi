@@ -97,18 +97,29 @@ export default function Footer({ onSubmitClick, onEmergencyClick }) {
               Contact Us
             </h4>
             <div className="space-y-2.5">
-              <div className="flex items-center text-[#8C7B6B] gap-2">
+              <a
+                href="mailto:contact@eventsaathi.com"
+                onClick={() => {
+                  window.location.href = "mailto:contact@eventsaathi.com";
+                }}
+                className="flex items-center text-[#8C7B6B] gap-2 w-fit"
+                aria-label="Email contact@eventsaathi.com"
+              >
                 <Mail className="h-4 w-4 text-[#C9973A]" />
-                <span className="font-body text-sm hover:text-[#F5F0E8] transition-colors cursor-pointer">
+                <span className="font-body text-sm hover:text-[#F5F0E8] transition-colors">
                   contact@eventsaathi.com
                 </span>
-              </div>
-              <div className="flex items-center text-[#8C7B6B] gap-2">
+              </a>
+              <a
+                href="tel:+916354000280"
+                className="flex items-center text-[#8C7B6B] gap-2 w-fit"
+                aria-label="Call +91 63540 00280"
+              >
                 <Phone className="h-4 w-4 text-[#C9973A]" />
-                <span className="font-body text-sm hover:text-[#F5F0E8] transition-colors cursor-pointer">
-                  +91 98765 43210
+                <span className="font-body text-sm hover:text-[#F5F0E8] transition-colors">
+                  +916354000280
                 </span>
-              </div>
+              </a>
             </div>
 
             {/* Social Handle Channels */}
@@ -124,7 +135,7 @@ export default function Footer({ onSubmitClick, onEmergencyClick }) {
               </a> */}
 
               <a
-                href="https://wa.me/919876543210"
+                href="https://wa.me/916354000280"
                 target="_blank"
                 rel="noreferrer"
                 className="w-10 h-10 rounded-full flex items-center justify-center border border-[#8C7B6B]/30 text-[#8C7B6B] hover:text-green-400 hover:border-green-400/60 hover:scale-105 transition-all duration-200"

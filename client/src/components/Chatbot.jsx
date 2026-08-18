@@ -384,14 +384,14 @@ function ChatWindow({ onClose }) {
                 </p>
                 <div className="grid grid-cols-3 gap-2">
                   <a
-                    href="tel:+919999999999"
+                    href="tel:+916354000280"
                     className="flex flex-col items-center justify-center gap-1.5 p-2 bg-[var(--color-bg)] hover:bg-[var(--color-primary)] border border-[var(--color-accent)]/30 rounded-lg text-[var(--color-primary)] hover:text-white transition-all group shadow-sm text-center"
                   >
                     <Phone className="w-4 h-4" />
                     <span className="text-[10px] font-bold">Call</span>
                   </a>
                   <a
-                    href="https://wa.me/919999999999"
+                    href="https://wa.me/916354000280"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex flex-col items-center justify-center gap-1.5 p-2 bg-[var(--color-bg)] hover:bg-emerald-600 border border-[var(--color-accent)]/30 rounded-lg text-emerald-600 hover:text-white transition-all group shadow-sm text-center"

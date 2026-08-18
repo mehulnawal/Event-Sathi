@@ -408,9 +408,15 @@ export default function EnquiryModal({
                       name="mobileNumber"
                       value={formData.mobileNumber}
                       onChange={handleMobileChange}
-                      placeholder="e.g. 9876543210"
+                      placeholder="e.g. 6354000280"
                       className={`w-full bg-[#FDFAF5] border rounded-lg p-2.5 text-sm text-[#1C1C1C] focus:outline-none focus:border-[#7B1223] transition-colors ${errors.mobileNumber ? "border-[#D94F3D]" : "border-[#C9973A]/30"}`}
                     />
+                    <a
+                      href="tel:+916354000280"
+                      className="mt-1.5 inline-block text-xs font-semibold text-[#7B1223] hover:text-[#D94F3D] transition-colors"
+                    >
+                      Need help? Call us: +91 63540 00280
+                    </a>
                     {errors.mobileNumber && (
                       <span className="text-[#D94F3D] text-xs font-semibold flex items-center gap-1 mt-1">
                         <AlertCircle className="h-3 w-3" />{" "}
