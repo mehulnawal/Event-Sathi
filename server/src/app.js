@@ -16,6 +16,7 @@ app.use(
   cors({
     origin: [
       process.env.CLIENT_URL,
+      "https://www.theeventsaathi.com"
       "https://k6304119-3000.inc1.devtunnels.ms",
       "https://k6304119-5000.inc1.devtunnels.ms",
       "http://localhost:3000",
